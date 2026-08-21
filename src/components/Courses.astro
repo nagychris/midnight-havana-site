@@ -69,7 +69,9 @@ const tracks = [
         Two tracks, four levels
       </h2>
     </div>
-    <p class="max-w-[36ch] text-md-plus leading-normal-2 text-cream/55 text-pretty">
+    <p
+      class="max-w-[36ch] text-md-plus leading-normal-2 text-cream/55 text-pretty max-sm:hidden"
+    >
       Two classes run in parallel each hour, so you always have a level that fits.
       Drop in whenever — nothing builds on last week.
     </p>
@@ -128,13 +130,14 @@ const tracks = [
                   {session.level}
                 </span>
               </div>
+              {/* Prerequisite below is the decision-making line; this is flavour. */}
               {session.bodyHtml ? (
                 <p
-                  class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty"
+                  class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty max-sm:hidden"
                   set:html={session.bodyHtml}
                 />
               ) : (
-                <p class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty">
+                <p class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty max-sm:hidden">
                   {session.body}
                 </p>
               )}

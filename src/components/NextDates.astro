@@ -94,7 +94,9 @@ const badgeClass: Record<Badge["variant"], string> = {
         Next Salsa Fridays
       </h2>
     </div>
-    <p class="max-w-[34ch] text-md-plus leading-normal-2 text-cream/55 text-pretty">
+    <p
+      class="max-w-[34ch] text-md-plus leading-normal-2 text-cream/55 text-pretty max-sm:hidden"
+    >
       Almost every Friday. Check our Instagram or WhatsApp community for the latest updates.
     </p>
   </div>
@@ -129,8 +131,16 @@ const badgeClass: Record<Badge["variant"], string> = {
           </div>
         </div>
 
+        {/* Mobile keeps only date, title, a Tonight badge if it applies, and the
+            tap affordance. Everything else lives on the event page. */}
         <div>
-          <div class="mb-3 flex flex-wrap items-center gap-3">
+          <div
+            class:list={[
+              "mb-3 flex flex-wrap items-center gap-3",
+              // Would otherwise leave the margin behind with nothing in it.
+              !event.tonight && "max-sm:hidden",
+            ]}
+          >
             {event.badges.map((badge) => (
               <span
                 class:list={[
@@ -138,6 +148,7 @@ const badgeClass: Record<Badge["variant"], string> = {
                   badgeClass[badge.variant],
                   // Glows in step with the Tonight strip's pulse.
                   badge.label === "Tonight" && "mh-live-badge",
+                  badge.label !== "Tonight" && "max-sm:hidden",
                 ]}
               >
                 {badge.label}
@@ -145,17 +156,17 @@ const badgeClass: Record<Badge["variant"], string> = {
             ))}
           </div>
           <h3
-            class="font-display text-8xl font-medium tracking-tight-1 text-cream uppercase"
+            class="font-display text-8xl font-medium tracking-tight-1 text-cream uppercase max-sm:text-6xl"
           >
             {event.title}
           </h3>
           <p
-            class="mt-[9px] max-w-[52ch] text-md-plus leading-snug-3 text-cream/58 text-pretty"
+            class="mt-[9px] max-w-[52ch] text-md-plus leading-snug-3 text-cream/58 text-pretty max-sm:hidden"
           >
             {event.blurb}
           </p>
           <div
-            class="mt-4 flex flex-wrap items-center gap-x-[22px] gap-y-2 text-base text-cream/68"
+            class="mt-4 flex flex-wrap items-center gap-x-[22px] gap-y-2 text-base text-cream/68 max-sm:hidden"
           >
             {event.meta.map((item) => (
               <>
@@ -167,6 +178,12 @@ const badgeClass: Record<Badge["variant"], string> = {
             ))}
             <span class="text-gold">{event.dj}</span>
           </div>
+
+          {/* A span, not an anchor — the whole row is already the link. */}
+          <span
+            class="font-display mt-2.5 hidden border-b border-gold/45 pb-0.5 text-xs tracking-wide-16 text-gold uppercase max-sm:inline-block"
+            >Details →</span
+          >
         </div>
 
         {

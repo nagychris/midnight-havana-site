@@ -34,9 +34,9 @@ const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed
         for when you need air.
       </p>
 
-      <!-- ADDED breakpoint. -->
+      <!-- ADDED breakpoint. Hidden on mobile — the prose above says the same. -->
       <div
-        class="mt-[30px] grid grid-cols-2 gap-x-[26px] gap-y-3.5 max-xs:grid-cols-1"
+        class="mt-[30px] grid grid-cols-2 gap-x-[26px] gap-y-3.5 max-xs:grid-cols-1 max-sm:hidden"
       >
         {
           features.map((feature) => (
@@ -97,7 +97,8 @@ const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed
         </button>
       </div>
 
-      <div class="grid grid-cols-2 gap-2.5">
+      <!-- Both also appear in the gallery. -->
+      <div class="grid grid-cols-2 gap-2.5 max-sm:hidden">
         <div class="relative h-[180px] border border-gold/22">
           <img
             src="/assets/class-rueda.jpg"

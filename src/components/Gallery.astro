@@ -32,7 +32,7 @@ const photos = [
       <h2
         class="font-display mt-4 text-h2 leading-flat font-medium text-cream uppercase"
       >
-        Strangers at 19:00.<br />Friends by midnight.
+        Come for the music, stay for the people.
       </h2>
     </div>
     <a
@@ -49,11 +49,13 @@ const photos = [
     class="grid auto-rows-[230px] grid-cols-4 gap-2.5 px-2.5 max-lg:grid-cols-2 max-sm:auto-rows-[180px]"
   >
     {
-      photos.map((photo) => (
+      photos.map((photo, index) => (
         <div
           class:list={[
             "relative",
             photo.feature && "col-span-2 row-span-2 max-sm:col-span-1 max-sm:row-span-1",
+            // Keeps mobile a clean 2x2 instead of 2 rows plus an orphan.
+            index === 4 && "max-sm:hidden",
           ]}
         >
           <img
