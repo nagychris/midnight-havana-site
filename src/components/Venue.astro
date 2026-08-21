@@ -1,0 +1,145 @@
+---
+// Section #venue.
+const features = [
+  "Sprung wooden floor",
+  "Cool & ventilated hall",
+  "Terrace on the Spree",
+  "Bar, sofas, fairy lights",
+];
+
+const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed";
+---
+
+<section id="venue" class="mt-[118px] border-y border-gold/18 bg-surface">
+  <!-- ADDED: single column below 980px; the artboard had no breakpoint here. -->
+  <div
+    class="mx-auto grid max-w-[1240px] grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] items-center gap-[60px] px-8 py-[104px] max-xl:grid-cols-1 max-sm:px-5 max-sm:py-16"
+  >
+    <div>
+      <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+        >The place</span
+      >
+      <h2
+        class="font-display mt-4 text-h2-venue leading-flat font-medium text-cream uppercase"
+      >
+        Tangoloft Berlin
+      </h2>
+      <p
+        class="font-display mt-3 text-2xl font-light tracking-tight-4 text-gold"
+      >
+        Pfuelstraße 5 · 10997 Berlin-Kreuzberg
+      </p>
+      <p class="mt-[22px] text-lg-plus leading-normal-3 text-cream/68 text-pretty">
+        An old loft right on the Spree: one of Berlin's finest wooden dance floors,
+        high ceilings, cross-ventilation that actually works, and a riverside terrace
+        for when you need air.
+      </p>
+
+      <!-- ADDED: single column below 560px. -->
+      <div
+        class="mt-[30px] grid grid-cols-2 gap-x-[26px] gap-y-3.5 max-xs:grid-cols-1"
+      >
+        {
+          features.map((feature) => (
+            <span class="text-base-plus text-cream/60">{feature}</span>
+          ))
+        }
+      </div>
+
+      <div
+        class="mt-[30px] flex flex-col gap-2.5 border-t border-gold/20 pt-[26px] text-md text-cream/60"
+      >
+        <span
+          ><strong class="font-semibold text-cream">U1 / U3 Schlesisches Tor</strong> —
+          8 min walk along the water</span
+        >
+        <span
+          ><strong class="font-semibold text-cream">Bus 265, M29</strong> —
+          Taborstraße, 3 min</span
+        >
+        <span
+          >Ring the bell marked <em>Tangoloft</em>, second courtyard, third floor
+          (lift).</span
+        >
+      </div>
+
+      <a
+        href="https://maps.google.com/?q=Tangoloft+Berlin+Pfuelstra%C3%9Fe+5"
+        target="_blank"
+        rel="noopener"
+        class="font-display mt-7 inline-block border border-gold/50 px-[26px] py-[15px] text-sm font-medium tracking-wide-16 text-gold-light uppercase hover:bg-gold/12 hover:text-cream"
+        >Open in Google Maps</a
+      >
+    </div>
+
+    <div class="flex flex-col gap-2.5">
+      <!--
+        CHANGED from the design: the artboard embedded the Google Maps iframe
+        directly, which contacts Google on first paint. This site links an
+        Impressum and Datenschutz, so the map is behind a click-to-load cover.
+        See TASKS.md open question 6 — revert to a bare iframe if not wanted.
+      -->
+      <div
+        id="mh-map"
+        class="relative h-[330px] border border-gold/22"
+        data-map-src={mapSrc}
+      >
+        <button
+          type="button"
+          class="mh-map-consent flex h-full w-full cursor-pointer flex-col items-center justify-center gap-3 bg-ink/60 px-6 text-center"
+        >
+          <span
+            class="font-display text-xs tracking-wide-22 text-gold uppercase"
+            >Map — Tangoloft Berlin</span
+          >
+          <span class="max-w-[38ch] text-base-plus leading-normal-2 text-cream/60"
+            >Loading the map contacts Google Maps and sets their cookies.</span
+          >
+          <span
+            class="font-display mt-1 border border-gold/50 px-5 py-2.5 text-sm font-medium tracking-wide-16 text-gold-light uppercase"
+            >Load the map</span
+          >
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="relative h-[180px] border border-gold/22">
+          <img
+            src="/assets/class-rueda.jpg"
+            alt="The hall at Tangoloft, mid-class"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+        <div class="relative h-[180px] border border-gold/22">
+          <img
+            src="/assets/community-terrace.jpg"
+            alt="The riverside terrace"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Swap the consent cover for the real embed on click.
+  const wrapper = document.querySelector<HTMLElement>("#mh-map");
+  const consent = wrapper?.querySelector<HTMLButtonElement>(".mh-map-consent");
+
+  consent?.addEventListener("click", () => {
+    const src = wrapper?.dataset.mapSrc;
+    if (!wrapper || !src) return;
+
+    const frame = document.createElement("iframe");
+    frame.title = "Map — Tangoloft Berlin, Pfuelstraße 5";
+    frame.src = src;
+    frame.loading = "lazy";
+    frame.referrerPolicy = "no-referrer-when-downgrade";
+    frame.className = "block h-full w-full border-0";
+
+    wrapper.replaceChildren(frame);
+  });
+</script>

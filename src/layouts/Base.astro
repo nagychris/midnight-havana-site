@@ -1,0 +1,88 @@
+---
+// Head content ported from the artboard's <helmet data-dc-atomics> block.
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+}
+
+const {
+  title = "Salsa Friday Berlin — Cuban Salsa & Rueda de Casino | Midnight Havana",
+  description = "Salsa Friday in Berlin-Kreuzberg: Cuban salsa (casino) and rueda de casino classes for all levels from 19:00, social dance from 21:00 at Tangoloft Berlin. No partner needed, no registration, cash at the door.",
+  keywords = "salsa berlin, cuban salsa berlin, rueda de casino berlin, casino dance class berlin, salsa friday, kreuzberg salsa party, salsa for beginners berlin",
+} = Astro.props;
+
+// JSON-LD carried over verbatim from the artboard.
+const eventSeries = {
+  "@context": "https://schema.org",
+  "@type": "EventSeries",
+  name: "Salsa Friday by Midnight Havana",
+  description:
+    "Weekly Cuban salsa (casino) and rueda de casino classes plus social dance in Berlin-Kreuzberg.",
+  eventSchedule: {
+    "@type": "Schedule",
+    byDay: "Friday",
+    startTime: "19:00",
+    endTime: "01:00",
+  },
+  location: {
+    "@type": "Place",
+    name: "Tangoloft Berlin",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Pfuelstraße 5",
+      postalCode: "10997",
+      addressLocality: "Berlin",
+      addressCountry: "DE",
+    },
+  },
+  organizer: {
+    "@type": "Organization",
+    name: "Midnight Havana",
+    sameAs: "https://www.instagram.com/midnight.havana/",
+  },
+  offers: {
+    "@type": "Offer",
+    price: "8",
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/assets/logo-round.png" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/assets/hero-social.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Oswald:wght@300;400;500;600;700&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(eventSeries)}
+    />
+  </head>
+  <body>
+    <div class="max-w-full overflow-x-hidden">
+      <slot />
+    </div>
+  </body>
+</html>

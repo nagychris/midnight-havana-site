@@ -1,0 +1,15 @@
+# pnpm 11 reads settings from here rather than the "pnpm" field in package.json.
+
+# Both ship prebuilt platform binaries; allowing their install scripts keeps
+# pnpm's pre-run check from failing `pnpm build`.
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+
+# The pre-run dependency check re-invokes a bare `pnpm install`, which fails when
+# pnpm comes from corepack rather than a global install.
+verifyDepsBeforeRun: false

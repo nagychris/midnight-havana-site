@@ -1,0 +1,36 @@
+---
+// Stub route. The home page's "Event details →" links pointed at the design
+// canvas artboard "Midnight Havana Event.dc.html", which is out of scope for this
+// port — this keeps the links live instead of dead. See TASKS.md.
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base
+  title="Event details | Midnight Havana"
+  description="Event details for Salsa Friday by Midnight Havana at Tangoloft Berlin."
+>
+  <Header />
+  <section class="mx-auto max-w-[1000px] px-8 pt-[140px] pb-[120px] max-sm:px-5">
+    <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+      >Still building</span
+    >
+    <h1
+      class="font-display mt-4 text-h2 leading-flat font-medium text-cream uppercase"
+    >
+      Event details
+    </h1>
+    <p class="mt-6 max-w-[52ch] text-lg-plus leading-normal-3 text-cream/68 text-pretty">
+      We haven't built this page yet. Until we do, the
+      <a href="/#dates">next dates</a> on the home page are always current — and every
+      date goes out in the WhatsApp community first.
+    </p>
+    <a
+      href="/"
+      class="font-display mt-9 inline-block rounded-sharp border border-gold/50 px-[26px] py-[15px] text-sm font-medium tracking-wide-16 text-gold-light uppercase hover:bg-gold/12 hover:text-cream"
+      >Back to the home page</a
+    >
+  </section>
+  <Footer />
+</Base>

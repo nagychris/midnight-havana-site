@@ -1,0 +1,69 @@
+---
+// Community photo grid. The first tile spans 2×2 on desktop.
+const photos = [
+  {
+    src: "/assets/class-rueda.jpg",
+    alt: "A rueda circle seen from above, one caller in the middle",
+    feature: true,
+  },
+  { src: "/assets/hero-social.jpg", alt: "Dancers laughing mid-song", feature: false },
+  { src: "/assets/dj-night.jpg", alt: "The DJ booth late in the night", feature: false },
+  {
+    src: "/assets/community-terrace.jpg",
+    alt: "The riverside terrace at sunset",
+    feature: false,
+  },
+  {
+    src: "/assets/class-beginners.jpg",
+    alt: "Teaching the basic step in class",
+    feature: false,
+  },
+];
+---
+
+<section class="mt-[118px]">
+  <div
+    class="mx-auto flex max-w-[1240px] flex-wrap items-end justify-between gap-10 px-8 pb-11 max-sm:px-5"
+  >
+    <div>
+      <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+        >La comunidad</span
+      >
+      <h2
+        class="font-display mt-4 text-h2 leading-flat font-medium text-cream uppercase"
+      >
+        Strangers at 19:00.<br />Friends by midnight.
+      </h2>
+    </div>
+    <a
+      href="https://www.instagram.com/midnight.havana/"
+      target="_blank"
+      rel="noopener"
+      class="font-display border-b border-gold/45 pb-[3px] text-sm tracking-wide-16 uppercase"
+      >@midnight.havana →</a
+    >
+  </div>
+
+  <!-- ADDED: 2 columns below 900px, and the feature tile stops spanning below 620px. -->
+  <div
+    class="grid auto-rows-[230px] grid-cols-4 gap-2.5 px-2.5 max-lg:grid-cols-2 max-sm:auto-rows-[180px]"
+  >
+    {
+      photos.map((photo) => (
+        <div
+          class:list={[
+            "relative",
+            photo.feature && "col-span-2 row-span-2 max-sm:col-span-1 max-sm:row-span-1",
+          ]}
+        >
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      ))
+    }
+  </div>
+</section>

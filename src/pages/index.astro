@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import TonightStrip from "../components/TonightStrip.astro";
+import NextDates from "../components/NextDates.astro";
+import StartHere from "../components/StartHere.astro";
+import Courses from "../components/Courses.astro";
+import FridayRun from "../components/FridayRun.astro";
+import Gallery from "../components/Gallery.astro";
+import Venue from "../components/Venue.astro";
+import Faq from "../components/Faq.astro";
+import CommunityCta from "../components/CommunityCta.astro";
+import Footer from "../components/Footer.astro";
+
+// The two booleans the design canvas exposed as editable props (data-props on the
+// artboard's <script type="text/x-dc">). Both defaulted to true.
+const showLangSwitcher = true;
+const showPosterThumbs = true;
+---
+
+<Base>
+  <Header showLangSwitcher={showLangSwitcher} />
+  <Hero />
+  <TonightStrip />
+  <NextDates showPosterThumbs={showPosterThumbs} />
+  <StartHere />
+  <Courses />
+  <FridayRun />
+  <Gallery />
+  <Venue />
+  <Faq />
+  <CommunityCta />
+  <Footer />
+</Base>

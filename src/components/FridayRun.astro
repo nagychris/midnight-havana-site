@@ -1,0 +1,135 @@
+---
+// "How a Friday runs" timeline plus the at-the-door price card.
+const timeline = [
+  {
+    time: "18:45",
+    title: "Doors",
+    body: "Pay cash, change your shoes, say hello.",
+    accent: false,
+  },
+  {
+    time: "19:00",
+    title: "Casino Basics · Rueda Beginner",
+    body: "Two rooms, one hour. Classes start punctually.",
+    accent: false,
+  },
+  {
+    time: "20:00",
+    title: "Casino Beginner · Rueda Advanced",
+    body: "The second hour. Many people take both.",
+    accent: false,
+  },
+  {
+    time: "21:00",
+    title: "Social dance until late",
+    body: "Cuban salsa, timba and son. Terrace and bar open.",
+    accent: true,
+  },
+];
+
+const prices = [
+  { label: "1 class + social", price: "8 €", note: "6 € students", noteAccent: true },
+  { label: "2 classes + social", price: "15 €", note: "11 € students", noteAccent: true },
+  { label: "Social dance only", price: "6 €", note: "from 21:00", noteAccent: false },
+];
+---
+
+<section class="mx-auto max-w-[1240px] px-8 pt-[110px] max-sm:px-5">
+  <!-- ADDED: single column below 980px; the artboard had no breakpoint here. -->
+  <div
+    class="grid grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] items-start gap-14 max-xl:grid-cols-1 max-xl:gap-12"
+  >
+    <div>
+      <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+        >Plan your night</span
+      >
+      <h2
+        class="font-display mt-4 mb-[34px] text-h3-section leading-flat font-medium text-cream uppercase"
+      >
+        How a Friday runs
+      </h2>
+      <div class="flex flex-col">
+        {
+          timeline.map((entry, index) => (
+            <div
+              class:list={[
+                "grid grid-cols-[96px_1fr] gap-6 border-t border-gold/20 py-[22px]",
+                "max-xs:grid-cols-1 max-xs:gap-1.5",
+                index === timeline.length - 1 && "border-b border-gold/20",
+              ]}
+            >
+              <span
+                class:list={[
+                  "font-display text-7xl font-medium",
+                  entry.accent ? "text-orange" : "text-gold",
+                ]}
+              >
+                {entry.time}
+              </span>
+              <div>
+                <h4 class="font-display text-2xl font-medium text-cream uppercase">
+                  {entry.title}
+                </h4>
+                <p class="mt-1.5 text-md leading-snug-3 text-cream/58">
+                  {entry.body}
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="border border-gold/28 bg-surface">
+      <div class="border-b border-gold/20 px-7 pt-[26px] pb-5">
+        <h3
+          class="font-display text-5xl font-medium tracking-tight-4 text-cream uppercase"
+        >
+          At the door
+        </h3>
+        <p class="mt-2 text-base text-cream/50">
+          Cash only. Reduced for students and anyone on a tight budget.
+        </p>
+      </div>
+
+      <div class="px-7 pt-2 pb-[22px]">
+        {
+          prices.map((tier, index) => (
+            <div
+              class:list={[
+                "flex items-baseline gap-4 py-[17px]",
+                index !== prices.length - 1 && "border-b border-gold/14",
+              ]}
+            >
+              <span class="text-md-plus text-cream/82">{tier.label}</span>
+              <span class="font-display ml-auto text-7xl font-medium text-cream">
+                {tier.price}
+              </span>
+              <span
+                class:list={[
+                  "min-w-[78px] text-right text-sm-plus",
+                  tier.noteAccent ? "text-gold" : "text-cream/35",
+                ]}
+              >
+                {tier.note}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+
+      <div
+        class="flex flex-col gap-[9px] border-t border-gold/20 px-7 pt-[18px] pb-6"
+      >
+        <span class="text-base-plus text-cream/60">✓ No registration, no membership</span>
+        <span class="text-base-plus text-cream/60">✓ No partner needed — we rotate</span>
+        <span class="text-base-plus text-cream/60"
+          >✓ Classes taught in English &amp; German</span
+        >
+        <span class="text-base-plus text-gold-light"
+          >! Clean indoor shoes required — change at the door</span
+        >
+      </div>
+    </div>
+  </div>
+</section>

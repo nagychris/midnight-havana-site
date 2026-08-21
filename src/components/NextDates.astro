@@ -1,0 +1,193 @@
+---
+import { hasPublicAsset } from "../lib/assets";
+
+interface Props {
+  /** Artboard prop `showPosterThumbs` (was <sc-if value="{{ posterThumbs }}">). */
+  showPosterThumbs?: boolean;
+}
+const { showPosterThumbs = true } = Astro.props;
+
+type Badge = { label: string; variant: "solid" | "gold" | "green" };
+
+const dates = [
+  {
+    day: "Fri",
+    date: "21",
+    month: "Aug 2026",
+    tonight: true,
+    badges: [
+      { label: "Tonight", variant: "solid" },
+      { label: "Sunset rueda special", variant: "gold" },
+    ] as Badge[],
+    title: "Summer Peak Party",
+    blurb:
+      "One more long summer night — riverside terrace open, big rueda at 21:30, Cuban timba until late.",
+    meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Yago · Sassan"],
+    dj: "DJ EC Kuba",
+    poster: "/assets/flyer-summer-peak.png",
+    posterAlt: "Summer Peak Party flyer",
+  },
+  {
+    day: "Fri",
+    date: "11",
+    month: "Sep 2026",
+    tonight: false,
+    badges: [{ label: "Live percussion", variant: "green" }] as Badge[],
+    title: "Timba Nights",
+    blurb:
+      "Harder, faster, Havana-style. A conga player joins the DJ for two live sets on the floor.",
+    meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Yago · Sassan"],
+    dj: "DJ La Yuma",
+    // The artboard's image-slot for this row had no src — no flyer exists yet.
+    poster: null,
+    posterAlt: "Timba Nights flyer",
+  },
+  {
+    day: "Fri",
+    date: "25",
+    month: "Sep 2026",
+    tonight: false,
+    badges: [{ label: "Big rueda 22:00", variant: "gold" }] as Badge[],
+    title: "Rueda Grande",
+    blurb:
+      "Everyone in one circle at 22:00 — beginners included. The calls stay simple until the whole floor is in.",
+    meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Sassan"],
+    dj: "DJ Rumbero",
+    poster: null,
+    posterAlt: "Rueda Grande flyer",
+  },
+];
+
+// Fall back to the placeholder for any flyer whose file is not present yet.
+const rows = dates.map((event) => ({
+  ...event,
+  poster: event.poster && hasPublicAsset(event.poster) ? event.poster : null,
+}));
+
+const badgeClass: Record<Badge["variant"], string> = {
+  solid: "bg-orange text-ink",
+  gold: "border border-gold/40 text-gold",
+  green: "border border-green-dark/55 text-green",
+};
+---
+
+<section id="dates" class="mx-auto max-w-[1240px] px-8 pt-[120px] pb-5 max-sm:px-5">
+  <div
+    class="mb-[52px] flex flex-wrap items-end justify-between gap-10"
+  >
+    <div>
+      <span
+        class="font-display text-xs tracking-wide-30 text-gold uppercase"
+        >The schedule</span
+      >
+      <h2
+        class="font-display mt-4 text-h2 leading-flat font-medium text-cream uppercase"
+      >
+        Next Salsa Fridays
+      </h2>
+    </div>
+    <p class="max-w-[34ch] text-md-plus leading-normal-2 text-cream/55 text-pretty">
+      Almost every Friday. We skip a few for holidays and venue dates — the list
+      below is always the truth.
+    </p>
+  </div>
+
+  {
+    rows.map((event, index) => (
+      <a
+        href="/event"
+        class:list={[
+          "grid grid-cols-[132px_1fr_300px] items-center gap-9 border-t border-gold/20 py-[30px] text-inherit hover:bg-gold/5",
+          // ADDED: the artboard had no breakpoints here. Below 1100px the poster
+          // column is dropped; below 620px the date block goes horizontal.
+          "max-3xl:grid-cols-[132px_1fr] max-sm:grid-cols-1 max-sm:gap-4",
+          index === rows.length - 1 && "border-b border-gold/20",
+        ]}
+      >
+        <div class="text-center max-sm:flex max-sm:items-baseline max-sm:gap-3 max-sm:text-left">
+          <div
+            class:list={[
+              "font-display text-sm font-light tracking-wide-22 uppercase",
+              event.tonight ? "text-orange" : "text-gold/75",
+            ]}
+          >
+            {event.day}
+          </div>
+          <div class="font-display text-11xl leading-flat font-semibold text-cream">
+            {event.date}
+          </div>
+          <div
+            class="font-display text-base font-normal tracking-wide-16 text-cream/60 uppercase"
+          >
+            {event.month}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-3 flex flex-wrap items-center gap-3">
+            {event.badges.map((badge) => (
+              <span
+                class:list={[
+                  "font-display px-2.5 py-1 text-2xs tracking-wide-18 uppercase",
+                  badgeClass[badge.variant],
+                  // The "Tonight" badge glows in step with the strip's pulse.
+                  badge.label === "Tonight" && "mh-live-badge",
+                ]}
+              >
+                {badge.label}
+              </span>
+            ))}
+          </div>
+          <h3
+            class="font-display text-8xl font-medium tracking-tight-1 text-cream uppercase"
+          >
+            {event.title}
+          </h3>
+          <p
+            class="mt-[9px] max-w-[52ch] text-md-plus leading-snug-3 text-cream/58 text-pretty"
+          >
+            {event.blurb}
+          </p>
+          <div
+            class="mt-4 flex flex-wrap items-center gap-x-[22px] gap-y-2 text-base text-cream/68"
+          >
+            {event.meta.map((item) => (
+              <>
+                <span>{item}</span>
+                <span class="text-gold/35" aria-hidden="true">
+                  ·
+                </span>
+              </>
+            ))}
+            <span class="text-gold">{event.dj}</span>
+          </div>
+        </div>
+
+        {
+          showPosterThumbs &&
+            (event.poster ? (
+              <div class="h-[172px] overflow-hidden border border-gold/22 bg-surface max-3xl:hidden">
+                <img
+                  src={event.poster}
+                  alt={event.posterAlt}
+                  class="block h-full w-full object-cover object-top opacity-92"
+                />
+              </div>
+            ) : (
+              // No flyer artwork exists for this date yet — see TASKS.md.
+              <div class="flex h-[172px] items-center justify-center border border-dashed border-gold/22 bg-surface max-3xl:hidden">
+                <span class="font-display px-4 text-center text-2xs tracking-wide-18 text-cream/32 uppercase">
+                  Flyer to come
+                </span>
+              </div>
+            ))
+        }
+      </a>
+    ))
+  }
+
+  <p class="mt-6 text-base-plus text-cream/45">
+    No Salsa Friday on 4 &amp; 18 September (venue dates). Dates further ahead are
+    announced first in the WhatsApp community.
+  </p>
+</section>

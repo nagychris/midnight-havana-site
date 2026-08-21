@@ -1,0 +1,208 @@
+---
+import Globe from "./icons/Globe.astro";
+import Instagram from "./icons/Instagram.astro";
+import Whatsapp from "./icons/Whatsapp.astro";
+
+interface Props {
+  /** Artboard prop `showLangSwitcher` (was <sc-if value="{{ langSwitcher }}">). */
+  showLangSwitcher?: boolean;
+}
+const { showLangSwitcher = true } = Astro.props;
+
+const navLinks = [
+  { href: "#dates", label: "Next dates" },
+  { href: "#start", label: "New here?" },
+  { href: "#courses", label: "Classes" },
+  { href: "#venue", label: "Venue" },
+  { href: "#faq", label: "FAQ" },
+];
+---
+
+<header class="mh-header bg-ink/82 border-b border-gold/16 backdrop-blur-[14px]">
+  <div
+    class="mx-auto flex max-w-[1240px] items-center gap-7 px-8 py-3.5 max-sm:gap-4 max-sm:px-5"
+  >
+    <a href="#top" class="mr-auto flex flex-none items-center gap-3">
+      <img
+        src="/assets/logo-round.png"
+        alt="Midnight Havana"
+        width="38"
+        height="38"
+        class="block h-[38px] w-[38px]"
+      />
+      <span
+        class="font-wordmark text-base font-bold tracking-wide-16 text-cream uppercase"
+        >Midnight Havana</span
+      >
+    </a>
+
+    <nav
+      class="mh-nav ml-auto flex items-center gap-[30px] text-base-plus tracking-tight-2"
+    >
+      {
+        navLinks.map((link) => (
+          <a href={link.href} class="text-cream/78 hover:text-gold-light">
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Language, WhatsApp and Instagram read as one control cluster, so they sit
+         on a tight 8px gap rather than the header's 28px rhythm. -->
+    <div class="flex flex-none items-center gap-2">
+      {
+        showLangSwitcher && (
+          <div class="mh-lang relative flex flex-none items-center text-gold-light">
+            <span
+              class="pointer-events-none absolute left-[11px] text-gold"
+              aria-hidden="true"
+            >
+              <Globe />
+            </span>
+            <select
+              aria-label="Language"
+              class="font-display h-[42px] cursor-pointer appearance-none rounded-sharp border border-gold/40 bg-transparent pr-[26px] pl-[32px] text-xs-plus font-normal tracking-wide-14 text-gold-light"
+            >
+              <option value="EN" class="bg-surface text-cream">EN</option>
+              <option value="DE" class="bg-surface text-cream">DE</option>
+              <option value="ES" class="bg-surface text-cream">ES</option>
+            </select>
+            <span
+              class="pointer-events-none absolute right-[10px] text-4xs text-gold"
+              aria-hidden="true"
+            >
+              ▼
+            </span>
+          </div>
+        )
+      }
+
+      <a
+        href="#community"
+        aria-label="Join the WhatsApp community"
+        title="WhatsApp community"
+        class="flex h-[42px] w-[42px] flex-none items-center justify-center rounded-sharp border border-gold/40 text-gold-light hover:bg-gold/14"
+      >
+        <Whatsapp />
+      </a>
+
+      <a
+        href="https://www.instagram.com/midnight.havana/"
+        target="_blank"
+        rel="noopener"
+        aria-label="Follow Midnight Havana on Instagram"
+        title="@midnight.havana"
+        class="flex h-[42px] w-[42px] flex-none items-center justify-center rounded-sharp bg-orange text-ink hover:bg-orange-hover"
+      >
+        <Instagram />
+      </a>
+
+      <button
+        type="button"
+        class="mh-burger text-gold-light"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="mh-mobile-menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!--
+    ADDED, not in the design. The artboard hides the nav, language select and CTA
+    label below 1040px and shows a burger, but has no menu for it to open — see
+    TASKS.md open question 1.
+  -->
+  <div
+    id="mh-mobile-menu"
+    hidden
+    class="hidden border-t border-gold/16 bg-ink/95 backdrop-blur-[14px] 2xl:hidden"
+  >
+    <nav class="mx-auto flex max-w-[1240px] flex-col px-8 py-2 max-sm:px-5">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="font-display border-b border-gold/12 py-4 text-base-plus tracking-wide-16 text-cream/78 uppercase last:border-b-0 hover:text-gold-light"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      {
+        showLangSwitcher && (
+          <div class="flex items-center gap-3 py-4">
+            <span class="font-display text-xs tracking-wide-22 text-cream/40 uppercase">
+              Language
+            </span>
+            <select
+              aria-label="Language"
+              class="font-display h-[38px] cursor-pointer appearance-none rounded-sharp border border-gold/40 bg-transparent px-3.5 text-xs-plus tracking-wide-14 text-gold-light"
+            >
+              <option value="EN" class="bg-surface text-cream">EN</option>
+              <option value="DE" class="bg-surface text-cream">DE</option>
+              <option value="ES" class="bg-surface text-cream">ES</option>
+            </select>
+          </div>
+        )
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Ported from the artboard's trailing DCLogic class (componentDidMount).
+  // Thresholds are the design's: >4px counts as movement, hide only past 160px.
+  const header = document.querySelector<HTMLElement>(".mh-header");
+  const burger = document.querySelector<HTMLButtonElement>(".mh-burger");
+  const menu = document.querySelector<HTMLElement>("#mh-mobile-menu");
+
+  if (header) {
+    let lastY = window.scrollY || 0;
+    let hidden = false;
+
+    const onScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      const down = y > lastY + 4;
+      const up = y < lastY - 4;
+
+      // Never hide the header while the mobile menu is open.
+      const menuOpen = burger?.getAttribute("aria-expanded") === "true";
+
+      if (down && y > 160 && !hidden && !menuOpen) {
+        hidden = true;
+        header.classList.add("mh-hidden");
+      } else if (up && hidden) {
+        hidden = false;
+        header.classList.remove("mh-hidden");
+      }
+
+      if (down || up) lastY = y;
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  if (burger && menu) {
+    const setOpen = (open: boolean) => {
+      burger.setAttribute("aria-expanded", String(open));
+      menu.hidden = !open;
+      menu.classList.toggle("hidden", !open);
+    };
+
+    burger.addEventListener("click", () => {
+      setOpen(burger.getAttribute("aria-expanded") !== "true");
+    });
+
+    // Close on navigation and when the viewport grows past the collapse point.
+    menu.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("a")) setOpen(false);
+    });
+
+    window.matchMedia("(min-width: 1041px)").addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

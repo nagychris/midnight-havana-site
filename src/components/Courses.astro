@@ -1,0 +1,163 @@
+---
+// Section #courses. Two track cards, each with its own gradient wash and accent
+// colour — orange for Casino (danced in pairs), green for Rueda (in a circle).
+const tracks = [
+  {
+    eyebrow: "Track 01 · in pairs",
+    title: "Casino",
+    blurb: "Cuban salsa danced as a couple. Where everyone starts.",
+    accent: "text-orange",
+    badge: "bg-orange/16 text-orange-light",
+    wash: "linear-gradient(180deg,rgba(212,100,44,.09),rgba(20,16,13,0) 55%)",
+    classes: [
+      {
+        time: "19:00",
+        name: "Casino Basics",
+        level: "Level 0",
+        body: "You have never danced Cuban salsa. We build the step, the timing and the first contact with a partner from nothing.",
+        prerequisite: "Prerequisite: none at all. Come alone.",
+      },
+      {
+        time: "20:00",
+        name: "Casino Beginner",
+        level: "Level 1",
+        bodyHtml:
+          'Real partner dancing: leading and following, turns, and the figures the whole Cuban vocabulary is built on — starting with <em class="text-cream/80">dile que no</em>.',
+        prerequisite:
+          "Prerequisite: comfortable with the basic step and turning with a partner.",
+      },
+    ],
+  },
+  {
+    eyebrow: "Track 02 · in a circle",
+    title: "Rueda de Casino",
+    blurb:
+      "The same dance in a circle, one caller, everyone switching partners.",
+    accent: "text-green",
+    badge: "bg-green-dark/18 text-green",
+    wash: "linear-gradient(180deg,rgba(127,154,78,.1),rgba(20,16,13,0) 55%)",
+    classes: [
+      {
+        time: "19:00",
+        name: "Rueda Beginner",
+        level: "Level 2",
+        body: "Your first calls, and the timing of the switch. Suddenly you are dancing with twelve people instead of one.",
+        prerequisite:
+          "Prerequisite: Casino Beginner level — ready for group dancing and dynamic partner changes.",
+      },
+      {
+        time: "20:00",
+        name: "Rueda Advanced",
+        level: "Level 3",
+        body: "Long combinations, faster calls, cleaner hands. Musicality and rueda etiquette at speed.",
+        prerequisite:
+          "Prerequisite: solid rueda experience, ready for advanced figures.",
+      },
+    ],
+  },
+];
+---
+
+<section id="courses" class="mx-auto max-w-[1240px] px-8 pt-[118px] max-sm:px-5">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-10">
+    <div>
+      <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+        >Classes &amp; levels</span
+      >
+      <h2
+        class="font-display mt-4 text-h2 leading-flat font-medium text-cream uppercase"
+      >
+        Two tracks, four levels
+      </h2>
+    </div>
+    <p class="max-w-[36ch] text-md-plus leading-normal-2 text-cream/55 text-pretty">
+      Two classes run in parallel each hour, so you always have a level that fits.
+      Drop in whenever — nothing builds on last week.
+    </p>
+  </div>
+
+  <!-- ADDED: single column below 900px; the artboard had no breakpoint here. -->
+  <div class="mt-[52px] grid grid-cols-2 gap-7 max-lg:grid-cols-1">
+    {
+      tracks.map((track) => (
+        <div
+          class="border border-gold/28"
+          style={`background:${track.wash}`}
+        >
+          <div class="border-b border-gold/20 px-[30px] pt-7 pb-[22px]">
+            <div
+              class:list={[
+                "font-display text-2xs-plus tracking-wide-28 uppercase",
+                track.accent,
+              ]}
+            >
+              {track.eyebrow}
+            </div>
+            <h3 class="font-display mt-3 text-9xl font-semibold text-cream uppercase">
+              {track.title}
+            </h3>
+            <p class="mt-2.5 text-md leading-snug-3 text-cream/62 text-pretty">
+              {track.blurb}
+            </p>
+          </div>
+
+          {track.classes.map((session, index) => (
+            <div
+              class:list={[
+                "px-[30px] py-[26px]",
+                index === 0 && "border-b border-gold/14",
+              ]}
+            >
+              <div class="flex flex-wrap items-baseline gap-3.5">
+                <span
+                  class:list={[
+                    "font-display text-3xl font-medium",
+                    track.accent,
+                  ]}
+                >
+                  {session.time}
+                </span>
+                <h4 class="font-display text-4xl font-medium text-cream uppercase">
+                  {session.name}
+                </h4>
+                <span
+                  class:list={[
+                    "font-display ml-auto px-2.5 py-[3px] text-3xs tracking-wide-16 uppercase",
+                    track.badge,
+                  ]}
+                >
+                  {session.level}
+                </span>
+              </div>
+              {session.bodyHtml ? (
+                <p
+                  class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty"
+                  set:html={session.bodyHtml}
+                />
+              ) : (
+                <p class="mt-3 text-md leading-normal-2 text-cream/62 text-pretty">
+                  {session.body}
+                </p>
+              )}
+              <p class="mt-3 text-sm-plus leading-snug-2 text-cream/42">
+                {session.prerequisite}
+              </p>
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <div
+    class="mt-[22px] flex flex-wrap items-center gap-x-[26px] gap-y-3 border border-dashed border-gold/30 px-[26px] py-[22px]"
+  >
+    <span class="font-display text-xs tracking-wide-22 text-gold uppercase"
+      >Not sure?</span
+    >
+    <span class="text-md-plus text-cream/68 text-pretty"
+      >Come at 18:45 and ask at the door — Helen, Yago or Sassan will put you in the
+      right room in ten seconds.</span
+    >
+  </div>
+</section>

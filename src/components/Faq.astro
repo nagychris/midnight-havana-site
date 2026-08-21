@@ -1,0 +1,77 @@
+---
+// Section #faq. Seven native <details>; the webkit marker is hidden in global.css
+// and replaced by the "+" span, exactly as the artboard did it.
+const faqs = [
+  {
+    q: "Do I need a partner?",
+    a: "No. Most people come alone. We rotate partners throughout every class, and at the social dance asking someone new to dance is completely normal — that is the culture.",
+  },
+  {
+    q: "I have never danced anything. Is this really for me?",
+    a: "Yes — Casino Basics at 19:00 exists precisely for that. Every Friday it starts from zero, so you can never be behind. Half the room is usually in their first month.",
+  },
+  {
+    q: "Do I have to register or buy a course?",
+    a: "Never. Every Friday is drop-in and paid in cash at the door. No subscription, no ten-week commitment, no email required. Come when you can come.",
+  },
+  {
+    q: "What should I wear and which shoes?",
+    aHtml:
+      'Whatever you can move and sweat in. <strong class="font-semibold text-cream">Clean shoes are required</strong> — bring a second, indoor-only pair and change at the door. Street shoes damage and dirty the wooden floor, and everyone dances on it. A smooth sole turns much better than a grippy running shoe, but clean sneakers are absolutely fine for your first nights. Bring a second shirt if you run hot.',
+  },
+  {
+    q: "Which language are the classes in?",
+    aHtml:
+      "English and German, switched as the room needs it. The Cuban vocabulary stays Spanish — you will pick up <em>dile que no</em> and <em>enchufla</em> on your first night.",
+  },
+  {
+    q: "What is the difference between salsa cubana, casino and rueda?",
+    aHtml:
+      "Casino <em>is</em> Cuban salsa — the name Cubans use for the couple dance. Rueda de casino is the same dance in a circle of couples, with one person calling figures and everyone changing partners on the call. We teach both, side by side.",
+  },
+  {
+    q: "Is there a Salsa Friday every week?",
+    aHtml:
+      'Almost. We pause for public holidays and the occasional venue date — the <a href="#dates">next dates</a> list is always current, and every date is announced in the WhatsApp community first.',
+  },
+];
+---
+
+<section id="faq" class="mx-auto max-w-[1000px] px-8 pt-[118px] max-sm:px-5">
+  <span class="font-display text-xs tracking-wide-30 text-gold uppercase"
+    >Good to know</span
+  >
+  <h2
+    class="font-display mt-4 mb-11 text-h2-faq leading-flat font-medium text-cream uppercase"
+  >
+    Questions before your first night
+  </h2>
+
+  {
+    faqs.map((faq, index) => (
+      <details
+        class:list={[
+          "border-t border-gold/20",
+          index === faqs.length - 1 && "border-b border-gold/20",
+        ]}
+      >
+        <summary
+          class="font-display flex cursor-pointer list-none items-baseline gap-5 py-6 text-4xl font-normal tracking-tight-2 text-cream uppercase hover:text-gold-light"
+        >
+          <span class="text-base text-gold" aria-hidden="true">+</span>
+          {faq.q}
+        </summary>
+        {faq.aHtml ? (
+          <p
+            class="max-w-[62ch] pb-[26px] pl-10 text-lg leading-relaxed-2 text-cream/65 text-pretty max-sm:pl-0"
+            set:html={faq.aHtml}
+          />
+        ) : (
+          <p class="max-w-[62ch] pb-[26px] pl-10 text-lg leading-relaxed-2 text-cream/65 text-pretty max-sm:pl-0">
+            {faq.a}
+          </p>
+        )}
+      </details>
+    ))
+  }
+</section>
