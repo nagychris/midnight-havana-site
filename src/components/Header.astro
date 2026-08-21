@@ -180,6 +180,15 @@ const navLinks = [
   const menu = document.querySelector<HTMLElement>("#mh-mobile-menu");
 
   if (header) {
+    // Keeps the hero's height calc exact, whatever the bar ends up measuring.
+    const syncHeight = () =>
+      document.documentElement.style.setProperty(
+        "--mh-header-h",
+        `${header.offsetHeight}px`,
+      );
+    syncHeight();
+    window.addEventListener("resize", syncHeight);
+
     let lastY = window.scrollY || 0;
     let hidden = false;
 

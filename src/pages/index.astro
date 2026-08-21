@@ -20,8 +20,13 @@ const showPosterThumbs = true;
 
 <Base>
   <Header showLangSwitcher={showLangSwitcher} />
-  <Hero />
-  <TonightStrip />
+  <!-- Hero + strip share one viewport so the next date is visible without
+       scrolling. The header stays outside, or it would stop being sticky once
+       this wrapper scrolled past. -->
+  <div class="flex min-h-[calc(100dvh-var(--mh-header-h))] flex-col">
+    <Hero />
+    <TonightStrip />
+  </div>
   <NextDates showPosterThumbs={showPosterThumbs} />
   <StartHere />
   <Courses />

@@ -99,6 +99,11 @@
 
 /* Base layer, from the artboard's <style> block. */
 @layer base {
+  /* Fallback until Header.astro syncs the measured height. */
+  :root {
+    --mh-header-h: 70px;
+  }
+
   body {
     margin: 0;
     background: var(--color-ink);
