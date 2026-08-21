@@ -81,13 +81,8 @@ const eventSeries = {
     />
   </head>
   <body>
-    <!--
-      `overflow-x: clip`, not `hidden`. The design used `hidden` here, but that
-      makes this div a scroll container, which then becomes the containing block
-      for `position: sticky` descendants — so the sticky header sticks to a box
-      that never scrolls, i.e. it doesn't stick at all. `clip` still prevents
-      sideways scrolling but creates no scroll container, so sticky keeps working.
-    -->
+    <!-- `clip`, not `hidden` — `hidden` makes this a scroll container and breaks
+         the sticky header. -->
     <div class="max-w-full overflow-x-clip">
       <slot />
     </div>

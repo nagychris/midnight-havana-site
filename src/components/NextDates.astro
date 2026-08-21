@@ -1,11 +1,8 @@
 ---
 import { Image } from "astro:assets";
 
-// Flyers live in src/assets so Astro's image pipeline resizes them and emits
-// webp at build time — the source art is a multi-megabyte print-resolution PNG
-// and the thumbnail is 300x172. Globbing rather than importing each one keeps the
-// drop-a-file-in behaviour: add a flyer here, name it in `poster` below, done.
-// A `poster` with no matching file falls back to the placeholder.
+// Globbed rather than imported so adding a flyer is drop-in, and a `poster` with
+// no matching file falls back to the placeholder.
 const flyers = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/flyers/*.{png,jpg,jpeg,webp,avif}",
   { eager: true },
@@ -68,8 +65,6 @@ const dates = [
   },
 ];
 
-// Resolve each `poster` filename to its imported image, or null so the row
-// renders the placeholder instead.
 const rows = dates.map((event) => ({
   ...event,
   poster: event.poster
@@ -110,8 +105,7 @@ const badgeClass: Record<Badge["variant"], string> = {
         href="/event"
         class:list={[
           "grid grid-cols-[132px_1fr_300px] items-center gap-9 border-t border-gold/20 py-[30px] text-inherit hover:bg-gold/5",
-          // ADDED: the artboard had no breakpoints here. Below 1100px the poster
-          // column is dropped; below 620px the date block goes horizontal.
+          // ADDED breakpoints — the artboard had none here.
           "max-3xl:grid-cols-[132px_1fr] max-sm:grid-cols-1 max-sm:gap-4",
           index === rows.length - 1 && "border-b border-gold/20",
         ]}
@@ -191,7 +185,7 @@ const badgeClass: Record<Badge["variant"], string> = {
                 />
               </div>
             ) : (
-              // No flyer artwork exists for this date yet — see TASKS.md.
+              // No artwork for this date yet.
               <div class="flex h-[172px] items-center justify-center border border-dashed border-gold/22 bg-surface max-3xl:hidden">
                 <span class="font-display px-4 text-center text-2xs tracking-wide-18 text-cream/32 uppercase">
                   Flyer to come

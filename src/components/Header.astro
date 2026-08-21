@@ -51,8 +51,7 @@ const navLinks = [
       }
     </nav>
 
-    <!-- Language, WhatsApp and Instagram read as one control cluster, so they sit
-         on a tight 8px gap rather than the header's 28px rhythm. -->
+    <!-- One control cluster, so a tighter gap than the header's 28px rhythm. -->
     <div class="flex flex-none items-center gap-2">
       {
         showLangSwitcher && (
@@ -81,8 +80,7 @@ const navLinks = [
         )
       }
 
-      <!-- Below 620px these move into the burger menu — the bar cannot hold the
-           wordmark plus three controls on a small phone without clipping. -->
+      <!-- Below 620px these move into the burger menu; the bar clips otherwise. -->
       <a
         href="#community"
         aria-label="Join the WhatsApp community"
@@ -115,14 +113,8 @@ const navLinks = [
     </div>
   </div>
 
-  <!--
-    ADDED, not in the design. The artboard hides the nav, language select and CTA
-    label below 1040px and shows a burger, but has no menu for it to open — see
-    TASKS.md open question 1.
-  -->
-  <!-- Absolute, so opening it overlays the page instead of growing the header
-       and pushing the content down. The header is `position: sticky`, which is a
-       positioned element, so `top-full` resolves against the bar above. -->
+  <!-- ADDED: the artboard had a burger with no menu behind it. Absolute so it
+       overlays the page instead of growing the header. -->
   <div
     id="mh-mobile-menu"
     hidden
@@ -157,8 +149,7 @@ const navLinks = [
         )
       }
 
-      <!-- The two CTAs, shown here only at the widths where the bar drops them.
-           Full-width and labelled, since there is room for words in the menu. -->
+      <!-- Shown only at the widths where the bar drops them. -->
       <div class="flex flex-col gap-2.5 pt-1 pb-4 sm:hidden">
         <a
           href="https://www.instagram.com/midnight.havana/"
@@ -182,8 +173,8 @@ const navLinks = [
 </header>
 
 <script>
-  // Ported from the artboard's trailing DCLogic class (componentDidMount).
-  // Thresholds are the design's: >4px counts as movement, hide only past 160px.
+  // Scroll-hide ported from the artboard's DCLogic class. The 4px and 160px
+  // thresholds are the design's — they're what stop it flickering.
   const header = document.querySelector<HTMLElement>(".mh-header");
   const burger = document.querySelector<HTMLButtonElement>(".mh-burger");
   const menu = document.querySelector<HTMLElement>("#mh-mobile-menu");
@@ -233,8 +224,7 @@ const navLinks = [
       if ((event.target as HTMLElement).closest("a")) setOpen(false);
     });
 
-    // The menu now floats over the page rather than pushing it, so it needs the
-    // dismissals people expect of an overlay: tap anywhere outside, or Escape.
+    // Overlay dismissals: tap outside, or Escape.
     document.addEventListener("click", (event) => {
       const target = event.target as Node;
       if (isOpen() && !menu.contains(target) && !burger.contains(target)) {
