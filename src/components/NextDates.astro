@@ -45,7 +45,7 @@ const dates = [
       "Harder, faster, Havana-style. A conga player joins the DJ for two live sets on the floor.",
     meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Yago · Sassan"],
     dj: "DJ La Yuma",
-    // The artboard's image-slot for this row had no src — no flyer exists yet.
+    // No flyer for this date yet.
     poster: null,
     posterAlt: "Timba Nights flyer",
   },
@@ -136,7 +136,7 @@ const badgeClass: Record<Badge["variant"], string> = {
                 class:list={[
                   "font-display px-2.5 py-1 text-2xs tracking-wide-18 uppercase",
                   badgeClass[badge.variant],
-                  // The "Tonight" badge glows in step with the strip's pulse.
+                  // Glows in step with the Tonight strip's pulse.
                   badge.label === "Tonight" && "mh-live-badge",
                 ]}
               >

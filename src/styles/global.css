@@ -1,19 +1,10 @@
 @import "tailwindcss";
 
-/*
-  Design tokens extracted from the Claude Design artboard "Midnight Havana Home.dc.html".
-  The design carried no Tailwind — every value below was lifted from an inline style
-  attribute. Most of these scales are deliberately OFF Tailwind's defaults (half-pixel
-  type sizes, wide tracking, 2px radius), so reaching for a stock utility where a token
-  exists is how this design quietly renders wrong.
-*/
+/* Tokens lifted from the design artboard's inline styles. Most scales are
+   deliberately off Tailwind's defaults — use the tokens, not stock utilities. */
 @theme {
-  /* ---- Colour ------------------------------------------------------------
-     `ink` is both the page background and the text colour on orange/gold
-     buttons. `cream` and `gold` are declared as theme colours specifically so
-     the design's alpha ramps become opacity modifiers — the artboard uses
-     rgba(245,236,224,…) at 16 different alphas and rgba(217,162,92,…) at 13.
-     Write text-cream/60 and border-gold/20, never a literal rgba(). */
+  /* Colour. `cream` and `gold` are theme colours so the design's many alpha
+     variants work as modifiers: text-cream/60, border-gold/20 — never rgba(). */
   --color-ink: #0b0908;
   --color-ink-strip: #100c0a;
   --color-surface: #14100d;
@@ -26,8 +17,7 @@
   --color-green: #a3bd6e;
   --color-green-dark: #7f9a4e;
 
-  /* ---- Type scale --------------------------------------------------------
-     Half-pixel sizes are load-bearing here; Tailwind has no token for them. */
+  /* Type scale. The half-pixel sizes are load-bearing. */
   --text-4xs: 9px;
   --text-3xs: 10.5px;
   --text-2xs: 11px;
@@ -56,9 +46,6 @@
 
   /* Fluid heading clamps, used verbatim from the artboard. */
   --text-h1: clamp(56px, 8.4vw, 124px);
-  /* The hero headline is now two full-width lines rather than a headline plus a
-     smaller subtitle, so it needs a size that lets the longer second line sit on
-     one line at desktop widths. */
   --text-hero-line: clamp(38px, 6.1vw, 92px);
   --text-h2: clamp(34px, 4.4vw, 58px);
   --text-h2-faq: clamp(34px, 4.4vw, 54px);
@@ -66,9 +53,7 @@
   --text-h2-venue: clamp(32px, 4vw, 52px);
   --text-h3-section: clamp(30px, 3.6vw, 46px);
 
-  /* ---- Tracking ----------------------------------------------------------
-     13 custom values. Tailwind's widest is .1em, so every uppercase label in
-     this design needs one of these. */
+  /* Tracking. Tailwind's widest is .1em, so every uppercase label needs one. */
   --tracking-tightest: -0.01em;
   --tracking-tight-1: 0.01em;
   --tracking-tight-2: 0.02em;
@@ -83,7 +68,7 @@
   --tracking-wide-28: 0.28em;
   --tracking-wide-30: 0.3em;
 
-  /* ---- Leading ----------------------------------------------------------- */
+  /* Leading */
   --leading-crush: 0.9;
   --leading-flat: 1;
   --leading-flat-2: 1.02;
@@ -94,18 +79,15 @@
   --leading-normal-3: 1.62;
   --leading-relaxed-2: 1.65;
 
-  /* ---- Font families ----------------------------------------------------- */
+  /* Fonts */
   --font-display: Oswald, sans-serif;
   --font-body: Karla, system-ui, sans-serif;
   --font-wordmark: Cinzel, serif;
 
-  /* ---- Radius ------------------------------------------------------------
-     The design is 2px everywhere. Bare `rounded` (4px) softens the look. */
+  /* 2px everywhere; bare `rounded` (4px) softens the look. */
   --radius-sharp: 2px;
 
-  /* ---- Breakpoints -------------------------------------------------------
-     Overridden to the artboard's own values, so the header nav collapses at
-     exactly 1040px rather than snapping to Tailwind's 1024px lg. */
+  /* The artboard's own breakpoints, not Tailwind's. */
   --breakpoint-xs: 560px;
   --breakpoint-sm: 620px;
   --breakpoint-md: 860px;
@@ -115,7 +97,7 @@
   --breakpoint-3xl: 1100px;
 }
 
-/* ---- Base layer, ported from the artboard's <style> block --------------- */
+/* Base layer, from the artboard's <style> block. */
 @layer base {
   body {
     margin: 0;
@@ -162,10 +144,7 @@
   }
 }
 
-/* ---- Component classes carried over from the artboard ------------------- */
-
-/* Sticky header that hides on scroll-down. The transform and timing are the
-   artboard's; the toggle is driven by the inline script in Header.astro. */
+/* Scroll-hide header; toggled by the script in Header.astro. */
 .mh-header {
   position: sticky;
   top: 0;
@@ -205,8 +184,7 @@
   transition: transform 0.24s ease, opacity 0.24s ease;
 }
 
-/* Burger becomes an X when the mobile menu is open. The artboard had no mobile
-   menu at all — see TASKS.md, open question 1. */
+/* Burger becomes an X when open. ADDED — the artboard had no mobile menu. */
 .mh-burger[aria-expanded="true"] span:nth-child(1) {
   transform: translateY(6.5px) rotate(45deg);
 }
@@ -233,10 +211,8 @@
   }
 }
 
-/* ---- "Tonight" live indicator ------------------------------------------
-   ADDED, not in the design. A radar-style pulse rather than a hard blink: the
-   ring expands and fades out from under a steady core, so it reads as "on right
-   now" without flickering in peripheral vision while you read the page. */
+/* ADDED: "Tonight" pulse. A ring expanding under a steady core rather than a
+   blink, so it doesn't flicker in peripheral vision. */
 @keyframes mh-live-ring {
   0% {
     transform: scale(1);
@@ -274,7 +250,7 @@
   }
 }
 
-/* Four-step grid. These breakpoints are the artboard's own. */
+/* Four-step grid; breakpoints are the artboard's. */
 .mh-steps {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

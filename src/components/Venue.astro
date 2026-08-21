@@ -35,7 +35,7 @@ const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed
         for when you need air.
       </p>
 
-      <!-- ADDED: single column below 560px. -->
+      <!-- ADDED breakpoint. -->
       <div
         class="mt-[30px] grid grid-cols-2 gap-x-[26px] gap-y-3.5 max-xs:grid-cols-1"
       >
@@ -73,12 +73,8 @@ const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed
     </div>
 
     <div class="flex flex-col gap-2.5">
-      <!--
-        CHANGED from the design: the artboard embedded the Google Maps iframe
-        directly, which contacts Google on first paint. This site links an
-        Impressum and Datenschutz, so the map is behind a click-to-load cover.
-        See TASKS.md open question 6 — revert to a bare iframe if not wanted.
-      -->
+      <!-- CHANGED: click-to-load instead of the artboard's eager iframe, so
+           Google isn't contacted on first paint. See TASKS.md. -->
       <div
         id="mh-map"
         class="relative h-[330px] border border-gold/22"
@@ -125,7 +121,7 @@ const mapSrc = "https://www.google.com/maps?q=Tangoloft+Berlin&z=16&output=embed
 </section>
 
 <script>
-  // Swap the consent cover for the real embed on click.
+  // Swap the cover for the real embed on click.
   const wrapper = document.querySelector<HTMLElement>("#mh-map");
   const consent = wrapper?.querySelector<HTMLButtonElement>(".mh-map-consent");
 

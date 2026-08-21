@@ -1,7 +1,5 @@
 ---
-// Section #top. Both gradient overlays are kept verbatim from the artboard — the
-// first is the left-to-right scrim that makes the text readable, the second the
-// top/bottom vignette. Dropping either washes the headline out.
+// Both scrims are the artboard's; dropping either washes the headline out.
 const scrimHorizontal =
   "linear-gradient(95deg,rgba(11,9,8,.95) 0%,rgba(11,9,8,.9) 30%,rgba(11,9,8,.62) 50%,rgba(11,9,8,.22) 78%,rgba(11,9,8,.1) 100%)";
 const scrimVertical =
@@ -42,8 +40,7 @@ const scrimVertical =
         class="font-display block text-hero-line leading-crush font-semibold tracking-tightest text-cream uppercase"
         >Salsa Friday</span
       >
-      <!-- Second line runs orange → gold across its width. Text-shadow is cleared
-           because the glyphs are transparent for the gradient to show through. -->
+      <!-- text-shadow cleared: the glyphs are transparent for the gradient. -->
       <span
         class="font-display mt-1.5 block bg-gradient-to-r from-orange via-[#e0842f] to-[#f0c46a] bg-clip-text text-hero-line leading-crush font-semibold tracking-tightest text-transparent uppercase [text-shadow:none]"
         >Come to learn. Stay to dance.</span
