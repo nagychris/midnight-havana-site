@@ -168,25 +168,53 @@ Local dev plus Cloudflare Pages via GitHub Actions. No snapshot/artifact step.
       would deploy twice per push. Nothing to maintain in-repo, no API token or
       account ID secrets, and PR previews come free.
 - [x] `output: 'static'` pinned in astro.config. See below for why this matters.
-- [ ] **Deploy as Pages, not Workers.** The first prod deploy landed on
-      `midnight-havana.chrisn4gy.workers.dev` and every image 404'd on
-      `/_image?href=…&f=webp`. Cause: Cloudflare's *Workers* flow for Astro adds its
-      adapter and builds in server mode, where Astro stops optimising at build time
-      and instead emits the originals plus a runtime `/_image` endpoint — an endpoint
-      a static host doesn't have and the Workers runtime can't run sharp for. Our own
-      build has zero `/_image` references and emits only transformed webp. Fix:
-      create a **Pages** project (Workers & Pages → Create → Pages → Connect to Git)
-      so the static `dist/` is served as-is. If staying on Workers is ever wanted
-      instead, add `@astrojs/cloudflare` with `imageService: 'compile'`, which moves
-      optimisation back to build time.
-      | Setting | Value |
+- [x] **`wrangler.jsonc` committed — fixes the double build and the image 404s.**
+      Without a config, `wrangler deploy` auto-detected Astro and ran
+      `astro add cloudflare` on *every* build: ~36s of setup plus a second full
+      build. Timings from the 86s run:
+
+      | Phase | Time |
       |---|---|
-      | Project name | `midnight-havana` (sets the `*.pages.dev` subdomain) |
-      | Production branch | `main` |
-      | Build command | `pnpm build` |
-      | Output directory | `dist` |
-- [ ] Custom domain, if wanted later: Pages → the project → Custom domains. Update
-      `site` in astro.config to match at the same time.
+      | Install deps | 6s |
+      | First build (correct, images optimised) | 1s |
+      | `npx` downloading wrangler | 8s |
+      | `astro add cloudflare` | 36s |
+      | Second build (adapter loaded, no image optimisation) | 6s |
+      | Upload + deploy | 5s |
+
+      The second build is also what broke images: with the adapter loaded Astro
+      swaps build-time optimisation for Cloudflare Images at request time, so the
+      pre-generated `_astro/*.webp` became `/_image?…` URLs that 404. Pinning
+      `output: 'static'` did not prevent it — the adapter injects the Images
+      binding regardless. The config is assets-only (`assets` with no `main`), so
+      there is no adapter and no Worker script; Astro's own webp output ships as-is.
+- [x] `wrangler` added as a devDependency, so `npx wrangler` resolves it locally
+      instead of downloading 4.x on every build (~8s).
+- [x] `.wrangler/` gitignored — the auto-setup used to write it during CI builds.
+- [ ] **Leave Cloudflare's deploy command as `npx wrangler deploy`.** Do *not* point
+      it at the new `pnpm run deploy` script — that one is `build && wrangler deploy`
+      for local use, and would reintroduce the double build in CI.
+- [ ] Not verified locally: wrangler cannot run in the sandbox this was built in
+      (it requires a config dir outside it). The build side is confirmed — static
+      output, no adapter, optimised webp emitted. The first push is the real test of
+      the deploy side.
+
+<details>
+<summary>Superseded: earlier plan to move to Pages</summary>
+
+Before the cause was known, the plan was to move off Workers onto a Pages project
+to get static serving. That turned out to be unnecessary — Workers serves static
+assets fine; the adapter was the problem, and a committed `wrangler.jsonc` stops it
+being added. Staying on Workers, so the site is at
+`midnight-havana.chrisn4gy.workers.dev`.
+
+The other route, if a Pages project is ever wanted instead: Workers & Pages →
+Create → Pages → Connect to Git, build command `pnpm build`, output `dist`.
+
+</details>
+
+- [ ] Custom domain, if wanted later: the Worker → Settings → Domains & Routes.
+      Update `site` in astro.config to match at the same time.
 
 ## Local commands
 

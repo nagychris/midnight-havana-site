@@ -11,7 +11,8 @@
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "astro": "ASTRO_TELEMETRY_DISABLED=1 astro"
+    "astro": "ASTRO_TELEMETRY_DISABLED=1 astro",
+    "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {
     "astro": "^7.2.4",
@@ -22,6 +23,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "@types/node": "^26.2.0",
     "tailwindcss": "^4.1.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.124.0"
   }
 }

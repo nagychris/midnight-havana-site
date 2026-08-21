@@ -1,0 +1,10 @@
+{
+  // Assets-only deploy (no `main`). Must stay committed: without it,
+  // `wrangler deploy` runs `astro add cloudflare`, which doubles the build
+  // and replaces the prebuilt webp with runtime /_image URLs.
+  "name": "midnight-havana",
+  "compatibility_date": "2026-08-21",
+  "assets": {
+    "directory": "./dist"
+  }
+}
