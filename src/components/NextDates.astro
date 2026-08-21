@@ -24,7 +24,7 @@ const dates = [
       "One more long summer night — riverside terrace open, big rueda at 21:30, Cuban timba until late.",
     meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Yago · Sassan"],
     dj: "DJ EC Kuba",
-    poster: "/assets/flyer-summer-peak.png",
+    poster: "/assets/summer-peak-party-flyer.png",
     posterAlt: "Summer Peak Party flyer",
   },
   {
@@ -87,8 +87,7 @@ const badgeClass: Record<Badge["variant"], string> = {
       </h2>
     </div>
     <p class="max-w-[34ch] text-md-plus leading-normal-2 text-cream/55 text-pretty">
-      Almost every Friday. We skip a few for holidays and venue dates — the list
-      below is always the truth.
+      Almost every Friday. Check our Instagram or WhatsApp community for the latest updates.
     </p>
   </div>
 
@@ -170,6 +169,10 @@ const badgeClass: Record<Badge["variant"], string> = {
                 <img
                   src={event.poster}
                   alt={event.posterAlt}
+                  width="300"
+                  height="172"
+                  loading="lazy"
+                  decoding="async"
                   class="block h-full w-full object-cover object-top opacity-92"
                 />
               </div>
