@@ -1,5 +1,15 @@
 ---
-import { hasPublicAsset } from "../lib/assets";
+import { Image } from "astro:assets";
+
+// Flyers live in src/assets so Astro's image pipeline resizes them and emits
+// webp at build time — the source art is a multi-megabyte print-resolution PNG
+// and the thumbnail is 300x172. Globbing rather than importing each one keeps the
+// drop-a-file-in behaviour: add a flyer here, name it in `poster` below, done.
+// A `poster` with no matching file falls back to the placeholder.
+const flyers = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/flyers/*.{png,jpg,jpeg,webp,avif}",
+  { eager: true },
+);
 
 interface Props {
   /** Artboard prop `showPosterThumbs` (was <sc-if value="{{ posterThumbs }}">). */
@@ -24,7 +34,7 @@ const dates = [
       "One more long summer night — riverside terrace open, big rueda at 21:30, Cuban timba until late.",
     meta: ["19:00 & 20:00 classes", "Social from 21:00", "Helen · Yago · Sassan"],
     dj: "DJ EC Kuba",
-    poster: "/assets/summer-peak-party-flyer.png",
+    poster: "summer-peak-party-flyer.png",
     posterAlt: "Summer Peak Party flyer",
   },
   {
@@ -58,10 +68,13 @@ const dates = [
   },
 ];
 
-// Fall back to the placeholder for any flyer whose file is not present yet.
+// Resolve each `poster` filename to its imported image, or null so the row
+// renders the placeholder instead.
 const rows = dates.map((event) => ({
   ...event,
-  poster: event.poster && hasPublicAsset(event.poster) ? event.poster : null,
+  poster: event.poster
+    ? (flyers[`/src/assets/flyers/${event.poster}`]?.default ?? null)
+    : null,
 }));
 
 const badgeClass: Record<Badge["variant"], string> = {
@@ -166,11 +179,12 @@ const badgeClass: Record<Badge["variant"], string> = {
           showPosterThumbs &&
             (event.poster ? (
               <div class="h-[172px] overflow-hidden border border-gold/22 bg-surface max-3xl:hidden">
-                <img
+                <Image
                   src={event.poster}
                   alt={event.posterAlt}
-                  width="300"
-                  height="172"
+                  width={600}
+                  format="webp"
+                  quality={80}
                   loading="lazy"
                   decoding="async"
                   class="block h-full w-full object-cover object-top opacity-92"

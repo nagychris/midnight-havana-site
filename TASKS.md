@@ -9,9 +9,10 @@ Ported from the Claude Design canvas project `a66a5b6a-36d3-44f4-9dc1-b749ba6d17
 - [x] `@theme` token block in `src/styles/global.css`
 - [x] Base layer and the artboard's `mh-*` component classes ported
 - [x] `pnpm build` clean, `pnpm astro check` 0 errors
-- [ ] **`git init`** — blocked in the sandbox this was built in (writing `.git/config`
-      is denied). Run manually:
-      `git init -b main && git add -A && git commit -m "Port Midnight Havana homepage"`
+- [x] Git repo initialised and pushed to `github.com/nagychris/midnight-havana-website`
+- [x] `sharp` added as a direct dependency — Astro's image pipeline needs it declared
+      in the project, not just present transitively, or `<Image>` silently falls back
+      to shipping the original file
 
 ## Components (page order)
 
@@ -35,8 +36,10 @@ Ported from the Claude Design canvas project `a66a5b6a-36d3-44f4-9dc1-b749ba6d17
 - [x] `style-hover="…"` → `hover:` utilities (~14 elements)
 - [x] `DCLogic` scroll-hide header → inline script (4px threshold, 160px floor kept)
 - [x] `<sc-if>` + `data-props` → `showLangSwitcher` / `showPosterThumbs` props
-- [x] `<image-slot>` → `<img>`, with a build-time existence guard
-      (`src/lib/assets.ts`) so missing artwork degrades to a placeholder
+- [x] `<image-slot>` → `<img>` for photos, `<Image>` for the flyers and logo.
+      Flyers resolve through `import.meta.glob` over `src/assets/flyers/`, so a
+      `poster` with no matching file still degrades to the placeholder — the
+      drop-a-file-in behaviour survives while gaining build-time optimisation
 - [x] `<helmet>` → `Base.astro` head
 
 ## Breakpoints added (not in the design)
@@ -67,49 +70,47 @@ All additions are marked `ADDED` in the source.
       read as one flashing block rather than a status indicator. Emphasis on the
       word comes from weight (`font-medium`) instead.
 
-## Copy decisions
-
-- **The come/stay antithesis lives in the hero only.** "Come to learn. Stay to dance."
-  stays because it works as a tagline *and* explains the format (class 19:00, social
-  21:00). The gallery previously ran the same device in reverse ("You came for the
-  dance. You stay for the people"), which made the hero's payoff into the gallery's
-  setup. Gallery headline is now "Strangers at 19:00. Friends by midnight." — a
-  time-based device instead, reusing the night's own timeline and landing on the
-  brand's own name.
-- **Community is shown, not claimed.** Next to five photos of real faces the gallery
-  does not need to assert belonging.
-- **Slop pass.** Removed stock phrasing and replaced it with concrete detail:
-  - Hero lede: dropped "Authentic" (claiming authenticity rather than showing it),
-    "taught with care" (says nothing) and "you will leave with a community" (a
-    promise a stranger can't verify, and the gallery's job). Now leads with the
-    times and the three things that actually lower the barrier.
-  - Footer tagline: "real connection" → "Cuban music". Kept "warm nights", which is
-    evocative rather than filler.
-  - Footer sign-off: "Cuba meets Berlin" (the "X meets Y" template) → "Havana rules,
-    Berlin hours".
-  - `/event` stub: rewrote dev-speak ("has not been ported", "Coming soon") into
-    plain language.
-
-  Left alone deliberately — the design's own writing is strong and specific:
-  "cross-ventilation that actually works", "the list below is always the truth",
-  "Suddenly you are dancing with twelve people instead of one", "that's when it
-  stops being steps and starts being dancing", and the door line naming Helen, Yago
-  and Sassan.
-
 ## Assets
 
-In `public/assets/`. The design MCP could not supply these (`get_file` truncates
-at 256 KiB and returns corrupt data), so they were provided by hand.
+The design MCP could not supply these (`get_file` truncates at 256 KiB and returns
+corrupt data), so they were provided by hand.
 
-| File | Status |
-|---|---|
-| `hero-social.jpg` | present |
-| `class-rueda.jpg` | present |
-| `community-terrace.jpg` | present |
-| `dj-night.jpg` | present |
-| `class-beginners.jpg` | present |
-| `logo-round.png` | present (design called it `logo-vinyl.png`; refs updated) |
-| `flyer-summer-peak.png` | **missing** — Summer Peak Party row shows the placeholder |
+Two locations, and the split is deliberate:
+
+- **`src/assets/`** — anything Astro should optimise. Full-resolution originals live
+  here and never ship as-is.
+  - `logo-round.png` (537×537, 514 KB source) — the design called it
+    `logo-vinyl.png`; refs updated
+  - `flyers/summer-peak-party-flyer.png` (1086×1448, 2.9 MB source)
+- **`public/`** — served verbatim, no optimisation.
+  - `assets/hero-social.jpg`, `class-rueda.jpg`, `community-terrace.jpg`,
+    `dj-night.jpg`, `class-beginners.jpg`
+  - `favicon.png` (64×64, 10 KB) — generated from the logo, because
+    `<link rel="icon">` needs a stable URL the image pipeline can't hash, and PNG
+    still has wider favicon support than webp
+
+- [x] **Images optimised — build went 4.6 MB → 1.1 MB.** The two big offenders were
+      print-resolution files rendered into thumbnails, both stored as PNG with
+      photographic content:
+
+      | | Before | After |
+      |---|---|---|
+      | Flyer (shown at 300×172) | 2905 KB PNG | 111 KB webp |
+      | Logo, header (38×38) | 514 KB PNG | 6 KB webp |
+      | Logo, footer (52×52) | *same file* | 10 KB webp |
+      | Favicon | 514 KB PNG | 10 KB PNG @64px |
+
+      Worth noting for future assets: most of the win was the *format*, not the
+      resize — converting the flyer at full resolution already saved 91%; the resize
+      took it to 96%. PNG is for flat graphics and transparency, not photographs.
+
+- [ ] Timba Nights and Rueda Grande still show the "Flyer to come" placeholder. Drop
+      a file into `src/assets/flyers/` and set `poster` on that row in
+      `NextDates.astro` — the glob picks it up and optimises it automatically.
+- [ ] The five photos in `public/assets/` (~900 KB combined) are still unoptimised.
+      Moving them to `src/assets/` and using `<Image>` would cut most of that too;
+      left alone because they render near full-bleed, so the gain is smaller and the
+      quality risk higher than it was for a 300px thumbnail.
 
 ## Open questions from the source
 
@@ -135,18 +136,29 @@ Things the design left unresolved. Flagged rather than invented.
 
 ## Deployment
 
-- [x] Showcase snapshot published as a Claude Artifact:
-      https://claude.ai/code/artifact/f211eb80-bd23-4a07-8e11-a9a4fb9776da
-      One self-contained file (CSS inlined, images as data URIs, 3.2 MB). Caveats:
-      single page, so `/event` links point at `#dates`, and the Maps embed can't
-      load under the artifact CSP. The bundler also has to pin the dark ground
-      unlayered — the artifact host injects unlayered CSS, and any unlayered rule
-      beats our `body` background inside Tailwind's `@layer base`, which otherwise
-      renders the page on the host's light ground. Not an issue for real hosting,
-      where the page owns the document.
-- [ ] Real hosting. Needs `git init` first (see above), then a static host — the
-      build output is plain static files in `dist/`. Netlify, Vercel, Cloudflare
-      Pages and GitHub Pages all work with zero config for an Astro static build.
+Local dev plus Cloudflare Pages via GitHub Actions. No snapshot/artifact step.
+
+- [x] Repo pushed to `github.com/nagychris/midnight-havana-website` (branch `main`)
+- [x] Node pinned to 22 (`.nvmrc` + `engines.node`) — Astro 7 needs ≥ 22.12
+- [x] `site` in astro.config set to `https://midnight-havana.pages.dev`
+- [x] `workerd` added to `allowBuilds` in pnpm-workspace.yaml — wrangler pulls it in,
+      and pnpm 11 treats an unapproved build script as a hard failure, which breaks
+      `pnpm install` in CI
+- [x] `.github/workflows/deploy.yml` — builds and deploys on every push to `main`,
+      plus a manual `workflow_dispatch` trigger. Concurrency group cancels an
+      in-flight deploy when a newer push lands.
+- [ ] **Create the Pages project once**, before the first Action run:
+      Workers & Pages → Create → Pages → **Direct Upload**, name it
+      `midnight-havana` (the name sets the `*.pages.dev` subdomain). Do *not* use
+      "Connect to Git" — that adds Cloudflare's own build on top of the Action and
+      you get two deploys per push.
+- [ ] **Add two repo secrets** (Settings → Secrets and variables → Actions):
+      | Secret | Where to get it |
+      |---|---|
+      | `CLOUDFLARE_API_TOKEN` | My Profile → API Tokens → Create → template "Edit Cloudflare Workers", or a custom token with `Account : Cloudflare Pages : Edit` |
+      | `CLOUDFLARE_ACCOUNT_ID` | Right-hand sidebar of any Workers & Pages page |
+- [ ] Custom domain, if wanted later: Pages → the project → Custom domains. Update
+      `site` in astro.config to match at the same time.
 
 ## Local commands
 
