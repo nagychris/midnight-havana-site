@@ -5,10 +5,13 @@
 allowBuilds:
   esbuild: true
   sharp: true
+  # Pulled in by wrangler for the Cloudflare deploy.
+  workerd: true
 
 onlyBuiltDependencies:
   - esbuild
   - sharp
+  - workerd
 
 # The pre-run dependency check re-invokes a bare `pnpm install`, which fails when
 # pnpm comes from corepack rather than a global install.
