@@ -70,6 +70,25 @@ All additions are marked `ADDED` in the source.
       read as one flashing block rather than a status indicator. Emphasis on the
       word comes from weight (`font-medium`) instead.
 
+## Header fixes
+
+- [x] **Sticky header actually sticks.** The root cause was not the header — the
+      page wrapper in `Base.astro` had `overflow-x: hidden`, which makes it a scroll
+      container and therefore the containing block for `position: sticky`
+      descendants. The header was sticking to a box that never scrolls. Changed to
+      `overflow-x: clip`, which still blocks sideways scrolling but creates no
+      scroll container.
+- [x] **Mobile menu overlays instead of pushing.** It was a block child of the
+      header, so opening it grew the header and displaced the page. Now
+      `absolute inset-x-0 top-full`, with a max height and its own scroll for short
+      viewports. Added the dismissals an overlay needs and a pushing panel didn't:
+      tap outside, and Escape (which also returns focus to the burger).
+- [x] **Header no longer clips on small phones.** Below 620px the bar could not fit
+      the wordmark plus three controls. The two CTAs now move into the burger menu,
+      full-width and labelled, and the wordmark drops to 12px with tighter tracking.
+      Each control appears in exactly one place at any width — the bar CTAs are
+      `max-sm:hidden`, the menu CTAs `sm:hidden`.
+
 ## Assets
 
 The design MCP could not supply these (`get_file` truncates at 256 KiB and returns
@@ -144,19 +163,28 @@ Local dev plus Cloudflare Pages via GitHub Actions. No snapshot/artifact step.
 - [x] `workerd` added to `allowBuilds` in pnpm-workspace.yaml — wrangler pulls it in,
       and pnpm 11 treats an unapproved build script as a hard failure, which breaks
       `pnpm install` in CI
-- [x] `.github/workflows/deploy.yml` — builds and deploys on every push to `main`,
-      plus a manual `workflow_dispatch` trigger. Concurrency group cancels an
-      in-flight deploy when a newer push lands.
-- [ ] **Create the Pages project once**, before the first Action run:
-      Workers & Pages → Create → Pages → **Direct Upload**, name it
-      `midnight-havana` (the name sets the `*.pages.dev` subdomain). Do *not* use
-      "Connect to Git" — that adds Cloudflare's own build on top of the Action and
-      you get two deploys per push.
-- [ ] **Add two repo secrets** (Settings → Secrets and variables → Actions):
-      | Secret | Where to get it |
+- [x] Deploy path decided: **Cloudflare's Git integration**, not GitHub Actions.
+      `.github/workflows/deploy.yml` was written and then deleted — keeping both
+      would deploy twice per push. Nothing to maintain in-repo, no API token or
+      account ID secrets, and PR previews come free.
+- [x] `output: 'static'` pinned in astro.config. See below for why this matters.
+- [ ] **Deploy as Pages, not Workers.** The first prod deploy landed on
+      `midnight-havana.chrisn4gy.workers.dev` and every image 404'd on
+      `/_image?href=…&f=webp`. Cause: Cloudflare's *Workers* flow for Astro adds its
+      adapter and builds in server mode, where Astro stops optimising at build time
+      and instead emits the originals plus a runtime `/_image` endpoint — an endpoint
+      a static host doesn't have and the Workers runtime can't run sharp for. Our own
+      build has zero `/_image` references and emits only transformed webp. Fix:
+      create a **Pages** project (Workers & Pages → Create → Pages → Connect to Git)
+      so the static `dist/` is served as-is. If staying on Workers is ever wanted
+      instead, add `@astrojs/cloudflare` with `imageService: 'compile'`, which moves
+      optimisation back to build time.
+      | Setting | Value |
       |---|---|
-      | `CLOUDFLARE_API_TOKEN` | My Profile → API Tokens → Create → template "Edit Cloudflare Workers", or a custom token with `Account : Cloudflare Pages : Edit` |
-      | `CLOUDFLARE_ACCOUNT_ID` | Right-hand sidebar of any Workers & Pages page |
+      | Project name | `midnight-havana` (sets the `*.pages.dev` subdomain) |
+      | Production branch | `main` |
+      | Build command | `pnpm build` |
+      | Output directory | `dist` |
 - [ ] Custom domain, if wanted later: Pages → the project → Custom domains. Update
       `site` in astro.config to match at the same time.
 
