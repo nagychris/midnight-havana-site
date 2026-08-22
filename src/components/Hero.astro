@@ -40,30 +40,34 @@ const scrimVertical =
         class="font-display block text-hero-line leading-crush font-semibold tracking-tightest text-cream uppercase"
         >Salsa Friday</span
       >
-      <!-- text-shadow cleared: the glyphs are transparent for the gradient. -->
+      <!-- text-shadow cleared: the glyphs are transparent for the gradient.
+           A tagline, not a second headline — on phones it steps down so the
+           name of the night stays the one thing read first. -->
       <span
-        class="font-display mt-1.5 block bg-gradient-to-r from-orange via-[#e0842f] to-[#f0c46a] bg-clip-text text-hero-line leading-crush font-semibold tracking-tightest text-transparent uppercase [text-shadow:none]"
+        class="font-display mt-1.5 block bg-gradient-to-r from-orange via-[#e0842f] to-[#f0c46a] bg-clip-text text-hero-line leading-crush font-semibold tracking-tightest text-transparent uppercase [text-shadow:none] max-sm:mt-2.5 max-sm:text-5xl max-sm:leading-flat max-sm:tracking-tight-2"
         >Come to learn. Stay to dance.</span
       >
     </h1>
 
-    <p class="mt-8 max-w-[52ch] text-xl leading-relaxed-2 text-cream/62 text-pretty">
-      Cuban Salsa, Rueda, and Son.
+    <p class="mt-8 max-w-[52ch] text-xl leading-relaxed-2 text-cream/62 text-pretty max-sm:mt-5">
       <span class="max-sm:hidden"
-        >Classes at 19:00, social dance from 21:00 — no partner or sign-up needed.</span
+        >Cuban Salsa, Rueda, and Son. Classes at 19:00, social dance from 21:00 —
+        no partner or sign-up needed.</span
       >
-      <span class="sm:hidden">No partner or sign-up needed.</span>
+      <span class="sm:hidden">Cuban salsa. No partner or sign-up needed.</span>
     </p>
 
-    <div class="pointer-events-auto mt-9 flex flex-wrap gap-3.5">
+    <div class="pointer-events-auto mt-9 flex flex-wrap gap-3.5 max-sm:mt-6">
       <a
         href="#start"
         class="font-display rounded-sharp bg-orange px-[30px] py-[17px] text-base font-medium tracking-wide-16 text-ink uppercase hover:bg-orange-hover hover:text-ink"
         >New? Start here</a
       >
+      <!-- Hidden on phones: the strip directly below is the next date, and two
+           equal buttons above it split the tap. -->
       <a
         href="#dates"
-        class="font-display rounded-sharp border border-gold/50 px-[30px] py-[17px] text-base font-medium tracking-wide-16 text-gold-light uppercase hover:bg-gold/12 hover:text-cream"
+        class="font-display rounded-sharp border border-gold/50 px-[30px] py-[17px] text-base font-medium tracking-wide-16 text-gold-light uppercase hover:bg-gold/12 hover:text-cream max-sm:hidden"
         >Next dates</a
       >
     </div>

@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import logo from "../assets/logo-round.png";
+import wordmark from "../assets/wordmark.png";
 import Globe from "./icons/Globe.astro";
 import Instagram from "./icons/Instagram.astro";
 import Whatsapp from "./icons/Whatsapp.astro";
@@ -25,18 +26,26 @@ const navLinks = [
     class="mx-auto flex max-w-[1240px] items-center gap-7 px-8 py-3.5 max-sm:gap-4 max-sm:px-5"
   >
     <a href="#top" class="mr-auto flex flex-none items-center gap-3">
+      <!-- Decorative: the wordmark beside it already names the brand. -->
       <Image
         src={logo}
-        alt="Midnight Havana"
+        alt=""
         width={114}
         format="webp"
         quality={88}
+        loading="eager"
         class="block h-[38px] w-[38px]"
       />
-      <span
-        class="font-wordmark text-base font-bold tracking-wide-16 whitespace-nowrap text-cream uppercase max-sm:text-xs max-sm:tracking-wide-14"
-        >Midnight Havana</span
-      >
+      <!-- The flyer's own lettering. Two stacked lines, so it's sized by height. -->
+      <Image
+        src={wordmark}
+        alt="Midnight Havana"
+        width={230}
+        format="webp"
+        quality={90}
+        loading="eager"
+        class="block h-11 w-auto max-sm:h-9"
+      />
     </a>
 
     <nav
