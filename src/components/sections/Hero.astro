@@ -33,7 +33,6 @@ const scrimVertical =
     'linear-gradient(to top, rgba(11,9,8,.96) 0%, rgba(11,9,8,.62) 34%, rgba(11,9,8,.28) 64%, rgba(11,9,8,.55) 100%)';
 const scrimHorizontal =
     'linear-gradient(100deg, rgba(11,9,8,.85) 0%, rgba(11,9,8,.5) 45%, rgba(11,9,8,.12) 100%)';
-
 ---
 
 <section
@@ -44,7 +43,10 @@ const scrimHorizontal =
     <div class="absolute inset-0" data-hero-slides aria-hidden="true">
         {
             slides.map((photo, index) => (
-                <div class="hero-slide" data-active={index === 0 ? 'true' : 'false'}>
+                <div
+                    class="hero-slide"
+                    data-active={index === 0 ? 'true' : 'false'}
+                >
                     <Image
                         src={photo.image}
                         alt=""
@@ -80,17 +82,20 @@ const scrimHorizontal =
             />
         </div>
 
-        <div class="mt-auto pt-10 [text-shadow:0_1px_22px_rgba(11,9,8,.9)] sm:pt-14">
+        <div
+            class="mt-auto pt-10 [text-shadow:0_1px_22px_rgba(11,9,8,.9)] sm:pt-14"
+        >
             <p
                 class="mh-rise flex items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:text-sm"
                 style="animation-delay:.05s"
             >
-                <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"></span>
+                <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"
+                ></span>
                 {t.hero.eyebrow}
             </p>
 
             <h1
-                class="mh-rise mt-3 max-w-[17ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
+                class="mh-rise mt-3 max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
                 style="animation-delay:.18s"
             >
                 {t.hero.headline}
@@ -103,8 +108,10 @@ const scrimHorizontal =
                 {t.hero.tagline}
             </p>
 
-            {/* The full pitch. On a phone the buttons matter more, so it is
-                kept for larger screens and for search engines. */}
+            {
+                /* The full pitch. On a phone the buttons matter more, so it is
+                kept for larger screens and for search engines. */
+            }
             <p
                 class="mh-rise mt-3 hidden max-w-[58ch] text-lead leading-snug-2 text-cream/75 sm:mt-3.5 sm:block"
                 style="animation-delay:.31s"
@@ -192,7 +199,7 @@ const scrimHorizontal =
             if (timer) return;
             timer = window.setInterval(
                 () => show((current + 1) % slides.length),
-                SLIDE_DURATION_MS,
+                SLIDE_DURATION_MS
             );
         };
 
@@ -210,7 +217,9 @@ const scrimHorizontal =
         // down the page does not pay for images they never see.
         if ('IntersectionObserver' in window && container) {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => (entry.isIntersecting ? start() : stop()));
+                entries.forEach((entry) =>
+                    entry.isIntersecting ? start() : stop()
+                );
             });
             observer.observe(container);
         } else {
