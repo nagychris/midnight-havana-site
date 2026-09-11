@@ -102,6 +102,11 @@ export default defineConfig({
                 defaultLocale: 'de',
                 locales: { de: 'de-DE', en: 'en-GB' },
             },
+            // Impressum, Datenschutz and AGB are noindex. Submitting a page and
+            // then telling Google not to index it is a contradiction, and
+            // Search Console reports it as an error rather than ignoring it.
+            filter: (page) =>
+                !/\/(impressum|datenschutz|agb|imprint|privacy|terms)\/$/.test(page),
         }),
     ],
 

@@ -1,0 +1,46 @@
+name: Daily rebuild
+
+# The site is static, so its idea of "today" is frozen at build time. The next
+# date in the header chip and the booking bar, the list of upcoming dates and
+# the DanceEvent structured data all come from whenever Netlify last built. Left
+# alone, the site would go on advertising a Friday that has already happened,
+# and Google drops structured data for a past event.
+#
+# This asks Netlify for a fresh build every night, after midnight in Berlin. It
+# also picks up whatever `scripts/sync-eversports.mjs` finds, since that runs as
+# part of the build.
+#
+# Setup, once:
+#   1. Netlify → Site configuration → Build & deploy → Build hooks → Add build
+#      hook. Name it "Daily rebuild" and point it at the `main` branch. Copy the
+#      URL it gives you.
+#   2. GitHub → Settings → Secrets and variables → Actions → New repository
+#      secret, named NETLIFY_BUILD_HOOK_URL, with that URL as the value.
+#   3. Actions tab → Daily rebuild → Run workflow, to check it works.
+#
+# The hook URL is a write-only trigger: anyone holding it can start a build, so
+# it lives in a secret rather than in this file.
+
+on:
+  schedule:
+    # 01:15 UTC is 02:15 or 03:15 in Berlin depending on the season, either way
+    # safely past midnight there. GitHub runs scheduled jobs in UTC only, and
+    # may start them up to about 15 minutes late.
+    - cron: '15 1 * * *'
+  # Lets you trigger it by hand from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Netlify to rebuild
+        env:
+          BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          if [ -z "$BUILD_HOOK_URL" ]; then
+            echo "NETLIFY_BUILD_HOOK_URL is not set. See the comment at the top of this file."
+            exit 1
+          fi
+          curl --fail --silent --show-error --request POST --data '{}' "$BUILD_HOOK_URL"
+          echo "Build requested."

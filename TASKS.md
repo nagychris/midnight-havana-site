@@ -164,7 +164,10 @@ In order. The first four are blockers.
 4. [ ] **Confirm the prices.** 10 € standard and 8 € reduced now appear in the
        hero and on every date card, so a wrong number is wrong everywhere.
 5. [ ] **Daily build hook**, so the next date and the Eversports links stay
-       current without anyone touching the repo.
+       current without anyone touching the repo. The workflow is written
+       (`.github/workflows/daily-rebuild.yml`); it needs the build hook created
+       in Netlify and its URL stored as the `NETLIFY_BUILD_HOOK_URL` secret in
+       GitHub.
 6. [ ] **Run the Eversports sync once** where there is network:
        `pnpm run sync-eversports -- --dry`. Until it is confirmed the site uses
        the hand-entered links, which work.
