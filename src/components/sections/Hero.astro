@@ -91,7 +91,7 @@ const scrimHorizontal =
             >
                 <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"
                 ></span>
-                {t.hero.eyebrow}
+                {t.hero.eyebrowDisplay}
             </p>
 
             <h1
@@ -112,8 +112,11 @@ const scrimHorizontal =
                 /* The full pitch. On a phone the buttons matter more, so it is
                 kept for larger screens and for search engines. */
             }
+            {/* Every fact in this sentence is repeated by the sections below,
+                so on a phone it is three lines of prose between the promise and
+                the button. Kept in the markup, shown where there is room. */}
             <p
-                class="mh-rise mt-2.5 max-w-[58ch] text-md leading-snug-2 text-cream/75 sm:mt-3.5 sm:text-lead"
+                class="mh-rise mt-3.5 hidden max-w-[58ch] text-lead leading-snug-2 text-cream/75 lg:block"
                 style="animation-delay:.31s"
             >
                 {t.hero.body}

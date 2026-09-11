@@ -110,7 +110,10 @@ export const de = {
 
     hero: {
         eyebrow: 'Midnight Havana · Salsa Friday',
-        /** Sits above the headline and names the next night. */
+        /** Shown above the headline. Says the night and the place, not the
+            brand, which the wordmark directly above already carries. */
+        eyebrowDisplay: 'Salsa Friday · Tangoloft, Kreuzberg',
+        /** Names the next night in the header chip. */
         eyebrowNext: 'Nächster Salsa Friday',
         /** The practical line under the headline, from the artboard. */
         metaTimes: 'Kurse 19:00 & 20:00 · Party ab 21:00',
@@ -119,7 +122,7 @@ export const de = {
         headline: 'Salsa Cubana & Rueda de Casino in Berlin',
         tagline: 'Lerne Salsa. Triff Menschen. Tanz durch den Freitagabend.',
         body: 'Salsa-Kurse für Anfänger und Fortgeschrittene ab 19 Uhr. Ab 21 Uhr wird das Tangoloft zum Cuban Salsa Social mit Salsa Cubana, Timba und Son.',
-        badges: ['Kein Tanzpartner nötig', 'Anfänger willkommen', 'Berlin-Kreuzberg'],
+        badges: ['Kein Tanzpartner nötig', 'Anfänger willkommen'],
         ctaPrimary: 'Nächsten Termin ansehen',
         ctaSecondary: 'Kurse entdecken',
         scrollCue: 'Weiter zum nächsten Abschnitt',

@@ -92,6 +92,7 @@ export const en: Translation = {
 
     hero: {
         eyebrow: 'Midnight Havana · Salsa Friday',
+        eyebrowDisplay: 'Salsa Friday · Tangoloft, Kreuzberg',
         eyebrowNext: 'Next Salsa Friday',
         metaTimes: 'Classes 19:00 & 20:00 · Social from 21:00',
         metaPrices: 'Regular 10 € · students 8 € · cloakroom included',
@@ -99,7 +100,7 @@ export const en: Translation = {
         headline: 'Cuban Salsa & Rueda de Casino in Berlin',
         tagline: 'Learn salsa. Meet people. Dance your way into the weekend.',
         body: 'Join our Cuban Salsa and Rueda de Casino classes from 19:00 and stay for the Social Dance from 21:00 at Tangoloft Berlin.',
-        badges: ['No partner needed', 'Beginners welcome', 'Berlin-Kreuzberg'],
+        badges: ['No partner needed', 'Beginners welcome'],
         ctaPrimary: 'See upcoming dates',
         ctaSecondary: 'Explore classes',
         scrollCue: 'Scroll to the next section',
