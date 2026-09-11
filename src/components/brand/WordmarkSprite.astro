@@ -23,10 +23,10 @@ const inner = wordmarkFile
     .replace(/<\/svg>\s*$/, '');
 ---
 
-<svg
-    aria-hidden="true"
-    focusable="false"
-    style="position:absolute;width:0;height:0;overflow:hidden"
->
+{/* Takes up no space and paints nothing; it exists only to be referenced.
+    A class rather than a `style` attribute, which the Content Security Policy
+    blocks in the built site — left inline, this element would fall back to an
+    SVG's default 300×150 and push the whole page down. */}
+<svg aria-hidden="true" focusable="false" class="absolute size-0 overflow-hidden">
     <symbol id={WORDMARK_ID} viewBox={VIEW_BOX} set:html={inner} />
 </svg>

@@ -24,13 +24,13 @@ export interface Photo {
     image: ImageMetadata;
     alt: Record<Locale, string>;
     /**
-     * What has to stay in frame when the photo is cropped, as a CSS
-     * `object-position` value. Defaults to the middle of the picture.
+     * What has to stay in frame when the photo is cropped, as a Tailwind
+     * `object-*` position class. Defaults to the middle of the picture.
      */
     focus: string;
 }
 
-const CENTRE = '50% 50%';
+const CENTRE = 'object-center';
 
 /**
  * Where the subject sits in a photo, for the places it is cropped.
@@ -38,10 +38,13 @@ const CENTRE = '50% 50%';
  * Only needed where the middle of the picture is the wrong thing to keep. Both
  * teacher portraits are full-length shots, so a centred crop lands on the
  * clothes and cuts the face off; these pull the frame up to the face.
+ *
+ * A class rather than a raw `object-position` value, because the Content
+ * Security Policy blocks inline style in the built site.
  */
 const focalPoints: Record<string, string> = {
-    'teacher-helen.jpg': '50% 14%',
-    'teacher-yago.jpg': '50% 10%',
+    'teacher-helen.jpg': 'object-top',
+    'teacher-yago.jpg': 'object-top',
 };
 
 /**

@@ -334,6 +334,70 @@
     }
 
     /*
+      The hero.
+
+      These three live here rather than in a `style` attribute because the
+      Content Security Policy forbids inline style: Astro adds a hash to
+      `style-src` for the stylesheets it inlines, and a source list that carries
+      a hash makes the browser ignore `'unsafe-inline'`. Anything set in a
+      `style` attribute is then silently dropped in the built site while still
+      working in `astro dev`, which is the worst way for a bug to behave.
+    */
+    .hero {
+        /* Pulled up under the sticky header so the photograph reaches the top
+           of the window. The height comes back as padding below. */
+        margin-top: calc(-1 * var(--header-height));
+        /* `svh`, not `vh`: on a phone `100vh` reaches behind Safari's toolbar
+           and pushes the buttons out of thumb reach. */
+        min-height: max(35rem, 100svh);
+    }
+
+    .hero-content {
+        padding-top: calc(var(--header-height) + 1.5rem);
+    }
+
+    /* Both gradients are from the artboard. Dropping either washes the text
+       out: the vertical one carries the bottom of the frame, the raking one
+       keeps the left edge readable when the photograph is bright there. */
+    .hero-scrim {
+        background:
+            linear-gradient(
+                100deg,
+                rgba(11, 9, 8, 0.85) 0%,
+                rgba(11, 9, 8, 0.5) 45%,
+                rgba(11, 9, 8, 0.12) 100%
+            ),
+            linear-gradient(
+                to top,
+                rgba(11, 9, 8, 0.96) 0%,
+                rgba(11, 9, 8, 0.62) 34%,
+                rgba(11, 9, 8, 0.28) 64%,
+                rgba(11, 9, 8, 0.55) 100%
+            );
+    }
+
+    /* The gradient that keeps text readable over a full-bleed photograph. Two
+       weights: the closing call to action sits on a brighter frame than the
+       header of an event page does. */
+    .photo-scrim {
+        background: linear-gradient(
+            to top,
+            rgba(11, 9, 8, 0.96) 0%,
+            rgba(11, 9, 8, 0.78) 45%,
+            rgba(11, 9, 8, 0.6) 100%
+        );
+    }
+
+    .photo-scrim-soft {
+        background: linear-gradient(
+            to top,
+            rgba(11, 9, 8, 0.97) 0%,
+            rgba(11, 9, 8, 0.8) 40%,
+            rgba(11, 9, 8, 0.5) 100%
+        );
+    }
+
+    /*
       Hero slideshow. Slides are stacked and cross-faded by toggling
       `data-active`; only opacity and transform animate, so it stays on the
       compositor and does not repaint on scroll.

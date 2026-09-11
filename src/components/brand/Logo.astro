@@ -16,16 +16,19 @@ interface Props {
 const { size = 48, alt = '', loading = 'lazy', class: className } = Astro.props;
 ---
 
+{/* `width` and `height` are the display size; `densities` generates the 2x file
+    for the srcset. Sizing it through the attributes rather than a `style` rule
+    keeps it working under the Content Security Policy, which blocks inline
+    style in the built site. */}
 <Image
     src={logoVinyl}
     alt={alt}
-    width={size * 2}
-    height={size * 2}
+    width={size}
+    height={size}
     densities={[1, 2]}
     format="webp"
     quality={90}
     loading={loading}
     decoding={loading === 'eager' ? 'sync' : 'async'}
     class:list={['aspect-square', className]}
-    style={`width:${size}px;height:${size}px`}
 />

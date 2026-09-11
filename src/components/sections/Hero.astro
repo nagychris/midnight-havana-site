@@ -27,19 +27,9 @@ import {
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
 const slides = photoSetOrAll(photoGroups.hero);
-
-/* Both scrims are from the artboard. Dropping either washes the text out. */
-const scrimVertical =
-    'linear-gradient(to top, rgba(11,9,8,.96) 0%, rgba(11,9,8,.62) 34%, rgba(11,9,8,.28) 64%, rgba(11,9,8,.55) 100%)';
-const scrimHorizontal =
-    'linear-gradient(100deg, rgba(11,9,8,.85) 0%, rgba(11,9,8,.5) 45%, rgba(11,9,8,.12) 100%)';
 ---
 
-<section
-    id={sectionIds.top}
-    class="relative flex flex-col overflow-hidden"
-    style="margin-top: calc(-1 * var(--header-height)); min-height: max(35rem, 100svh)"
->
+<section id={sectionIds.top} class="hero relative flex flex-col overflow-hidden">
     <div class="absolute inset-0" data-hero-slides aria-hidden="true">
         {
             slides.map((photo, index) => (
@@ -63,15 +53,10 @@ const scrimHorizontal =
         }
     </div>
 
-    <div
-        class="pointer-events-none absolute inset-0"
-        style={`background:${scrimHorizontal},${scrimVertical}`}
-    >
-    </div>
+    <div class="hero-scrim pointer-events-none absolute inset-0"></div>
 
     <div
-        class="relative mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-5.5 pb-5.5 sm:px-8 sm:pb-10"
-        style="padding-top: calc(var(--header-height) + 1.5rem)"
+        class="hero-content relative mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-5.5 pb-5.5 sm:px-8 sm:pb-10"
     >
         <div class="mh-rise flex flex-col items-center gap-3">
             <Logo size={58} loading="eager" />
@@ -88,8 +73,7 @@ const scrimHorizontal =
                 it again, so on a phone the line is spent for nothing. It
                 returns as soon as there is height to spare. */}
             <p
-                class="mh-rise hidden items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:flex sm:text-sm"
-                style="animation-delay:.05s"
+                class="mh-rise [animation-delay:50ms] hidden items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:flex sm:text-sm"
             >
                 <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"
                 ></span>
@@ -97,22 +81,19 @@ const scrimHorizontal =
             </p>
 
             <h1
-                class="mh-rise max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
-                style="animation-delay:.18s"
+                class="mh-rise [animation-delay:180ms] max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
             >
                 {t.hero.headline}
             </h1>
 
             <p
-                class="mh-rise mt-2.5 max-w-[52ch] text-lg leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
-                style="animation-delay:.26s"
+                class="mh-rise [animation-delay:260ms] mt-2.5 max-w-[52ch] text-lg leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
             >
                 {t.hero.tagline}
             </p>
 
             <p
-                class="mh-rise mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-3xs tracking-label text-gold uppercase sm:gap-x-2.5 sm:text-xs sm:tracking-label-wide"
-                style="animation-delay:.37s"
+                class="mh-rise [animation-delay:370ms] mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-3xs tracking-label text-gold uppercase sm:gap-x-2.5 sm:text-xs sm:tracking-label-wide"
             >
                 {
                     t.hero.badges.map((badge, index) => (
@@ -129,8 +110,7 @@ const scrimHorizontal =
             </p>
 
             <div
-                class="mh-rise mt-5 flex flex-col items-stretch gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7"
-                style="animation-delay:.44s"
+                class="mh-rise [animation-delay:440ms] mt-5 flex flex-col items-stretch gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7"
             >
                 <Button href={sectionHref(sectionIds.dates, locale)} size="lg">
                     {t.hero.ctaPrimary}

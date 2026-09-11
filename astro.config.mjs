@@ -47,9 +47,19 @@ export default defineConfig({
                 resources: ["'self'", 'https://www.googletagmanager.com'],
             },
             styleDirective: {
-                // Gradients and image sizing are set with style attributes,
-                // which a hash cannot cover.
-                resources: ["'self'", "'unsafe-inline'"],
+                // No 'unsafe-inline' here, and it would do nothing if there
+                // were: Astro adds a hash to this directive for each stylesheet
+                // it inlines, and a source list carrying a hash makes the
+                // browser ignore 'unsafe-inline' entirely. Listing it gave the
+                // false impression that style attributes were allowed while the
+                // built site dropped every one of them — invisibly, because
+                // `astro dev` serves no policy at all.
+                //
+                // So nothing in src/ may use a `style` attribute. Gradients,
+                // the hero's measurements and image cropping are all classes;
+                // see `.hero` and friends in src/styles/global.css. Styles set
+                // from script through the CSSOM are not affected by this.
+                resources: ["'self'"],
             },
             directives: [
                 "default-src 'self'",

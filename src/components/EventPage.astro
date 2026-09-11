@@ -46,8 +46,6 @@ const heroPhoto = event.image ? photoByName(event.image) : undefined;
 const otherDates = otherUpcomingEvents(event.slug).slice(0, 3);
 
 const pageTitle = `${title} — ${longDate} | ${site.name}`;
-const scrim =
-    'linear-gradient(to top, rgba(11,9,8,.97) 0%, rgba(11,9,8,.8) 40%, rgba(11,9,8,.5) 100%)';
 ---
 
 <Base
@@ -88,7 +86,7 @@ const scrim =
                     />
                 )
             }
-            <div class="pointer-events-none absolute inset-0" style={`background:${scrim}`}>
+            <div class="photo-scrim-soft pointer-events-none absolute inset-0">
             </div>
 
             <div
