@@ -61,11 +61,13 @@ const headingId = `event-${event.date}`;
         <div class="flex items-center gap-4 sm:contents">
             <EventDate date={event.date} accent={isNext} class="shrink-0" />
 
+            {/* No box: the chevron reads as a chevron. It keeps a 44px hit
+                area so it is still comfortable to tap. */}
             <span
-                class="disclosure-marker ml-auto flex size-9 shrink-0 items-center justify-center rounded-sharp border border-gold/25 text-gold sm:order-last sm:size-10"
+                class="disclosure-marker -mr-2 ml-auto flex size-11 shrink-0 items-center justify-center text-gold/70 transition-colors group-hover:text-gold-light sm:order-last"
                 aria-hidden="true"
             >
-                <Icon name="chevron-down" size={18} />
+                <Icon name="chevron-down" size={20} />
             </span>
         </div>
 
