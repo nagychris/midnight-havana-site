@@ -3,14 +3,18 @@ import { formatDateParts } from '../../lib/datetime';
 import { localeFromAstro } from '../../i18n';
 
 /**
- * The large date block: weekday, day number, month.
+ * The date block: weekday, day number, month, year, stacked and centred.
+ *
+ * A fixed narrow column at every width, as in the artboard. Keeping it stacked
+ * on a phone rather than laying it out as a row means the title beside it gets
+ * a full-height column to sit against instead of being pushed down.
  *
  * Wrapped in a `<time>` so the machine-readable date sits next to the display
- * one, which matters for both accessibility and structured data.
+ * one, which matters for accessibility and for structured data.
  */
 interface Props {
     date: string;
-    /** Highlights the date in the accent colour. */
+    /** Highlights the weekday in the accent colour. */
     accent?: boolean;
     size?: 'md' | 'lg';
     class?: string;
@@ -24,31 +28,31 @@ const parts = formatDateParts(date, locale);
 
 <time
     datetime={date}
-    class:list={[
-        'flex items-baseline gap-2 text-left sm:block sm:text-center',
-        className,
-    ]}
+    class:list={['block shrink-0 text-center', size === 'lg' ? 'w-14' : 'w-12', className]}
 >
     <span
         class:list={[
-            'font-display text-sm font-light tracking-label-wide uppercase',
+            'block font-display text-2xs font-light tracking-label-wide uppercase',
             accent ? 'text-orange' : 'text-gold/75',
         ]}
     >
         {parts.weekday}
     </span>
+
     <span
         class:list={[
             'block font-display leading-flat font-semibold text-cream',
-            size === 'lg' ? 'text-h2 sm:text-date' : 'text-h3',
+            size === 'lg' ? 'text-[2.375rem] sm:text-date' : 'text-3xl',
         ]}
     >
         {parts.day}
     </span>
-    <span class="font-display text-sm tracking-label text-cream/65 uppercase sm:block">
+
+    <span class="block font-display text-2xs tracking-label text-cream/70 uppercase">
         {parts.month}
     </span>
-    <span class="font-display text-sm tracking-label text-cream/40 uppercase sm:block sm:text-xs">
+
+    <span class="block font-display text-3xs tracking-label text-cream/35 uppercase">
         {parts.year}
     </span>
 </time>

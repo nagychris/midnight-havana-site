@@ -39,7 +39,7 @@ const hasIntro = Astro.slots.has('default');
     <div>
         {
             eyebrow && (
-                <p class="font-display text-xs tracking-eyebrow text-gold uppercase">
+                <p class="font-display text-2xs tracking-eyebrow text-gold uppercase sm:text-xs">
                     {eyebrow}
                 </p>
             )
@@ -48,7 +48,7 @@ const hasIntro = Astro.slots.has('default');
             id={id}
             class:list={[
                 'font-display font-medium text-cream uppercase',
-                eyebrow && 'mt-3',
+                eyebrow && 'mt-2.5 sm:mt-3',
                 level === 'h1'
                     ? 'text-hero leading-crush tracking-tightest'
                     : 'text-h2 leading-tight-2 tracking-tiny',
