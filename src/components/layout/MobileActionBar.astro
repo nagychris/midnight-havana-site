@@ -1,0 +1,114 @@
+---
+import Button from '../ui/Button.astro';
+import { bookingUrlFor, nextEvent } from '../../lib/events';
+import { formatDateParts, todayInBerlin } from '../../lib/datetime';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * The booking bar that sits at the foot of the screen on phones.
+ *
+ * It stays out of the way over the hero, which already carries the same call to
+ * action, and slides up once the hero is behind you. From there the next date
+ * and a way to book it are always one tap away, however far down the page you
+ * are. Above 1024px the header carries this instead.
+ *
+ * Whether the date is tonight is decided in the browser, not at build time: the
+ * site is generated ahead of time and a page can sit in a cache past midnight.
+ * Both wordings are rendered and the script picks one.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const event = nextEvent();
+const parts = event ? formatDateParts(event.date, locale) : null;
+const title = event?.title?.[locale] ?? '';
+const isToday = event?.date === todayInBerlin();
+---
+
+{
+    event && parts && (
+        <div
+            data-action-bar
+            data-event-when
+            data-event-date={event.date}
+            data-today={String(isToday)}
+            data-shown="false"
+            class="group fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-gold/25 bg-ink/94 px-3.5 pt-2.5 pb-[calc(0.875rem+env(safe-area-inset-bottom))] backdrop-blur-lg transition-transform duration-300 ease-out data-[shown=false]:pointer-events-none data-[shown=false]:translate-y-[110%] motion-reduce:transition-none lg:hidden"
+        >
+            <div class="min-w-0">
+                <p class="flex items-center gap-2">
+                    <span
+                        class="mh-pulse size-1.5 shrink-0 rounded-full bg-orange group-data-[today=false]:hidden"
+                        aria-hidden="true"
+                    />
+                    <span
+                        class="size-1.5 shrink-0 rounded-full bg-gold group-data-[today=true]:hidden"
+                        aria-hidden="true"
+                    />
+                    <span class="font-display text-2xs tracking-label text-gold uppercase group-data-[today=true]:text-orange">
+                        <span class="group-data-[today=true]:hidden">
+                            {t.hero.eyebrowNext}
+                        </span>
+                        <span class="group-data-[today=false]:hidden">
+                            {t.nextEvent.todayLabel}
+                        </span>
+                    </span>
+                </p>
+
+                <p class="mt-0.5 truncate font-display text-lg tracking-tiny text-cream uppercase">
+                    <time datetime={event.date} class="group-data-[today=true]:hidden">
+                        {parts.weekday} {parts.day} {parts.month}
+                    </time>
+                    {title && (
+                        <>
+                            <span class="text-gold/40 group-data-[today=true]:hidden">
+                                {' · '}
+                            </span>
+                            {title}
+                        </>
+                    )}
+                </p>
+            </div>
+
+            <Button
+                href={bookingUrlFor(event, 'salsa-basics')}
+                external
+                class="ml-auto shrink-0"
+                data-analytics="book:action-bar"
+            >
+                {t.nav.bookShort}
+            </Button>
+        </div>
+    )
+}
+
+<script>
+    /**
+     * Reveals the bar once the hero is behind you.
+     *
+     * Over the hero it would repeat the call to action that is already on
+     * screen, so it waits. On a page with no hero there is nothing to scroll
+     * past and the bar is there from the start.
+     *
+     * The date itself is kept current by `refreshEventBadges`, called from the
+     * layout, which also removes this bar if its date has passed.
+     */
+    const bar = document.querySelector<HTMLElement>('[data-action-bar]');
+    const hero = document.querySelector<HTMLElement>('#top');
+
+    if (bar) {
+        const show = (shown: boolean) => {
+            bar.dataset.shown = String(shown);
+        };
+
+        if (hero && 'IntersectionObserver' in window) {
+            const observer = new IntersectionObserver(
+                ([entry]) => show(!entry.isIntersecting),
+                { threshold: 0 },
+            );
+            observer.observe(hero);
+        } else {
+            show(true);
+        }
+    }
+</script>

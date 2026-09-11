@@ -1,0 +1,93 @@
+---
+import LegalPage from '../../layouts/LegalPage.astro';
+import { site } from '../../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../../i18n';
+
+/**
+ * English imprint.
+ *
+ * German law requires this information in German, so the German page is the
+ * binding one and this page says so. The details themselves are the same.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const { legal } = site;
+---
+
+<LegalPage
+    page="imprint"
+    title={t.meta.imprint.title}
+    heading="Imprint"
+    description={t.meta.imprint.description}
+>
+    <p>
+        Provider information under German law (§ 5 DDG). The
+        <a href="/impressum/" hreflang="de" lang="de">German version</a> is the binding
+        one.
+    </p>
+
+    <h2>Provider</h2>
+    <address>
+        <strong>Midnight Havana</strong><br />
+        a division of {legal.company}<br />
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}<br />
+        Germany
+    </address>
+
+    <h2>Contact</h2>
+    <p>
+        Phone: {site.phone}<br />
+        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+
+    <h2>Authorised representative</h2>
+    <p>{legal.representative}</p>
+
+    <h2>Commercial register</h2>
+    <p>
+        Register court: {legal.court}<br />
+        Register number: {legal.registerNumber}<br />
+        VAT identification number: {legal.vatId}
+    </p>
+
+    <h2>Responsible for the content</h2>
+    <p>{legal.representative}, at the address above.</p>
+
+    <h2>Liability for content and links</h2>
+    <p>
+        We take great care over the content of these pages but cannot guarantee
+        that it is accurate, complete or up to date. We are responsible for our
+        own content under general law. We are not obliged to monitor third-party
+        information that we transmit or store, or to investigate circumstances
+        that suggest unlawful activity.
+    </p>
+    <p>
+        Our site links to external websites whose content we do not control. The
+        provider or operator of a linked page is always responsible for its
+        content. Links were checked for legal problems at the time they were
+        added. If we become aware of an infringement, we remove the link without
+        delay.
+    </p>
+
+    <h2>Copyright</h2>
+    <p>
+        The content and works created by the site operators on these pages are
+        subject to German copyright law. Reproduction, adaptation, distribution
+        and any kind of use outside the limits of copyright require written
+        permission from the respective author or creator. Downloads and copies of
+        this page are permitted for private, non-commercial use only.
+    </p>
+
+    <h2>Consumer dispute resolution</h2>
+    <p>
+        {legal.company} is not obliged and is generally not willing to take part in
+        dispute resolution proceedings before a consumer arbitration board.
+    </p>
+
+    <hr />
+    <p>
+        See also our <a href={pathFor('privacy', locale)}>privacy policy</a> and
+        <a href={pathFor('terms', locale)}>terms and conditions</a>.
+    </p>
+</LegalPage>

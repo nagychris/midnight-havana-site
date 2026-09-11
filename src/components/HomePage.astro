@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from './seo/JsonLd.astro';
+import Hero from './sections/Hero.astro';
+import NextEvent from './sections/NextEvent.astro';
+import SalsaParty from './sections/SalsaParty.astro';
+import Classes from './sections/Classes.astro';
+import Venue from './sections/Venue.astro';
+import Team from './sections/Team.astro';
+import Reviews from './sections/Reviews.astro';
+import Contact from './sections/Contact.astro';
+import Faq from './sections/Faq.astro';
+import FinalCta from './sections/FinalCta.astro';
+import {
+    danceEventSchema,
+    eventSeriesSchema,
+    faqSchema,
+    localBusinessSchema,
+} from '../lib/structured-data';
+import { upcomingEvents } from '../lib/events';
+import { localeFromAstro, pagePaths, useTranslations } from '../i18n';
+
+/**
+ * The home page, shared by both languages.
+ *
+ * `src/pages/index.astro` and `src/pages/en/index.astro` are thin files that
+ * render this, so the two versions can never drift apart while still having
+ * their own URL, title, description and canonical.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+/* Only the next few dates are marked up. A long tail of events adds weight to
+   the page without adding anything Google will show. */
+const events = upcomingEvents().slice(0, 4);
+---
+
+<Base
+    paths={pagePaths('home')}
+    title={t.meta.home.title}
+    description={t.meta.home.description}
+    transparentHeader
+>
+    <Fragment slot="head">
+        <JsonLd data={localBusinessSchema(locale)} />
+        <JsonLd data={eventSeriesSchema(locale)} />
+        {events.map((event) => <JsonLd data={danceEventSchema(event, locale)} />)}
+        <JsonLd data={faqSchema(t.faq.items)} />
+    </Fragment>
+
+    <Hero />
+    <NextEvent />
+    <SalsaParty />
+    <Classes />
+    <Venue />
+    <Team />
+    <Reviews />
+    <Contact />
+    <Faq />
+    <FinalCta />
+</Base>

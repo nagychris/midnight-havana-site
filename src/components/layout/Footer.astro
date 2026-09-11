@@ -1,0 +1,139 @@
+---
+import Logo from '../brand/Logo.astro';
+import Wordmark from '../brand/Wordmark.astro';
+import Icon from '../ui/Icon.astro';
+import { legalNavigation, menuNavigation } from './navigation';
+import { site } from '../../data/site';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const navLinks = menuNavigation(t, locale);
+const legalLinks = legalNavigation(t, locale);
+
+/* On a phone the artboard drops the column headings and lets the links wrap
+   into one block, each tall enough to hit with a thumb. The columns come back
+   as soon as there is width for them. */
+const linkListClass = 'flex flex-row flex-wrap gap-x-5 md:flex-col md:gap-3';
+const linkClass =
+    'inline-flex min-h-11 items-center text-md text-cream/75 hover:text-gold-light md:min-h-0';
+const headingClass =
+    'hidden font-display text-xs tracking-eyebrow text-cream/45 uppercase md:block';
+
+const year = new Date().getFullYear();
+
+/* Only rendered when analytics is configured; without it there is no choice
+   to change, because nothing is ever stored. */
+const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+---
+
+<footer class="rule-top mt-8">
+    <div
+        class="mx-auto grid max-w-(--container-content) gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-8"
+    >
+        <div class="flex flex-col gap-4 lg:col-span-1">
+            <div class="flex items-center gap-3">
+                <Logo size={44} />
+                <Wordmark title="" class="h-8 w-auto text-cream" />
+            </div>
+            <p class="font-display text-xs tracking-label-wide text-gold uppercase">
+                {t.footer.tagline}
+            </p>
+        </div>
+
+        <nav aria-labelledby="footer-nav-heading">
+            <h2 id="footer-nav-heading" class={headingClass}>
+                {t.footer.navHeading}
+            </h2>
+            <div class:list={[linkListClass, 'md:mt-3']}>
+                {
+                    navLinks.map((link) => (
+                        <a href={link.href} class={linkClass}>
+                            {link.label}
+                        </a>
+                    ))
+                }
+            </div>
+        </nav>
+
+        <div class="flex flex-col gap-3">
+            <h2 class={headingClass}>
+                {t.footer.contactHeading}
+            </h2>
+            <address class="text-md leading-snug-2 text-cream/75 not-italic">
+                {site.venue.name}<br />
+                {site.venue.street}<br />
+                {site.venue.postalCode}
+                {site.venue.city}
+            </address>
+            <a href={`mailto:${site.email}`} class="text-md text-cream/75 hover:text-gold-light">
+                {site.email}
+            </a>
+            <div class="mt-1 flex gap-2.5">
+                <a
+                    href={site.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t.nav.instagram}
+                    class="flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light hover:bg-gold/12 hover:text-cream"
+                >
+                    <Icon name="instagram" size={19} />
+                </a>
+                <a
+                    href={site.social.whatsappCommunity}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t.nav.whatsapp}
+                    class="flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light hover:bg-gold/12 hover:text-cream"
+                >
+                    <Icon name="whatsapp" size={19} />
+                </a>
+            </div>
+        </div>
+
+        <nav aria-labelledby="footer-legal-heading">
+            <h2 id="footer-legal-heading" class={headingClass}>
+                {t.footer.legalHeading}
+            </h2>
+            <div class:list={[linkListClass, 'md:mt-3']}>
+                {
+                    legalLinks.map((link) => (
+                        <a href={link.href} class={linkClass}>
+                            {link.label}
+                        </a>
+                    ))
+                }
+                {
+                    hasConsentSettings && (
+                        <button
+                            type="button"
+                            data-open-consent
+                            hidden
+                            class:list={[linkClass, 'text-left']}
+                        >
+                            {t.footer.cookieSettings}
+                        </button>
+                    )
+                }
+                <a
+                    href={site.school.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={linkClass}
+                >
+                    {site.school.name}
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    {/* The booking bar is fixed over the foot of the page on phones, so the
+        last line needs room to clear it. */}
+    <div class="rule-top">
+        <p
+            class="mx-auto max-w-(--container-content) px-5 pt-6 pb-28 text-sm text-cream/45 sm:px-8 lg:pb-6"
+        >
+            © {year} {t.footer.copyright}
+        </p>
+    </div>
+</footer>

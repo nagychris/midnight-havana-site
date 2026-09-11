@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from './seo/JsonLd.astro';
+import SalsaParty from './sections/SalsaParty.astro';
+import NextEvent from './sections/NextEvent.astro';
+import Venue from './sections/Venue.astro';
+import Reviews from './sections/Reviews.astro';
+import Faq from './sections/Faq.astro';
+import FinalCta from './sections/FinalCta.astro';
+import {
+    breadcrumbSchema,
+    eventSeriesSchema,
+    faqSchema,
+    localBusinessSchema,
+} from '../lib/structured-data';
+import { site } from '../data/site';
+import { localeFromAstro, pagePaths, useTranslations } from '../i18n';
+
+/**
+ * The party landing page: /salsa-party-berlin/ and /en/salsa-party-berlin/.
+ *
+ * For someone looking for somewhere to dance on a Friday rather than for a
+ * class. Same components as the home page, different emphasis and its own
+ * title, description and canonical.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const paths = pagePaths('party');
+---
+
+<Base paths={paths} title={t.meta.party.title} description={t.meta.party.description}>
+    <Fragment slot="head">
+        <JsonLd data={localBusinessSchema(locale)} />
+        <JsonLd data={eventSeriesSchema(locale)} />
+        <JsonLd data={faqSchema(t.faq.items)} />
+        <JsonLd
+            data={breadcrumbSchema(
+                [
+                    { name: t.nav.home, url: pagePaths('home')[locale] },
+                    { name: t.nav.party, url: paths[locale] },
+                ],
+                site.url,
+            )}
+        />
+    </Fragment>
+
+    <SalsaParty headingLevel="h1" />
+    <NextEvent />
+    <Venue />
+    <Reviews />
+    <Faq />
+    <FinalCta />
+</Base>

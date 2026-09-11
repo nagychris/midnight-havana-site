@@ -1,0 +1,146 @@
+---
+import Base from './Base.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import { breadcrumbSchema } from '../lib/structured-data';
+import { site } from '../data/site';
+import {
+    localeFromAstro,
+    pagePaths,
+    useTranslations,
+    type PageId,
+} from '../i18n';
+
+/**
+ * Layout for the Impressum, privacy policy and terms.
+ *
+ * One measured column of prose, styled here rather than in each page, and kept
+ * out of the search index only where that makes sense. These pages are linked
+ * from every footer, so they carry a `noindex` of their own: they are for
+ * readers, not for search results.
+ */
+interface Props {
+    page: Extract<PageId, 'imprint' | 'privacy' | 'terms'>;
+    title: string;
+    heading: string;
+    description: string;
+    /** Free text such as "Stand: September 2026". */
+    lastUpdated?: string;
+}
+
+const { page, title, heading, description, lastUpdated } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const paths = pagePaths(page);
+---
+
+<Base paths={paths} title={title} description={description} noindex>
+    <Fragment slot="head">
+        <JsonLd
+            data={breadcrumbSchema(
+                [
+                    { name: t.nav.home, url: pagePaths('home')[locale] },
+                    { name: heading, url: paths[locale] },
+                ],
+                site.url,
+            )}
+        />
+    </Fragment>
+
+    <div class="mx-auto w-full max-w-[46rem] px-5 py-14 sm:px-8 sm:py-20">
+        <h1
+            class="font-display text-h2 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
+        >
+            {heading}
+        </h1>
+        {
+            lastUpdated && (
+                <p class="mt-3 font-display text-sm tracking-label text-gold uppercase">
+                    {lastUpdated}
+                </p>
+            )
+        }
+
+        <div class="legal-prose mt-10">
+            <slot />
+        </div>
+    </div>
+</Base>
+
+<style is:global>
+    /*
+      Typography for legal prose. Scoped to this layout so the rest of the site
+      keeps its own rhythm, and written as plain element selectors because the
+      content is long-form text rather than components.
+    */
+    .legal-prose {
+        color: --alpha(var(--color-cream) / 78%);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .legal-prose h2 {
+        margin-top: 2.75rem;
+        margin-bottom: 0.75rem;
+        font-family: var(--font-display);
+        font-size: var(--text-h4);
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--color-cream);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .legal-prose h3 {
+        margin-top: 1.75rem;
+        margin-bottom: 0.5rem;
+        font-family: var(--font-display);
+        font-size: 1.0625rem;
+        font-weight: 500;
+        color: var(--color-gold-light);
+    }
+
+    .legal-prose p,
+    .legal-prose ul,
+    .legal-prose ol,
+    .legal-prose address {
+        margin-bottom: 1rem;
+    }
+
+    .legal-prose address {
+        font-style: normal;
+    }
+
+    .legal-prose ul,
+    .legal-prose ol {
+        padding-left: 1.25rem;
+    }
+
+    .legal-prose ul {
+        list-style: disc;
+    }
+
+    .legal-prose ol {
+        list-style: decimal;
+    }
+
+    .legal-prose li {
+        margin-bottom: 0.4rem;
+    }
+
+    .legal-prose a {
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+    }
+
+    .legal-prose strong {
+        color: var(--color-cream);
+        font-weight: 600;
+    }
+
+    .legal-prose hr {
+        margin: 2.5rem 0;
+        border: 0;
+        border-top: 1px solid --alpha(var(--color-gold) / 20%);
+    }
+</style>

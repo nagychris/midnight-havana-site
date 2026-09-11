@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import JsonLd from './seo/JsonLd.astro';
+import Classes from './sections/Classes.astro';
+import NextEvent from './sections/NextEvent.astro';
+import Team from './sections/Team.astro';
+import Faq from './sections/Faq.astro';
+import FinalCta from './sections/FinalCta.astro';
+import { breadcrumbSchema, faqSchema, localBusinessSchema } from '../lib/structured-data';
+import { site } from '../data/site';
+import { localeFromAstro, pagePaths, useTranslations } from '../i18n';
+
+/**
+ * The classes landing page: /salsa-kurs-berlin/ and /en/salsa-classes-berlin/.
+ *
+ * Its own URL, title and description, aimed at someone searching for a salsa
+ * class in Berlin rather than for a party. The sections are the same
+ * components as the home page, so there is one place to change a class
+ * description.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const paths = pagePaths('classes');
+---
+
+<Base paths={paths} title={t.meta.classes.title} description={t.meta.classes.description}>
+    <Fragment slot="head">
+        <JsonLd data={localBusinessSchema(locale)} />
+        <JsonLd data={faqSchema(t.faq.items)} />
+        <JsonLd
+            data={breadcrumbSchema(
+                [
+                    { name: t.nav.home, url: pagePaths('home')[locale] },
+                    { name: t.nav.classes, url: paths[locale] },
+                ],
+                site.url,
+            )}
+        />
+    </Fragment>
+
+    <Classes headingLevel="h1" />
+    <NextEvent />
+    <Team />
+    <Faq />
+    <FinalCta />
+</Base>

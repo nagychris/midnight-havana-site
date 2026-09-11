@@ -1,0 +1,50 @@
+---
+/**
+ * A page section: the anchor target, the width limit and the vertical rhythm.
+ *
+ * Padding grows with the viewport rather than jumping at a breakpoint, so the
+ * spacing feels the same on a phone and on a wide screen.
+ */
+interface Props {
+    id?: string;
+    /** Adds a hairline above the section. */
+    divider?: boolean;
+    /** Drops the horizontal padding, for sections that bleed to the edge. */
+    bleed?: boolean;
+    /** Turns off the fade-up. Use for anything above the fold. */
+    reveal?: boolean;
+    class?: string;
+    labelledBy?: string;
+}
+
+const {
+    id,
+    divider = false,
+    bleed = false,
+    reveal = true,
+    class: className,
+    labelledBy,
+} = Astro.props;
+---
+
+<section
+    id={id}
+    aria-labelledby={labelledBy}
+    class:list={[
+        'w-full',
+        divider && 'rule-top',
+        reveal && 'reveal',
+        className,
+    ]}
+    data-reveal={reveal ? 'idle' : undefined}
+>
+    <div
+        class:list={[
+            'mx-auto w-full max-w-(--container-content)',
+            bleed ? '' : 'px-5 sm:px-8',
+            'py-12 sm:py-16 lg:py-24',
+        ]}
+    >
+        <slot />
+    </div>
+</section>

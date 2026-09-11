@@ -1,0 +1,341 @@
+---
+import Wordmark from '../brand/Wordmark.astro';
+import Icon from '../ui/Icon.astro';
+import Button from '../ui/Button.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import HeaderDateChip from './HeaderDateChip.astro';
+import { mainNavigation, menuNavigation } from './navigation';
+import { site } from '../../data/site';
+import {
+    localeFromAstro,
+    pathFor,
+    useTranslations,
+    type LocalisedPaths,
+} from '../../i18n';
+
+/**
+ * Sticky header, following the artboard.
+ *
+ * Over the hero it is completely transparent, so the photograph runs to the top
+ * of the window and the page opens on an image rather than on a bar. The hero
+ * already carries the brand lockup, so the bar leaves it out until you scroll;
+ * then the background, the border and the wordmark fade in together.
+ *
+ * Mobile first: the bar carries the brand, the booking button and the menu
+ * toggle. The horizontal navigation appears once there is room for it, at
+ * 1024px, and the date chip at 1280px.
+ */
+interface Props {
+    /** This page's path in every language, for the language switch. */
+    paths: LocalisedPaths;
+    /** Set on a page whose hero should run underneath the bar. */
+    transparent?: boolean;
+}
+
+const { paths, transparent = false } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const navLinks = mainNavigation(t, locale);
+/* The full-screen menu has room for Kontakt; the bar does not. */
+const menuLinks = menuNavigation(t, locale);
+const homePath = pathFor('home', locale);
+---
+
+<header
+    class="site-header"
+    data-hidden="false"
+    data-scrolled="false"
+    data-overlay={transparent ? 'true' : 'false'}
+>
+    <div
+        class="mx-auto flex max-w-(--container-content) items-center gap-4 px-5 py-3 sm:px-8 lg:gap-6"
+    >
+        {/* Over the hero this would repeat the lockup directly below it, so it
+            keeps its space but stays invisible until the hero is behind you.
+            Holding the space means the navigation does not jump on scroll. */}
+        <a
+            href={homePath}
+            class="site-header__brand flex shrink-0 items-center text-cream"
+            aria-label={`${site.name} — Home`}
+        >
+            <Wordmark title="" class="h-8 w-auto text-cream sm:h-10" />
+        </a>
+
+        <HeaderDateChip />
+
+        <nav
+            aria-label={t.nav.home}
+            class="ml-auto hidden items-center gap-6 lg:flex"
+        >
+            {
+                navLinks.map((link) => (
+                    <a
+                        href={link.href}
+                        data-nav-link
+                        data-section={link.section}
+                        class="mh-nav-link font-display text-sm tracking-label text-cream/82 uppercase"
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+        </nav>
+
+        <div class="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
+            {/* Both are one tap away in the footer and the closing panel too;
+                here they are for the people who came looking for them. */}
+            <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.nav.instagram}
+                class="hidden size-11 items-center justify-center rounded-sharp text-gold-light transition-colors hover:bg-gold/12 hover:text-cream lg:flex"
+            >
+                <Icon name="instagram" size={19} />
+            </a>
+            <a
+                href={site.social.whatsappCommunity}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.nav.whatsapp}
+                class="hidden size-11 items-center justify-center rounded-sharp text-gold-light transition-colors hover:bg-gold/12 hover:text-cream lg:flex"
+            >
+                <Icon name="whatsapp" size={19} />
+            </a>
+
+            <span
+                class="mx-1 hidden h-6 w-px bg-gold/25 lg:block"
+                aria-hidden="true"></span>
+
+            <LanguageSwitcher
+                paths={paths}
+                locale={locale}
+                label={t.common.ariaLanguageSwitch}
+                class="hidden md:block"
+            />
+
+            <button
+                type="button"
+                id="menu-toggle"
+                class="flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light lg:hidden"
+                aria-expanded="false"
+                aria-controls="mobile-menu"
+                aria-label={t.nav.openMenu}
+            >
+                <span data-menu-icon="open"><Icon name="menu" size={20} /></span>
+                <span data-menu-icon="close" hidden><Icon name="close" size={20} /></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!--
+  Full-screen menu. Outside the header so it covers the page rather than
+  stretching the bar, and `hidden` until the toggle opens it.
+-->
+<div
+    id="mobile-menu"
+    hidden
+    class="fixed inset-0 z-60 flex flex-col overflow-y-auto overscroll-contain bg-ink/98 backdrop-blur-lg lg:hidden"
+>
+    <div class="flex items-center gap-4 border-b border-gold/15 px-5 py-3 sm:px-8">
+        <a href={homePath} class="flex items-center text-cream">
+            <Wordmark title="" class="h-8 w-auto text-cream" />
+        </a>
+        <button
+            type="button"
+            id="menu-close"
+            class="ml-auto flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light"
+            aria-label={t.nav.closeMenu}
+        >
+            <Icon name="close" size={20} />
+        </button>
+    </div>
+
+    <nav aria-label={t.nav.home} class="flex flex-col px-5 py-2 sm:px-8">
+        {
+            menuLinks.map((link) => (
+                <a
+                    href={link.href}
+                    class="border-b border-gold/12 py-4 font-display text-2xl tracking-tiny text-cream uppercase last:border-b-0 hover:text-gold-light"
+                >
+                    {link.label}
+                </a>
+            ))
+        }
+    </nav>
+
+    <div class="mt-auto flex flex-col gap-3 px-5 pt-4 pb-8 sm:px-8">
+        <Button href={site.booking.fallbackUrl} external size="lg" fullWidth>
+            {t.nav.book}
+        </Button>
+
+        <div class="flex gap-3">
+            <Button
+                href={site.social.instagram}
+                external
+                variant="secondary"
+                fullWidth
+                aria-label={t.nav.instagram}
+            >
+                <Icon name="instagram" size={18} />
+                Instagram
+            </Button>
+            <Button
+                href={site.social.whatsappCommunity}
+                external
+                variant="secondary"
+                fullWidth
+                aria-label={t.nav.whatsapp}
+            >
+                <Icon name="whatsapp" size={18} />
+                WhatsApp
+            </Button>
+        </div>
+
+        <LanguageSwitcher
+            paths={paths}
+            locale={locale}
+            label={t.common.ariaLanguageSwitch}
+            drop="up"
+            fullWidth
+        />
+    </div>
+</div>
+
+<script>
+    /**
+     * Header behaviour: publish its measured height, swap between the
+     * transparent and solid states, hide it on the way down, mark the section
+     * currently on screen, and drive the full-screen menu.
+     */
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const toggle = document.querySelector<HTMLButtonElement>('#menu-toggle');
+    const closeButton = document.querySelector<HTMLButtonElement>('#menu-close');
+    const menu = document.querySelector<HTMLElement>('#mobile-menu');
+
+    /** How far down the page the bar stops being transparent. */
+    const SOLID_AFTER_PX = 120;
+    /** Below this the bar stays put; iOS rubber-banding gives tiny deltas. */
+    const HIDE_AFTER_PX = 160;
+
+    if (header) {
+        // The hero's top padding and every anchor offset depend on this.
+        const syncHeight = () => {
+            document.documentElement.style.setProperty(
+                '--header-height',
+                `${header.offsetHeight}px`,
+            );
+        };
+
+        syncHeight();
+        window.addEventListener('resize', syncHeight);
+        if (typeof ResizeObserver !== 'undefined') {
+            new ResizeObserver(syncHeight).observe(header);
+        }
+
+        let lastY = window.scrollY;
+
+        const onScroll = () => {
+            const y = Math.max(0, window.scrollY);
+            const movedDown = y > lastY + 4;
+            const movedUp = y < lastY - 4;
+            const menuOpen = toggle?.getAttribute('aria-expanded') === 'true';
+
+            header.dataset.scrolled = String(y > SOLID_AFTER_PX);
+
+            if (movedDown && y > HIDE_AFTER_PX && !menuOpen) {
+                header.dataset.hidden = 'true';
+            } else if (movedUp || y <= HIDE_AFTER_PX) {
+                header.dataset.hidden = 'false';
+            }
+
+            if (movedDown || movedUp) lastY = y;
+        };
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    /**
+     * Marks the navigation link for whichever section is in view, so the bar
+     * says where you are and not only where you can go.
+     */
+    const navLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>('[data-nav-link][data-section]'),
+    );
+
+    if (navLinks.length > 0 && 'IntersectionObserver' in window) {
+        const sections = navLinks
+            .map((link) => document.getElementById(link.dataset.section ?? ''))
+            .filter((section): section is HTMLElement => section !== null);
+
+        const onScreen = new Set<string>();
+
+        const paint = () => {
+            // Only the topmost section in view counts, so two neighbours never
+            // both look current.
+            const current = sections.find((section) => onScreen.has(section.id));
+            navLinks.forEach((link) => {
+                const isCurrent = Boolean(current) && link.dataset.section === current!.id;
+                link.dataset.current = String(isCurrent);
+                if (isCurrent) link.setAttribute('aria-current', 'true');
+                else link.removeAttribute('aria-current');
+            });
+        };
+
+        const spy = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) onScreen.add(entry.target.id);
+                    else onScreen.delete(entry.target.id);
+                });
+                paint();
+            },
+            { rootMargin: '-45% 0px -45% 0px' },
+        );
+
+        sections.forEach((section) => spy.observe(section));
+    }
+
+    if (toggle && menu) {
+        const openIcon = toggle.querySelector<HTMLElement>('[data-menu-icon="open"]');
+        const closeIcon = toggle.querySelector<HTMLElement>('[data-menu-icon="close"]');
+
+        const setOpen = (open: boolean) => {
+            toggle.setAttribute('aria-expanded', String(open));
+            menu.hidden = !open;
+            if (openIcon) openIcon.hidden = open;
+            if (closeIcon) closeIcon.hidden = !open;
+            // Stops the page behind the menu scrolling on touch devices.
+            document.body.style.overflow = open ? 'hidden' : '';
+            if (open) menu.querySelector<HTMLElement>('a, button')?.focus();
+        };
+
+        const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+        toggle.addEventListener('click', () => setOpen(!isOpen()));
+        closeButton?.addEventListener('click', () => {
+            setOpen(false);
+            toggle.focus();
+        });
+
+        menu.addEventListener('click', (event) => {
+            if ((event.target as HTMLElement).closest('a')) setOpen(false);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && isOpen()) {
+                setOpen(false);
+                toggle.focus();
+            }
+        });
+
+        // Reaching the desktop layout with the menu open would leave the page
+        // locked behind an invisible overlay.
+        window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
+            if (event.matches) setOpen(false);
+        });
+    }
+</script>

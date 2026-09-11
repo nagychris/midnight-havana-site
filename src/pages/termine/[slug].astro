@@ -1,0 +1,22 @@
+---
+import EventPage from '../../components/EventPage.astro';
+import { upcomingEvents } from '../../lib/events';
+
+/**
+ * German event detail pages at /termine/<slug>/.
+ *
+ * Only upcoming dates get a page. A night that is over has nothing left to
+ * book, and leaving it up would give search engines a page that contradicts
+ * the rest of the site.
+ */
+export function getStaticPaths() {
+    return upcomingEvents().map((event) => ({
+        params: { slug: event.slug },
+        props: { event },
+    }));
+}
+
+const { event } = Astro.props;
+---
+
+<EventPage event={event} />

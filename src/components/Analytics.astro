@@ -1,0 +1,65 @@
+---
+/**
+ * Google Analytics 4, loaded only after the visitor agrees.
+ *
+ * Switched on by setting `PUBLIC_GA_MEASUREMENT_ID` in the Netlify environment.
+ * With no value set this component renders nothing, the consent banner does not
+ * appear, and the site makes no third-party request at all.
+ *
+ * The id travels to the browser in a data attribute rather than an inline
+ * script, so the Content Security Policy can forbid inline script entirely.
+ * It is validated first: it ends up inside a script URL, and an environment
+ * variable is not something to interpolate unchecked.
+ */
+const rawId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
+const measurementId = /^G-[A-Z0-9]{4,20}$/.test(rawId) ? rawId : null;
+
+if (rawId && !measurementId) {
+    throw new Error(
+        `PUBLIC_GA_MEASUREMENT_ID is not a valid GA4 id: ${JSON.stringify(rawId)}. Expected something like G-ABCD123456.`,
+    );
+}
+---
+
+{measurementId && <div id="analytics-config" hidden data-measurement-id={measurementId} />}
+
+{
+    measurementId && (
+        <script>
+            import { whenGranted } from '../scripts/consent';
+
+            const config = document.querySelector<HTMLElement>('#analytics-config');
+            const measurementId = config?.dataset.measurementId;
+
+            /**
+             * Loads gtag.js and sends the first page view. Runs at most once,
+             * either straight away for a returning visitor who already agreed,
+             * or the moment the banner is accepted.
+             */
+            function loadAnalytics() {
+                if (!measurementId) return;
+
+                const tag = document.createElement('script');
+                tag.async = true;
+                tag.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+                document.head.appendChild(tag);
+
+                const dataLayer = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ??= []);
+                const gtag = (...args: unknown[]) => {
+                    dataLayer.push(args);
+                };
+
+                gtag('js', new Date());
+                gtag('config', measurementId, {
+                    anonymize_ip: true,
+                    allow_google_signals: false,
+                    allow_ad_personalization_signals: false,
+                });
+            }
+
+            if (measurementId) {
+                whenGranted('analytics', loadAnalytics);
+            }
+        </script>
+    )
+}

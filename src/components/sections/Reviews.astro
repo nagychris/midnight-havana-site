@@ -1,0 +1,87 @@
+---
+import Section from '../ui/Section.astro';
+import PhotoMarquee from '../PhotoMarquee.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import { allReviews } from '../../lib/reviews';
+import { photoGroups, photoSetOrAll } from '../../data/photos';
+import { site } from '../../data/site';
+import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
+
+/**
+ * What guests say, above a strip of photos from the nights themselves.
+ *
+ * The quotes come from src/data/reviews.json and the section disappears while
+ * that file is empty, so nothing here is ever a placeholder pretending to be a
+ * real person.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const reviews = allReviews();
+const strip = photoSetOrAll(photoGroups.community);
+---
+
+<Section id={sectionIds.reviews} divider labelledBy="reviews-heading" bleed>
+    <div class="px-5 sm:px-8">
+        <SectionHeading
+            eyebrow={t.reviews.eyebrow}
+            headline={t.reviews.headline}
+            id="reviews-heading"
+            split
+        >
+            {t.reviews.intro}
+        </SectionHeading>
+
+        {
+            reviews.length > 0 && (
+                <ul class="hairline-grid mt-12 grid md:grid-cols-2 lg:grid-cols-3">
+                    {reviews.map((review) => (
+                        <li class="flex flex-col gap-4 p-6 sm:p-8">
+                            <blockquote class="text-lead leading-snug-2 text-cream/85">
+                                <p>{review.quote[locale]}</p>
+                            </blockquote>
+                            <p class="mt-auto font-display text-sm tracking-label text-gold uppercase">
+                                {review.author}
+                            </p>
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
+        {/* The strip below is the rest of the answer to "what is this like?",
+            so it gets a heading of its own rather than drifting loose under
+            the quotes. */}
+        <div class="mt-16">
+            <p class="font-display text-2xs tracking-eyebrow text-gold uppercase sm:text-xs">
+                {t.reviews.community.eyebrow}
+            </p>
+            <h3 class="mt-2.5 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase sm:mt-3">
+                {
+                    t.reviews.community.headline.map((line, index) => (
+                        <>
+                            {index > 0 && <br />}
+                            {line}
+                        </>
+                    ))
+                }
+            </h3>
+        </div>
+    </div>
+
+    <PhotoMarquee
+        photos={strip}
+        label={t.hero.slideshowLabel}
+        class="mt-6"
+    />
+
+    <a
+        href={site.social.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mx-5 mt-6 inline-flex min-h-11 items-center gap-2.5 font-display text-sm tracking-label uppercase sm:mx-8"
+    >
+        <Icon name="instagram" size={16} />
+        {site.social.instagramHandle}
+        <Icon name="arrow-right" size={15} />
+    </a>
+</Section>

@@ -1,0 +1,40 @@
+{
+  "_readme": "Echte Rezensionen von Gästen. Drei bis fünf sind ideal. 'quote' ist der Text in beiden Sprachen, 'author' der Name. Solange die Liste leer ist, wird der ganze Abschnitt nicht angezeigt. Bitte nur veröffentlichen, was die Person auch öffentlich geschrieben oder ausdrücklich freigegeben hat. Die Zitate wurden auf Englisch abgegeben; die deutsche Fassung ist eine Übersetzung.",
+  "reviews": [
+    {
+      "author": "Laura",
+      "quote": {
+        "de": "Ich bin das erste Mal alleine gekommen und habe mich sofort willkommen gefühlt. Die Atmosphäre ist entspannt, freundlich, und man kommt wirklich leicht mit Leuten ins Gespräch.",
+        "en": "I came on my own the first time and felt welcome right away. The atmosphere is relaxed, friendly and it's really easy to meet people."
+      }
+    },
+    {
+      "author": "Marco",
+      "quote": {
+        "de": "Ich war schon auf einigen Salsa-Events in Berlin, aber Midnight Havana fühlt sich anders an. Kleiner, persönlicher, und man erkennt schnell Gesichter wieder.",
+        "en": "I've been to quite a few salsa events in Berlin, but Midnight Havana feels different. It's smaller, more personal and you quickly start recognizing people."
+      }
+    },
+    {
+      "author": "Daniel",
+      "quote": {
+        "de": "Die Rueda-Kurse machen richtig Spaß, und mir gefällt, dass man danach direkt zum Social bleiben kann. Gute Energie, gute Leute, kein Druck.",
+        "en": "The Rueda classes are great fun and I like that you can stay for the social right afterwards. Good energy, good people and no pressure."
+      }
+    },
+    {
+      "author": "Sofia",
+      "quote": {
+        "de": "Am besten gefällt mir die Mischung aus Kursen, Social Dance und den Menschen. Es fühlt sich persönlich an und nie wie eine riesige, anonyme Party.",
+        "en": "What I like most is the mix of classes, social dancing and the people. It feels personal and never like a huge anonymous party."
+      }
+    },
+    {
+      "author": "Nina",
+      "quote": {
+        "de": "Die Location ist ein wunderschöner Ort zum Tanzen. Der ganze Abend hat etwas Warmes, fast Urlaubsmäßiges.",
+        "en": "The location is such a beautiful place to dance. The whole evening has this warm, almost holiday-like feeling."
+      }
+    }
+  ]
+}

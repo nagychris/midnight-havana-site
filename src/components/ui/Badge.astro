@@ -1,0 +1,31 @@
+---
+/**
+ * Small uppercase label: a level, a date marker, a one-off special.
+ *
+ * Every tone pairs a colour with either a fill or a border, so the meaning
+ * never rests on colour alone.
+ */
+interface Props {
+    tone?: 'solid' | 'gold' | 'green' | 'muted';
+    class?: string;
+}
+
+const { tone = 'gold', class: className } = Astro.props;
+
+const tones = {
+    solid: 'bg-orange text-ink',
+    gold: 'border border-gold/45 text-gold-light',
+    green: 'border border-green-dark/60 text-green',
+    muted: 'border border-cream/20 text-cream/60',
+} as const;
+---
+
+<span
+    class:list={[
+        'inline-flex items-center gap-1.5 rounded-sharp px-2.5 py-1 font-display text-2xs tracking-label-wide uppercase whitespace-nowrap',
+        tones[tone],
+        className,
+    ]}
+>
+    <slot />
+</span>

@@ -1,0 +1,130 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import ClassFinder from '../classes/ClassFinder.astro';
+import { classes } from '../../data/classes';
+import { bookingUrlFor, nextEvent } from '../../lib/events';
+import { site } from '../../data/site';
+import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
+
+/**
+ * The four classes, each with its own booking link.
+ *
+ * The links point at the next date's classes on Eversports, so someone who
+ * books from here lands on a real bookable session rather than a course
+ * overview. Without a next date they fall back to the general page.
+ */
+interface Props {
+    /** Renders the heading as an h1, for the dedicated classes page. */
+    headingLevel?: 'h1' | 'h2';
+}
+
+const { headingLevel = 'h2' } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const next = nextEvent();
+---
+
+<Section id={sectionIds.classes} divider labelledBy="classes-heading">
+    <SectionHeading
+        eyebrow={t.classes.eyebrow}
+        headline={t.classes.headline}
+        level={headingLevel}
+        id="classes-heading"
+        split
+    >
+        {t.classes.intro}
+    </SectionHeading>
+
+    <p class="mt-6 font-display text-md tracking-label text-gold uppercase">
+        {t.classes.priceNote}
+    </p>
+
+    {/* The chooser sits beside the cards once there is room, and above them on
+        a phone, which is where someone who does not know the four classes yet
+        needs it. */}
+    <div
+        class="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]"
+    >
+        <ClassFinder />
+
+        <ul class="hairline-grid grid md:grid-cols-2">
+        {
+            classes.map((danceClass) => {
+                const copy = t.classes.items[danceClass.id];
+                const isRueda = danceClass.track === 'rueda';
+                return (
+                    <li class="flex flex-col p-6 sm:p-8">
+                        <div class="flex flex-wrap items-center gap-2.5">
+                            <Badge tone={isRueda ? 'green' : 'gold'}>
+                                {danceClass.level}
+                            </Badge>
+                            <span class="flex items-center gap-1.5 font-display text-xs tracking-label text-cream/60 uppercase">
+                                <Icon name="clock" size={14} />
+                                {danceClass.startTime}–{danceClass.endTime}
+                            </span>
+                        </div>
+
+                        <h3 class="mt-4 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
+                            {copy.name}
+                        </h3>
+
+                        <p class="mt-3 text-lead leading-snug-2 text-cream/85">
+                            {copy.lead}
+                        </p>
+                        <p class="mt-3 text-md leading-snug-2 text-cream/70">
+                            {copy.body}
+                        </p>
+
+                        {copy.note && (
+                            <p class="mt-3 font-display text-md tracking-tiny text-orange-light">
+                                {copy.note}
+                            </p>
+                        )}
+
+                        {copy.prerequisites && (
+                            <p class="mt-4 border-t border-gold/15 pt-4 text-sm leading-snug-2 text-cream/55">
+                                <span class="font-display tracking-label text-gold uppercase">
+                                    {t.classes.prerequisitesLabel}:
+                                </span>{' '}
+                                {copy.prerequisites}
+                            </p>
+                        )}
+
+                        <Button
+                            href={
+                                next
+                                    ? bookingUrlFor(next, danceClass.id)
+                                    : site.booking.fallbackUrl
+                            }
+                            external
+                            variant={isRueda ? 'secondary' : 'primary'}
+                            class="mt-6 self-start"
+                            data-analytics={`book:${danceClass.id}`}
+                        >
+                            {copy.cta}
+                            <Icon name="external" size={15} />
+                        </Button>
+                    </li>
+                );
+            })
+        }
+        </ul>
+    </div>
+
+    <Button
+        href={site.booking.fallbackUrl}
+        external
+        size="lg"
+        class="mt-8 w-full sm:w-auto"
+    >
+        {t.classes.bookAll}
+        <Icon name="external" size={16} />
+    </Button>
+
+    <p class="mt-6 text-sm text-cream/45">{t.classes.bookNote}</p>
+</Section>

@@ -1,0 +1,213 @@
+---
+import LegalPage from '../../layouts/LegalPage.astro';
+import { site } from '../../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../../i18n';
+
+/**
+ * English privacy policy.
+ *
+ * A translation for readers; the German version is the binding one, which the
+ * page states up front.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const { legal, host } = site;
+const analyticsEnabled = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+---
+
+<LegalPage
+    page="privacy"
+    title={t.meta.privacy.title}
+    heading="Privacy Policy"
+    description={t.meta.privacy.description}
+    lastUpdated="Last updated: September 2026"
+>
+    <p>
+        This is a translation for convenience. The
+        <a href="/datenschutz/" hreflang="de" lang="de">German version</a> is the
+        binding one.
+    </p>
+
+    <h2>1. Controller</h2>
+    <address>
+        {legal.company}<br />
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}, Germany<br />
+        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </address>
+
+    <h2>2. What this site does and does not do</h2>
+    <p>
+        This website sets no cookies of its own. Fonts and icons are served from
+        our own domain, so opening a page contacts no third party. Nothing that
+        is not strictly necessary loads until you agree to it.
+    </p>
+    <p>
+        Your privacy choice is kept in your browser's local storage. It stays on
+        your device and is never sent to us.
+    </p>
+
+    <h2>3. Hosting and server logs</h2>
+    <p>This site is hosted by {host.name}, {host.address}.</p>
+    <p>
+        When you open a page, the web server processes technically necessary data:
+        IP address, date and time, the page requested, the amount of data
+        transferred, your browser, your operating system and the referring URL.
+        This is needed to deliver the site and keep it stable and secure. The
+        legal basis is Art. 6(1)(f) GDPR.
+    </p>
+    <p>
+        Netlify processes this data on our behalf under a data processing
+        agreement (Art. 28 GDPR). Processing in the United States cannot be ruled
+        out; it takes place under Art. 44 ff. GDPR on the basis of the standard
+        contractual clauses Netlify uses.
+    </p>
+
+    <h2>4. Google Maps</h2>
+    <p>
+        We offer a Google Maps map on the venue page. The provider for users in
+        the European Economic Area is Google Ireland Limited, Gordon House,
+        Barrow Street, Dublin 4, Ireland.
+    </p>
+    <p>
+        <strong>The map only loads after you ask for it.</strong> Until you press
+        "Load map", there is no connection to Google. After that, data such as
+        your IP address, browser and device information, the time of the request
+        and technical usage data are sent to Google. If you are signed in to a
+        Google account at the same time, Google may associate the use with your
+        account.
+    </p>
+    <p>
+        The legal basis is your consent under Art. 6(1)(a) GDPR together with
+        § 25(1) TDDDG.
+    </p>
+
+    {
+        analyticsEnabled && (
+            <>
+                <h2>5. Google Analytics</h2>
+                <p>
+                    We use Google Analytics 4 (Google Ireland Limited) to see
+                    which pages people visit. It loads{' '}
+                    <strong>only after you agree</strong>. Without your consent
+                    there is no measurement and no cookie is set.
+                </p>
+                <p>
+                    After you agree, the following may be processed: a shortened
+                    IP address, device and browser information, the pages you
+                    open, how long you stay and the referring page. IP
+                    anonymisation is on; Google signals and ad personalisation are
+                    off.
+                </p>
+                <p>
+                    The legal basis is your consent under Art. 6(1)(a) GDPR
+                    together with § 25(1) TDDDG. You can withdraw it at any time
+                    from the cookie settings in the footer.
+                </p>
+            </>
+        )
+    }
+
+    <h2>{analyticsEnabled ? '6' : '5'}. Bookings through Eversports</h2>
+    <p>
+        We use Eversports (Eversport GmbH, Jakov-Lind-Straße 13/H/5th floor, 1020
+        Vienna, Austria) to take and manage class bookings. Our site only links to
+        Eversports; a connection is made when you follow one of those links.
+    </p>
+    <p>
+        A booking may involve your name, email address, phone number, booking
+        data, payment and invoice data. Where Eversports provides booking and
+        participant management for us, it acts as our processor under Art. 28
+        GDPR, and our own processing rests on Art. 6(1)(b) GDPR. Eversports' own
+        platform features are covered by its own privacy information.
+    </p>
+
+    <h2>{analyticsEnabled ? '7' : '6'}. Urban Sports Club</h2>
+    <p>
+        Midnight Havana is a partner of Urban Sports GmbH, Novalisstraße 10, 10115
+        Berlin. If you attend on a membership, we receive your name, membership
+        number, check-in information and the class, date and time. The legal basis
+        is Art. 6(1)(b) GDPR.
+    </p>
+
+    <h2>{analyticsEnabled ? '8' : '7'}. Payments at the venue</h2>
+    <p>
+        Card payments are handled by SumUp (SumUp Limited, Block 8, Harcourt
+        Centre, Charlotte Way, Dublin 2, D02 K580, Ireland). We never receive your
+        full card details. The legal basis is Art. 6(1)(b) GDPR, and Art. 6(1)(c)
+        GDPR for the records we must keep. Paying cash involves no personal
+        payment data.
+    </p>
+
+    <h2>{analyticsEnabled ? '9' : '8'}. Contacting us</h2>
+    <p>
+        If you write to us by email, on Instagram or on WhatsApp, we process what
+        you send us in order to answer. The legal basis is Art. 6(1)(b) GDPR for
+        booking-related messages and Art. 6(1)(f) GDPR otherwise. We delete the
+        data once your enquiry is dealt with and nothing obliges us to keep it.
+    </p>
+
+    <h2>{analyticsEnabled ? '10' : '9'}. WhatsApp community and Instagram</h2>
+    <p>
+        Joining our WhatsApp community is voluntary. The provider is WhatsApp
+        Ireland Limited, Merrion Road, Dublin 4, Ireland. Your mobile number,
+        profile name, messages and the time of your messages may be processed. The
+        legal basis is your consent under Art. 6(1)(a) GDPR, and you can leave at
+        any time.
+    </p>
+    <p>
+        We run an Instagram profile (Meta Platforms Ireland Limited, Merrion Road,
+        Dublin 4, Ireland). Our site only links to it; no connection to Meta is
+        made until you follow the link.
+    </p>
+
+    <h2>{analyticsEnabled ? '11' : '10'}. Photos and video at events</h2>
+    <p>
+        Photos and video may be taken at our events and used to document them and
+        to promote Midnight Havana. For overview and group shots we rely on Art.
+        6(1)(f) GDPR together with §§ 22 and 23 of the German Art Copyright Act.
+        For portraits of an individual we ask for consent under Art. 6(1)(a) GDPR.
+    </p>
+    <p>
+        If you would rather not be photographed or filmed, tell the event team or
+        the photographer. You may object under Art. 21 GDPR to processing based on
+        Art. 6(1)(f) GDPR.
+    </p>
+
+    <h2>{analyticsEnabled ? '12' : '11'}. How long we keep data</h2>
+    <p>
+        We keep personal data only as long as it is needed for the purpose it was
+        collected for, unless commercial or tax law requires us to keep it longer.
+    </p>
+
+    <h2>{analyticsEnabled ? '13' : '12'}. Your rights</h2>
+    <p>
+        You have the right of access (Art. 15 GDPR), rectification (Art. 16),
+        erasure (Art. 17), restriction of processing (Art. 18) and data
+        portability (Art. 20). Where we process data under Art. 6(1)(f) GDPR, you
+        have a right to object under Art. 21. You may withdraw any consent at any
+        time with effect for the future.
+    </p>
+
+    <h2>{analyticsEnabled ? '14' : '13'}. Right to complain</h2>
+    <p>
+        Under Art. 77 GDPR you may complain to a supervisory authority. Ours is
+        the Berlin Commissioner for Data Protection and Freedom of Information,
+        Alt-Moabit 59–61, 10555 Berlin, phone +49 30 13889-0, email
+        <a href="mailto:mailbox@datenschutz-berlin.de"
+            >mailbox@datenschutz-berlin.de</a
+        >.
+    </p>
+
+    <h2>{analyticsEnabled ? '15' : '14'}. Automated decision-making</h2>
+    <p>
+        We do not use automated decision-making or profiling within the meaning of
+        Art. 22 GDPR.
+    </p>
+
+    <hr />
+    <p>
+        See also our <a href={pathFor('terms', locale)}>terms and conditions</a> and
+        our <a href={pathFor('imprint', locale)}>imprint</a>.
+    </p>
+</LegalPage>

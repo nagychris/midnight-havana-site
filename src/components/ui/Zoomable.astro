@@ -1,0 +1,64 @@
+---
+import { getImage } from 'astro:assets';
+import type { Photo } from '../../data/photos';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * Wraps a thumbnail so tapping it opens the photo full screen.
+ *
+ * The anchor points at a large version of the same file and carries its
+ * dimensions, which is what the lightbox needs to size the image before it has
+ * loaded. Without JavaScript the link still works: the photo opens in a new
+ * tab, which is a reasonable second best.
+ *
+ * The gallery someone swipes through is the nearest container marked
+ * `data-lightbox-gallery`, so each section is its own set of photos.
+ */
+interface Props {
+    photo: Photo;
+    /**
+     * Set on a decorative copy of a photo that is already in the gallery, given
+     * the position of the original. The copy stays tappable but is kept out of
+     * the list so the same picture does not appear twice while swiping.
+     */
+    duplicateOf?: number;
+    class?: string;
+}
+
+const { photo, duplicateOf, class: className } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+/* Big enough for a retina phone held in landscape, small enough that opening a
+   photo on mobile data is not a punishment. */
+const MAX_WIDTH = 1600;
+const width = Math.min(photo.image.width, MAX_WIDTH);
+const height = Math.round((width / photo.image.width) * photo.image.height);
+
+const full = await getImage({
+    src: photo.image,
+    width,
+    height,
+    format: 'webp',
+    quality: 82,
+});
+
+const isDuplicate = duplicateOf !== undefined;
+---
+
+<a
+    href={full.src}
+    target="_blank"
+    rel="noopener"
+    data-pswp-width={width}
+    data-pswp-height={height}
+    data-lightbox-item={isDuplicate ? undefined : ''}
+    data-lightbox-clone={duplicateOf}
+    aria-hidden={isDuplicate ? 'true' : undefined}
+    tabindex={isDuplicate ? -1 : undefined}
+    aria-label={isDuplicate ? undefined : t.common.lightbox.open}
+    class:list={['block cursor-zoom-in', className]}
+>
+    <slot />
+</a>

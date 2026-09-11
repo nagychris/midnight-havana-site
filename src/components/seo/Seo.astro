@@ -1,0 +1,118 @@
+---
+import oswaldLatin from '@fontsource-variable/oswald/files/oswald-latin-wght-normal.woff2?url';
+import karlaLatin from '@fontsource-variable/karla/files/karla-latin-wght-normal.woff2?url';
+import {
+    absoluteUrl,
+    alternateLinks,
+    locales,
+    openGraphLocale,
+    type Locale,
+    type LocalisedPaths,
+} from '../../i18n';
+import { site } from '../../data/site';
+
+/**
+ * Everything that goes in `<head>`.
+ *
+ * The three pieces that decide whether Google shows the right language to the
+ * right person are here: a self-referencing canonical, a complete set of
+ * hreflang links, and a title and description written for that language rather
+ * than translated from the other one.
+ */
+interface Props {
+    locale: Locale;
+    /** This page's path in every language, including its own. */
+    paths: LocalisedPaths;
+    title: string;
+    description: string;
+    /** Path of the social image inside public/, or an absolute URL. */
+    ogImage?: string;
+    ogImageAlt: string;
+    /** `article` for an individual event, `website` for everything else. */
+    ogType?: 'website' | 'article';
+    noindex?: boolean;
+}
+
+const {
+    locale,
+    paths,
+    title,
+    description,
+    ogImage = '/og-image.jpg',
+    ogImageAlt,
+    ogType = 'website',
+    noindex = false,
+} = Astro.props;
+
+const canonical = absoluteUrl(paths[locale], site.url);
+const alternates = alternateLinks(paths, site.url);
+const ogImageUrl = new URL(ogImage, `${site.url}/`).toString();
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+{
+    alternates.map((alternate) => (
+        <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+    ))
+}
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:alt" content={ogImageAlt} />
+<meta property="og:locale" content={openGraphLocale[locale]} />
+{
+    locales
+        .filter((other) => other !== locale)
+        .map((other) => (
+            <meta property="og:locale:alternate" content={openGraphLocale[other]} />
+        ))
+}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
+
+<meta name="theme-color" content="#0b0908" />
+<meta name="apple-mobile-web-app-title" content={site.name} />
+<meta name="geo.region" content="DE-BE" />
+<meta name="geo.placename" content={`${site.venue.city}, ${site.venue.district}`} />
+
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<!--
+  Preloads the latin cut of each family, so the first paint already has the
+  brand type instead of swapping a fallback out a moment later. The other
+  subsets are still declared and fetched only if a page needs them.
+-->
+<link
+    rel="preload"
+    href={oswaldLatin}
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+/>
+<link
+    rel="preload"
+    href={karlaLatin}
+    as="font"
+    type="font/woff2"
+    crossorigin="anonymous"
+/>

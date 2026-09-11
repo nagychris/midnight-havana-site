@@ -1,0 +1,18 @@
+---
+import { toJsonLd } from '../../lib/structured-data';
+
+/**
+ * Emits one schema.org block.
+ *
+ * `application/ld+json` is a data block, not executable code, so it is not
+ * affected by the Content Security Policy. The serialiser still escapes `<` so
+ * no value can close the tag early.
+ */
+interface Props {
+    data: unknown;
+}
+
+const { data } = Astro.props as Props;
+---
+
+<script type="application/ld+json" is:inline set:html={toJsonLd(data)} />

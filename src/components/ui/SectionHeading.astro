@@ -1,0 +1,73 @@
+---
+/**
+ * Eyebrow plus heading, the pattern that opens every section.
+ *
+ * `level` keeps the document outline correct: the home page uses h2 for section
+ * headings, while a landing page whose whole subject is one section uses h1.
+ */
+interface Props {
+    eyebrow?: string;
+    headline: string;
+    level?: 'h1' | 'h2' | 'h3';
+    id?: string;
+    /** Puts the optional intro slot beside the heading on wide screens. */
+    split?: boolean;
+    class?: string;
+}
+
+const {
+    eyebrow,
+    headline,
+    level = 'h2',
+    id,
+    split = false,
+    class: className,
+} = Astro.props;
+
+const Heading = level;
+const hasIntro = Astro.slots.has('default');
+---
+
+<div
+    class:list={[
+        split && hasIntro
+            ? 'flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-16'
+            : 'flex flex-col gap-5',
+        className,
+    ]}
+>
+    <div>
+        {
+            eyebrow && (
+                <p class="font-display text-2xs tracking-eyebrow text-gold uppercase sm:text-xs">
+                    {eyebrow}
+                </p>
+            )
+        }
+        <Heading
+            id={id}
+            class:list={[
+                'font-display font-medium text-cream uppercase',
+                eyebrow && 'mt-2.5 sm:mt-3',
+                level === 'h1'
+                    ? 'text-hero leading-crush tracking-tightest'
+                    : 'text-h2 leading-tight-2 tracking-tiny',
+            ]}
+        >
+            {headline}
+        </Heading>
+    </div>
+
+    {
+        hasIntro && (
+            <div
+                class:list={[
+                    'text-lead leading-relaxed-2 text-cream/70',
+                    split ? 'max-w-[46ch] lg:text-right' : 'max-w-[62ch]',
+                ]}
+            >
+                <slot />
+            </div>
+        )
+    }
+</div>

@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { site } from '../../data/site';
+import { photoGroups, photoSet } from '../../data/photos';
+import {
+    localeFromAstro,
+    sectionHref,
+    sectionIds,
+    useTranslations,
+} from '../../i18n';
+
+/**
+ * Big photo, little text, two ways to act.
+ *
+ * The image sits behind the text rather than beside it, so on a phone the
+ * whole block is one tall, readable panel instead of a picture the reader has
+ * to scroll past.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const [photo] = photoSet(photoGroups.finalCta);
+---
+
+<section class="reveal relative overflow-hidden" data-reveal="idle">
+    {
+        photo && (
+            <Image
+                src={photo.image}
+                alt=""
+                widths={[640, 1024, 1600, 2000]}
+                sizes="100vw"
+                format="webp"
+                quality={72}
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover"
+            />
+        )
+    }
+
+    <div
+        class="pointer-events-none absolute inset-0"
+        style="background:linear-gradient(to top,rgba(11,9,8,.96) 0%,rgba(11,9,8,.78) 45%,rgba(11,9,8,.6) 100%)"
+    >
+    </div>
+
+    <div
+        class="relative mx-auto flex max-w-(--container-content) flex-col px-5 py-20 sm:px-8 sm:py-28"
+    >
+        <h2
+            class="max-w-[18ch] font-display text-h2 leading-crush font-semibold tracking-tightest text-cream uppercase"
+        >
+            {t.finalCta.headline}
+        </h2>
+
+        <p class="mt-5 max-w-[52ch] text-lead leading-relaxed-2 text-cream/80">
+            {t.finalCta.body}
+        </p>
+
+        <p class="mt-4 font-display text-sm tracking-label-wide text-gold uppercase">
+            {t.finalCta.strap}
+        </p>
+
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button href={sectionHref(sectionIds.dates, locale)} size="lg">
+                {t.finalCta.ctaDates}
+                <Icon name="arrow-right" size={17} />
+            </Button>
+            <Button
+                href={site.booking.fallbackUrl}
+                external
+                variant="secondary"
+                size="lg"
+            >
+                {t.finalCta.ctaBook}
+            </Button>
+        </div>
+
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:gap-6">
+            <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center gap-2.5 font-display text-sm tracking-label uppercase"
+            >
+                <Icon name="instagram" size={17} />
+                {site.social.instagramHandle}
+            </a>
+            <a
+                href={site.social.whatsappCommunity}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center gap-2.5 font-display text-sm tracking-label uppercase"
+            >
+                <Icon name="whatsapp" size={17} />
+                {t.finalCta.whatsappLabel}
+            </a>
+        </div>
+    </div>
+</section>

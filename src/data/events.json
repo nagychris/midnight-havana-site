@@ -1,0 +1,132 @@
+{
+  "$schema": "./events.schema.json",
+  "_readme": "Die Termine der Website. Neuen Termin anlegen: einen Block in 'events' kopieren, Datum, Slug und Texte anpassen, speichern, committen. Vergangene Termine verschwinden automatisch. Pflichtfelder sind nur 'date' und 'slug'. Buchungslinks müssen hier normalerweise nicht eingetragen werden: die Standardlinks der vier Kurse stehen in src/data/classes.ts und gelten für jeden Termin.",
+  "_readmeFields": {
+    "date": "JJJJ-MM-TT. Bestimmt die Reihenfolge und wann der Termin verschwindet.",
+    "slug": "Teil der URL der Detailseite, z. B. /termine/al-son-de-cuba/. Nur Kleinbuchstaben, Zahlen und Bindestriche. Darf sich nach der Veröffentlichung nicht mehr ändern, sonst brechen Links.",
+    "title": "Name des Abends. Ohne Titel zeigt die Seite nur das Datum.",
+    "summary": "Ein Satz. Steht auf der Terminkarte und wird zur Meta-Description der Detailseite.",
+    "description": "Zwei bis vier Sätze für die Detailseite.",
+    "dj": "Wer an dem Abend auflegt.",
+    "teachers": "Wer an dem Abend unterrichtet, z. B. [\"Helen\", \"Yago\"].",
+    "badges": "Kleine Labels auf der Karte. 'tone' ist 'gold', 'green' oder 'solid'.",
+    "image": "Dateiname aus src/assets/photos/ für das große Bild der Detailseite.",
+    "flyer": "Dateiname aus src/assets/flyers/ für das Plakat.",
+    "priceNote": "Nur ausfüllen, wenn an dem Abend andere Preise gelten.",
+    "cancelled": "true blendet den Termin nicht aus, sondern markiert ihn als abgesagt.",
+    "booking": "Nur ausfüllen, wenn an diesem Abend anders gebucht wird als sonst. Leer lassen heißt: es gelten die Kurslinks aus src/data/classes.ts. Erlaubt sind nur https-Adressen bei eversports.de oder urbansportsclub.com.",
+    "extras": "Zusatzangebote an dem Abend, z. B. ein Workshop vor den Kursen."
+  },
+  "events": [
+    {
+      "date": "2026-09-11",
+      "slug": "last-taste-of-summer",
+      "title": {
+        "de": "Last Taste of Summer",
+        "en": "Last Taste of Summer"
+      },
+      "summary": {
+        "de": "Sommerausklang im Tangoloft: Kurse ab 19 Uhr, danach kubanische Salsa und Timba mit EC Kuba an den Decks.",
+        "en": "The last taste of summer at Tangoloft: classes from 19:00, then Cuban salsa and timba with EC Kuba on the decks."
+      },
+      "description": {
+        "de": "Der Sommer geht, die Musik bleibt. Zwei Stunden Kurse für alle Level, danach Social Dance mit kubanischer Salsa, Timba und Son. Bei warmem Wetter ist der Außenbereich an der Spree offen.",
+        "en": "Summer is leaving, the music stays. Two hours of classes for every level, then a social dance with Cuban salsa, timba and son. In warm weather the outdoor area by the Spree is open."
+      },
+      "dj": "DJ EC Kuba",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "DJ EC Kuba",
+          "en": "DJ EC Kuba",
+          "tone": "gold"
+        }
+      ],
+      "image": "hero-dancer-arms-up.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "booking": {},
+      "extras": []
+    },
+    {
+      "date": "2026-09-25",
+      "slug": "autumn-heat",
+      "title": {
+        "de": "Autumn Heat",
+        "en": "Autumn Heat"
+      },
+      "summary": {
+        "de": "Draußen wird es kühl, drinnen nicht: Kurse ab 19 Uhr, danach Timba und Son mit EC Kuba.",
+        "en": "Cold outside, not in here: classes from 19:00, then timba and son with EC Kuba."
+      },
+      "description": {
+        "de": "Erste kalte Nächte, warme Tanzfläche. Kurse ab 19 Uhr für Anfänger und Fortgeschrittene, ab 21 Uhr gehört der Holzboden dem Social Dance.",
+        "en": "First cold nights, a warm dance floor. Classes from 19:00 for beginners and advanced dancers, and from 21:00 the wooden floor belongs to the social dance."
+      },
+      "dj": "DJ EC Kuba",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "DJ EC Kuba",
+          "en": "DJ EC Kuba",
+          "tone": "gold"
+        }
+      ],
+      "image": "social-couple-hat.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "booking": {},
+      "extras": []
+    },
+    {
+      "date": "2026-10-02",
+      "slug": "al-son-de-cuba",
+      "title": {
+        "de": "Al Son de Cuba",
+        "en": "Al Son de Cuba"
+      },
+      "summary": {
+        "de": "Unser Son-Special mit etwas mehr Eleganz, viel Son und hoffentlich einigen Zeitreisenden aus den 20er- und 30er-Jahren.",
+        "en": "Our son special: a little more elegance, a lot of son, and hopefully a few time travellers from the 1920s and 30s."
+      },
+      "description": {
+        "de": "Ein Abend für den Son: langsamer, eleganter, mit Musik aus der Zeit, in der alles anfing. Die Kurse laufen wie immer ab 19 Uhr, danach legt Helen Son, Bolero und kubanische Klassiker auf. Wer mag, kommt im Stil der 20er und 30er.",
+        "en": "A night for son: slower, more elegant, with music from the era where it all began. Classes run from 19:00 as always, then Helen plays son, bolero and Cuban classics. Dress in 1920s or 30s style if you like."
+      },
+      "dj": "DJ Helen",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "Son-Special",
+          "en": "Son special",
+          "tone": "green"
+        },
+        {
+          "de": "DJ Helen",
+          "en": "DJ Helen",
+          "tone": "gold"
+        }
+      ],
+      "image": "social-pair-smiling.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "booking": {},
+      "extras": []
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midnight-havana.de/schemas/events.schema.json",
+  "title": "Midnight Havana events",
+  "description": "The event dates shown on the website. Editors change this file by hand; a future admin interface would write the same shape.",
+  "type": "object",
+  "required": ["events"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to this schema file, so an editor offers autocomplete and flags mistakes."
+    },
+    "_readme": {
+      "type": "string",
+      "description": "Note for whoever edits this file. Ignored by the build."
+    },
+    "_readmeFields": {
+      "type": "object",
+      "description": "Per-field notes for whoever edits this file. Ignored by the build."
+    },
+    "events": {
+      "type": "array",
+      "description": "One entry per date, in any order. The build sorts them and drops anything in the past.",
+      "items": { "$ref": "#/$defs/event" }
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "required": ["date", "slug"],
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Calendar date in YYYY-MM-DD, Berlin local time. Must be a real date and must not repeat within the file."
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "maxLength": 80,
+          "description": "The last part of the detail page URL, for example al-son-de-cuba. Lower case letters, digits and hyphens. Do not change it after the page is published, or existing links break."
+        },
+        "title": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
+          "description": "Name of this edition. Without one, the page shows the date instead."
+        },
+        "summary": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
+          "description": "One sentence. Used on the date card and as the meta description of the detail page, so keep it under about 155 characters."
+        },
+        "description": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
+          "description": "Two to four sentences for the detail page."
+        },
+        "dj": {
+          "type": ["string", "null"],
+          "maxLength": 120,
+          "description": "Who is playing the social dance."
+        },
+        "teachers": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "minLength": 1, "maxLength": 60 },
+          "description": "Who is teaching that night. Shown on the detail page and listed as performers in the structured data."
+        },
+        "badges": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/badge" },
+          "description": "Short labels on the date card, for example a special or a guest DJ."
+        },
+        "image": {
+          "$ref": "#/$defs/imageFileName",
+          "description": "File name inside src/assets/photos/ for the large image on the detail page."
+        },
+        "flyer": {
+          "$ref": "#/$defs/imageFileName",
+          "description": "File name inside src/assets/flyers/ for the poster."
+        },
+        "priceNote": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
+          "description": "Only fill this in when prices differ from the usual ones that night."
+        },
+        "cancelled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Keeps the date visible but marks it as cancelled."
+        },
+        "booking": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Booking link per class for this date. Null means no link yet, and the button falls back to the general Eversports page.",
+          "properties": {
+            "salsa-basics": { "$ref": "#/$defs/bookingUrl" },
+            "rueda-beginner": { "$ref": "#/$defs/bookingUrl" },
+            "salsa-beginner": { "$ref": "#/$defs/bookingUrl" },
+            "rueda-advanced": { "$ref": "#/$defs/bookingUrl" },
+            "party": { "$ref": "#/$defs/bookingUrl" }
+          }
+        },
+        "extras": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/extra" },
+          "description": "Anything on top of the usual four classes, for example a workshop before them."
+        }
+      }
+    },
+    "extra": {
+      "type": "object",
+      "required": ["startTime", "title"],
+      "additionalProperties": false,
+      "description": "A one-off item in the timetable for a single date.",
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Start time on a 24 hour clock, for example 17:00."
+        },
+        "endTime": {
+          "type": ["string", "null"],
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "End time on a 24 hour clock. Optional."
+        },
+        "title": { "$ref": "#/$defs/localisedText" },
+        "description": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }]
+        },
+        "level": {
+          "type": ["string", "null"],
+          "maxLength": 20,
+          "description": "Level shorthand shown as a badge, for example A2 or B1."
+        },
+        "booking": { "$ref": "#/$defs/bookingUrl" }
+      }
+    },
+    "badge": {
+      "type": "object",
+      "required": ["de", "en"],
+      "additionalProperties": false,
+      "properties": {
+        "de": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "en": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "tone": {
+          "enum": ["gold", "green", "solid", "muted"],
+          "default": "gold",
+          "description": "gold is neutral, green marks a rueda or son special, solid is the strongest emphasis."
+        }
+      }
+    },
+    "localisedText": {
+      "type": "object",
+      "required": ["de", "en"],
+      "additionalProperties": false,
+      "description": "The same text in both site languages. Both are required so no page falls back to the wrong language.",
+      "properties": {
+        "de": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "en": { "type": "string", "minLength": 1, "maxLength": 600 }
+      }
+    },
+    "imageFileName": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9._-]+\\.(png|jpg|jpeg|webp|avif)$",
+      "description": "An image file name with its extension, no folders."
+    },
+    "bookingUrl": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "pattern": "^https://([a-z0-9-]+\\.)*(eversports\\.(de|com|at)|urbansportsclub\\.com)/",
+      "description": "An https link on a booking platform we work with. Other hosts are rejected at build time, so a wrong entry can never send visitors somewhere unexpected."
+    }
+  }
+}

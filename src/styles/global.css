@@ -1,276 +1,495 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import './fonts.css';
 
-/* Tokens lifted from the design artboard's inline styles. Most scales are
-   deliberately off Tailwind's defaults — use the tokens, not stock utilities. */
+/*
+  Brand tokens from the Claude Design artboard "Midnight Havana Website".
+
+  The type scale is fluid rather than the artboard's fixed pixel values, so one
+  set of sizes covers a 360px phone and a 2560px display without a stack of
+  breakpoint overrides. Everything is written mobile first: the base value is
+  the phone value and `sm:`/`md:`/`lg:` add to it.
+*/
 @theme {
-  /* Colour. `cream` and `gold` are theme colours so the design's many alpha
-     variants work as modifiers: text-cream/60, border-gold/20 — never rgba(). */
-  --color-ink: #0b0908;
-  --color-ink-strip: #100c0a;
-  --color-surface: #14100d;
-  --color-cream: #f5ece0;
-  --color-gold: #d9a25c;
-  --color-gold-light: #e9c489;
-  --color-orange: #d4642c;
-  --color-orange-hover: #e9762f;
-  --color-orange-light: #e8946a;
-  --color-green: #a3bd6e;
-  --color-green-dark: #7f9a4e;
+    /* ---- Colour ------------------------------------------------------- */
+    /* `cream` and `gold` are theme colours so the alpha modifiers the design
+       leans on work as utilities: text-cream/60, border-gold/20. */
+    --color-ink: #0b0908;
+    --color-ink-deep: #080706;
+    --color-surface: #14100d;
+    --color-surface-raised: #1b1613;
+    --color-cream: #f5ece0;
+    --color-gold: #d9a25c;
+    --color-gold-light: #e9c489;
+    --color-orange: #d4642c;
+    --color-orange-hover: #e9762f;
+    --color-orange-light: #e8946a;
+    --color-green: #a3bd6e;
+    --color-green-dark: #7f9a4e;
 
-  /* Type scale. The half-pixel sizes are load-bearing. */
-  --text-4xs: 9px;
-  --text-3xs: 10.5px;
-  --text-2xs: 11px;
-  --text-2xs-plus: 11.5px;
-  --text-xs: 12px;
-  --text-xs-plus: 12.5px;
-  --text-sm: 13px;
-  --text-sm-plus: 13.5px;
-  --text-base: 14px;
-  --text-base-plus: 14.5px;
-  --text-md: 15px;
-  --text-md-plus: 15.5px;
-  --text-lg: 16px;
-  --text-lg-plus: 16.5px;
-  --text-xl: 17px;
-  --text-2xl: 19px;
-  --text-3xl: 20px;
-  --text-4xl: 21px;
-  --text-5xl: 22px;
-  --text-6xl: 25px;
-  --text-7xl: 26px;
-  --text-8xl: 29px;
-  --text-9xl: 34px;
-  --text-10xl: 38px;
-  --text-11xl: 52px;
+    /* ---- Type --------------------------------------------------------- */
+    /*
+      DESIGN.md: the wordmark is the expressive serif, so everything else stays
+      deliberately neutral. A condensed display face carries the poster-like
+      headings it calls for; the body face is a plain humanist sans.
 
-  /* Fluid heading clamps, used verbatim from the artboard. */
-  --text-h1: clamp(56px, 8.4vw, 124px);
-  --text-hero-line: clamp(38px, 6.1vw, 92px);
-  --text-h2: clamp(34px, 4.4vw, 58px);
-  --text-h2-faq: clamp(34px, 4.4vw, 54px);
-  --text-h2-cta: clamp(32px, 4.2vw, 54px);
-  --text-h2-venue: clamp(32px, 4vw, 52px);
-  --text-h3-section: clamp(30px, 3.6vw, 46px);
+      Both are defined in fonts.css and served from our own domain.
+    */
+    --font-display: var(--font-oswald);
+    --font-body: var(--font-karla);
 
-  /* Tracking. Tailwind's widest is .1em, so every uppercase label needs one. */
-  --tracking-tightest: -0.01em;
-  --tracking-tight-1: 0.01em;
-  --tracking-tight-2: 0.02em;
-  --tracking-tight-3: 0.03em;
-  --tracking-tight-4: 0.04em;
-  --tracking-wide-14: 0.14em;
-  --tracking-wide-16: 0.16em;
-  --tracking-wide-18: 0.18em;
-  --tracking-wide-20: 0.2em;
-  --tracking-wide-22: 0.22em;
-  --tracking-wide-24: 0.24em;
-  --tracking-wide-28: 0.28em;
-  --tracking-wide-30: 0.3em;
+    --text-3xs: 0.625rem;
+    --text-2xs: 0.6875rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.8125rem;
+    --text-base: 0.875rem;
+    --text-md: 0.9375rem;
+    --text-lg: 1rem;
+    --text-xl: 1.0625rem;
+    --text-2xl: 1.1875rem;
+    --text-3xl: 1.375rem;
 
-  /* Leading */
-  --leading-crush: 0.9;
-  --leading-flat: 1;
-  --leading-flat-2: 1.02;
-  --leading-hero: 1.42;
-  --leading-snug-2: 1.5;
-  --leading-snug-3: 1.55;
-  --leading-normal-2: 1.6;
-  --leading-normal-3: 1.62;
-  --leading-relaxed-2: 1.65;
+    /* Fluid headings. The lower bound is the phone size, and for the hero it is
+       the artboard's 34px: the headline is the one thing worth reading up
+       there, so the rest of the screen belongs to the photograph. */
+    --text-hero: clamp(2.125rem, 1.35rem + 4vw, 4rem);
+    --text-h2: clamp(1.875rem, 1.35rem + 2.4vw, 3.25rem);
+    --text-h3: clamp(1.375rem, 1.15rem + 1vw, 1.9rem);
+    --text-h4: clamp(1.125rem, 1.03rem + 0.45vw, 1.375rem);
+    --text-lead: clamp(1rem, 0.94rem + 0.3vw, 1.1875rem);
+    --text-date: clamp(2.25rem, 1.6rem + 2.8vw, 3.5rem);
 
-  /* Fonts */
-  --font-display: Oswald, sans-serif;
-  --font-body: Karla, system-ui, sans-serif;
-  --font-wordmark: Cinzel, serif;
+    /* ---- Tracking ------------------------------------------------------ */
+    /*
+      DESIGN.md treats tracking as part of the identity and gives ranges:
+      small labels 0.10-0.16em, navigation 0.05-0.10em, section headings
+      0.03-0.08em, body copy near zero. Tailwind stops at 0.1em, so these are
+      named here and used instead of the stock utilities.
+    */
+    --tracking-tightest: -0.015em;
+    --tracking-tiny: 0.04em;
+    --tracking-nav: 0.06em;
+    --tracking-label: 0.14em;
+    --tracking-label-wide: 0.18em;
+    --tracking-eyebrow: 0.26em;
 
-  /* 2px everywhere; bare `rounded` (4px) softens the look. */
-  --radius-sharp: 2px;
+    /* ---- Leading ------------------------------------------------------- */
+    --leading-crush: 0.92;
+    --leading-flat: 1;
+    --leading-tight-2: 1.1;
+    --leading-snug-2: 1.45;
+    --leading-relaxed-2: 1.62;
 
-  /* The artboard's own breakpoints, not Tailwind's. */
-  --breakpoint-xs: 560px;
-  --breakpoint-sm: 620px;
-  --breakpoint-md: 860px;
-  --breakpoint-lg: 900px;
-  --breakpoint-xl: 980px;
-  --breakpoint-2xl: 1040px;
-  --breakpoint-3xl: 1100px;
+    /* ---- Shape --------------------------------------------------------- */
+    /* 2px everywhere. Buttons read as printed tickets, not app pills. */
+    --radius-sharp: 2px;
+
+    /* ---- Layout -------------------------------------------------------- */
+    --spacing-gutter: 1.25rem;
+    --container-content: 72.5rem;
+
+    /* Tailwind's smallest default breakpoint is 40rem, which leaves nothing
+       between a 360px phone and a tablet. `xs` covers the larger phone. */
+    --breakpoint-xs: 25rem;
 }
 
-/* Base layer, from the artboard's <style> block. */
 @layer base {
-  /* Fallback until Header.astro syncs the measured height. */
-  :root {
-    --mh-header-h: 70px;
-  }
+    :root {
+        /* Overwritten with the measured height by the header script. The
+           fallback keeps anchor offsets sane before the script runs. */
+        --header-height: 64px;
+        color-scheme: dark;
+    }
 
-  body {
-    margin: 0;
-    background: var(--color-ink);
-    color: var(--color-cream);
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-  }
+    html {
+        scroll-behavior: smooth;
+        /* Safari needs this to respect scroll-margin on anchor targets. */
+        -webkit-text-size-adjust: 100%;
+    }
 
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
 
-  a {
-    color: var(--color-gold);
-    text-decoration: none;
-  }
+    body {
+        margin: 0;
+        background: var(--color-ink);
+        color: var(--color-cream);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        line-height: var(--leading-relaxed-2);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* Stops a wide element from sideways-scrolling the whole page on a
+           phone. `clip` rather than `hidden`, which would make body a scroll
+           container and break the sticky header in Safari. */
+        overflow-x: clip;
+    }
 
-  a:hover {
-    color: var(--color-gold-light);
-  }
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    margin: 0;
-    font-weight: 400;
-  }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 0;
+        font-weight: 400;
+        text-wrap: balance;
+    }
 
-  p {
-    margin: 0;
-  }
+    p {
+        margin: 0;
+        text-wrap: pretty;
+    }
 
-  summary::-webkit-details-marker {
-    display: none;
-  }
+    a {
+        color: var(--color-gold);
+        text-decoration: none;
+        /* Removes the grey flash on tap in iOS Safari and Android Chrome; the
+           focus and hover states below carry the feedback instead. */
+        -webkit-tap-highlight-color: transparent;
+    }
 
-  ::selection {
-    background: var(--color-orange);
-    color: var(--color-ink);
-  }
+    a:hover {
+        color: var(--color-gold-light);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-gold-light);
+        outline-offset: 3px;
+        border-radius: var(--radius-sharp);
+    }
+
+    img,
+    picture,
+    svg,
+    video {
+        display: block;
+        max-width: 100%;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    summary {
+        list-style: none;
+        cursor: pointer;
+    }
+
+    ::selection {
+        background: var(--color-orange);
+        color: var(--color-ink);
+    }
+
+    /* Anchor targets must clear the sticky header. */
+    [id] {
+        scroll-margin-top: calc(var(--header-height) + 1rem);
+    }
 }
 
-/* Scroll-hide header; toggled by the script in Header.astro. */
-.mh-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
-}
+@layer components {
+    /*
+      Sticky header.
 
-.mh-header.mh-hidden {
-  transform: translateY(-101%);
-}
+      Over a hero it starts completely transparent, so the photograph reaches
+      the top of the window. Past the fold the background, the border and the
+      wordmark fade in together. It also slides out of the way on the way down
+      and returns on the way up.
+    */
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: --alpha(var(--color-ink) / 92%);
+        border-bottom: 1px solid --alpha(var(--color-gold) / 16%);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        transition:
+            transform 0.34s cubic-bezier(0.4, 0, 0.2, 1),
+            background 0.35s ease,
+            border-color 0.35s ease,
+            backdrop-filter 0.35s ease;
+    }
 
-.mh-nav {
-  white-space: nowrap;
-}
+    /* Over a hero, until you scroll. */
+    .site-header[data-overlay='true'][data-scrolled='false'] {
+        background: transparent;
+        border-bottom-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        text-shadow: 0 1px 12px rgba(11, 9, 8, 0.85);
+    }
 
-.mh-burger {
-  display: none;
-  flex: none;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid --alpha(var(--color-gold) / 32%);
-  background: transparent;
-  border-radius: var(--radius-sharp);
-  cursor: pointer;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
+    /*
+      The brand and the date chip belong to the scrolled state. They keep their
+      space so the navigation does not shift when they appear.
+    */
+    .site-header__brand,
+    .site-header [data-header-chip] {
+        transition: opacity 0.35s ease;
+    }
 
-.mh-burger span {
-  display: block;
-  width: 18px;
-  height: 1.5px;
-  background: var(--color-gold-light);
-  transition: transform 0.24s ease, opacity 0.24s ease;
-}
+    .site-header[data-overlay='true'][data-scrolled='false'] .site-header__brand,
+    .site-header[data-overlay='true'][data-scrolled='false'] [data-header-chip] {
+        opacity: 0;
+        pointer-events: none;
+    }
 
-/* Burger becomes an X when open. ADDED — the artboard had no mobile menu. */
-.mh-burger[aria-expanded="true"] span:nth-child(1) {
-  transform: translateY(6.5px) rotate(45deg);
-}
+    .site-header[data-hidden='true'] {
+        transform: translateY(-101%);
+    }
 
-.mh-burger[aria-expanded="true"] span:nth-child(2) {
-  opacity: 0;
-}
+    @media (prefers-reduced-motion: reduce) {
+        .site-header,
+        .site-header__brand,
+        .site-header [data-header-chip] {
+            transition: none;
+        }
 
-.mh-burger[aria-expanded="true"] span:nth-child(3) {
-  transform: translateY(-6.5px) rotate(-45deg);
-}
+        .site-header[data-hidden='true'] {
+            transform: none;
+        }
+    }
 
-@media (max-width: 1040px) {
-  .mh-nav {
-    display: none !important;
-  }
+    /*
+      Nothing in the bar wraps. A two-line item there pushes the bar taller and
+      throws everything else out of line, so items are kept whole and the
+      navigation is hidden below the width where they all fit.
+    */
+    .site-header a,
+    .site-header button,
+    .site-header time,
+    .site-header span {
+        white-space: nowrap;
+    }
 
-  .mh-lang {
-    display: none !important;
-  }
+    /*
+      Navigation links: an underline that grows from the left on hover, and the
+      accent colour for the section you are currently looking at.
+    */
+    .mh-nav-link {
+        position: relative;
+        transition: color 0.25s ease;
+    }
 
-  .mh-burger {
-    display: flex;
-  }
-}
+    .mh-nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        height: 1px;
+        width: 0;
+        background: var(--color-gold-light);
+        transition: width 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
 
-/* ADDED: "Tonight" pulse. A ring expanding under a steady core rather than a
-   blink, so it doesn't flicker in peripheral vision. */
-@keyframes mh-live-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  70%,
-  100% {
-    transform: scale(2.8);
-    opacity: 0;
-  }
-}
+    .mh-nav-link:hover {
+        color: var(--color-cream);
+    }
 
-@keyframes mh-live-badge {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 --alpha(var(--color-orange) / 0%);
-  }
-  50% {
-    box-shadow: 0 0 14px 2px --alpha(var(--color-orange) / 55%);
-  }
-}
+    .mh-nav-link:hover::after {
+        width: 100%;
+    }
 
-.mh-live-ring {
-  animation: mh-live-ring 1.9s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
+    .mh-nav-link[data-current='true'] {
+        color: var(--color-orange);
+    }
 
-.mh-live-badge {
-  animation: mh-live-badge 1.9s ease-in-out infinite;
-}
+    @media (prefers-reduced-motion: reduce) {
+        .mh-nav-link::after {
+            transition: none;
+        }
+    }
 
-@media (prefers-reduced-motion: reduce) {
-  .mh-live-ring,
-  .mh-live-badge {
-    animation: none;
-  }
-}
+    /* Hairline dividers carry the structure of this design, in place of
+       boxes and shadows. */
+    .rule-top {
+        border-top: 1px solid --alpha(var(--color-gold) / 20%);
+    }
 
-/* Four-step grid; breakpoints are the artboard's. */
-.mh-steps {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  background: --alpha(var(--color-gold) / 20%);
-}
+    /*
+      A grid ruled by hairlines.
 
-@media (max-width: 1100px) {
-  .mh-steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
+      The lines belong to the cells rather than to a background showing through
+      one-pixel gaps. With the background trick, a last row that does not fill
+      its columns leaves a solid rectangle floating where a cell would have
+      been; here the row simply ends.
+    */
+    .hairline-grid {
+        border-top: 1px solid --alpha(var(--color-gold) / 20%);
+        border-left: 1px solid --alpha(var(--color-gold) / 20%);
+    }
 
-@media (max-width: 620px) {
-  .mh-steps {
-    grid-template-columns: minmax(0, 1fr);
-  }
+    .hairline-grid > * {
+        border-right: 1px solid --alpha(var(--color-gold) / 20%);
+        border-bottom: 1px solid --alpha(var(--color-gold) / 20%);
+    }
+
+    /*
+      Hero slideshow. Slides are stacked and cross-faded by toggling
+      `data-active`; only opacity and transform animate, so it stays on the
+      compositor and does not repaint on scroll.
+    */
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: opacity;
+    }
+
+    .hero-slide[data-active='true'] {
+        opacity: 1;
+    }
+
+    .hero-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-slide {
+            transition: none;
+        }
+    }
+
+    /*
+      Horizontal photo strip.
+
+      No scroll snapping: the strip drifts on its own, and snap points would
+      drag it back to the nearest photo on every frame. `overscroll-behavior`
+      stops a swipe at the end of the strip from turning into a browser back
+      gesture or a bounce of the whole page.
+    */
+    .photo-strip {
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    .photo-strip::-webkit-scrollbar {
+        display: none;
+    }
+
+    /*
+      Hero entrance. Each block rises a little later than the one above it, so
+      the eye is walked down the composition rather than shown all of it at
+      once. Purely decorative: without motion everything is simply there.
+    */
+    @keyframes mh-rise {
+        from {
+            opacity: 0;
+            transform: translateY(1.6rem);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .mh-rise {
+        opacity: 0;
+        animation: mh-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    }
+
+    /* A steady core with a ring expanding out of it, rather than a blink,
+       so it does not flicker in peripheral vision. */
+    @keyframes mh-pulse {
+        0% {
+            box-shadow: 0 0 0 0 --alpha(var(--color-orange) / 55%);
+        }
+        70% {
+            box-shadow: 0 0 0 0.55rem --alpha(var(--color-orange) / 0%);
+        }
+        100% {
+            box-shadow: 0 0 0 0 --alpha(var(--color-orange) / 0%);
+        }
+    }
+
+    .mh-pulse {
+        animation: mh-pulse 1.9s ease-out infinite;
+    }
+
+    /* The scroll cue at the foot of the hero. */
+    @keyframes mh-nudge {
+        0%,
+        100% {
+            transform: translateY(0);
+            opacity: 0.55;
+        }
+        50% {
+            transform: translateY(0.35rem);
+            opacity: 1;
+        }
+    }
+
+    .mh-nudge {
+        animation: mh-nudge 1.8s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mh-rise {
+            opacity: 1;
+            animation: none;
+        }
+
+        .mh-pulse,
+        .mh-nudge {
+            animation: none;
+        }
+    }
+
+    /* Chevron in a <summary>, rotated when the section is open. */
+    .disclosure-marker {
+        transition: transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    details[open] > summary .disclosure-marker {
+        transform: rotate(180deg);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .disclosure-marker {
+            transition: none;
+        }
+    }
+
+    /*
+      Sections fade up as they come into view.
+
+      The hidden state only applies once the script has added `is-revealing` to
+      the root element. If the script never runs, or fails to load, every
+      section stays visible — content is never hidden by an effect that might
+      not arrive.
+    */
+    .reveal {
+        transition:
+            opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+            transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .is-revealing .reveal:not([data-reveal='shown']) {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .is-revealing .reveal:not([data-reveal='shown']) {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal {
+            transition: none;
+        }
+    }
 }

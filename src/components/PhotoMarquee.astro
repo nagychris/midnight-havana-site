@@ -1,0 +1,185 @@
+---
+import { Image } from 'astro:assets';
+import Zoomable from './ui/Zoomable.astro';
+import type { Photo } from '../data/photos';
+import { localeFromAstro } from '../i18n';
+
+/**
+ * A strip of photos that drifts slowly sideways on its own.
+ *
+ * It is a real scroll container, so it can still be swiped on a phone, dragged
+ * with a mouse, and moved with the keyboard. The drift is just the script
+ * nudging `scrollLeft`, which means touching it at any point simply takes over
+ * rather than fighting an animation.
+ *
+ * The list is rendered twice. When the drift passes the halfway mark it jumps
+ * back by exactly half the width, which lands on an identical frame, so the
+ * loop has no visible seam.
+ */
+interface Props {
+    photos: Photo[];
+    /** Describes the strip for anyone who cannot see it. */
+    label: string;
+    class?: string;
+}
+
+const { photos, label, class: className } = Astro.props;
+const locale = localeFromAstro(Astro.currentLocale);
+---
+
+<div
+    class:list={['photo-strip relative overflow-x-auto', className]}
+    data-photo-marquee
+    data-lightbox-gallery
+    role="region"
+    aria-label={label}
+    tabindex="0"
+>
+    <ul class="flex w-max gap-3">
+        {
+            [0, 1].map((pass) =>
+                photos.map((photo, index) => (
+                    // The second pass exists only to make the loop seamless, so
+                    // it is hidden from assistive technology entirely.
+                    <li class="shrink-0" aria-hidden={pass === 1 ? 'true' : undefined}>
+                        <Zoomable
+                            photo={photo}
+                            duplicateOf={pass === 1 ? index : undefined}
+                        >
+                            <Image
+                                src={photo.image}
+                                alt={pass === 0 ? photo.alt[locale] : ''}
+                                widths={[240, 360, 480]}
+                                sizes="(min-width: 640px) 15rem, 11rem"
+                                format="webp"
+                                quality={74}
+                                loading="lazy"
+                                decoding="async"
+                                class="h-52 w-40 border border-gold/15 object-cover sm:h-72 sm:w-60"
+                            />
+                        </Zoomable>
+                    </li>
+                )),
+            )
+        }
+    </ul>
+</div>
+
+<script>
+    /**
+     * Drifts each marquee sideways, and gets out of the way the moment someone
+     * touches it.
+     */
+    const PIXELS_PER_FRAME = 0.35;
+
+    const strips = document.querySelectorAll<HTMLElement>('[data-photo-marquee]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    strips.forEach((strip) => {
+        let paused = reducedMotion.matches;
+        let frame = 0;
+
+        const pause = () => {
+            paused = true;
+        };
+        const resume = () => {
+            paused = reducedMotion.matches;
+        };
+
+        // Anything that means "I am reading or steering this myself".
+        strip.addEventListener('pointerenter', pause);
+        strip.addEventListener('pointerleave', resume);
+        strip.addEventListener('pointerdown', pause);
+        strip.addEventListener('touchstart', pause, { passive: true });
+        strip.addEventListener('touchend', resume, { passive: true });
+        strip.addEventListener('focusin', pause);
+        strip.addEventListener('focusout', resume);
+
+        // A swipe carries on after the finger lifts; wait for it to settle.
+        let settle = 0;
+        strip.addEventListener(
+            'scroll',
+            () => {
+                window.clearTimeout(settle);
+                settle = window.setTimeout(resume, 2000);
+            },
+            { passive: true },
+        );
+
+        reducedMotion.addEventListener('change', () => {
+            paused = reducedMotion.matches;
+        });
+
+        const step = () => {
+            const half = strip.scrollWidth / 2;
+
+            if (!paused && half > 0) {
+                strip.scrollLeft += PIXELS_PER_FRAME;
+                // Half the strip is a copy of the other half, so rewinding by
+                // exactly half lands on an identical frame.
+                if (strip.scrollLeft >= half) strip.scrollLeft -= half;
+            }
+            frame = requestAnimationFrame(step);
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    if (!frame) frame = requestAnimationFrame(step);
+                } else if (frame) {
+                    cancelAnimationFrame(frame);
+                    frame = 0;
+                }
+            });
+        });
+
+        observer.observe(strip);
+
+        /*
+          Swiping the strip ends in a click on whichever photo is under the
+          finger, which would open it full screen. A press that travelled is a
+          swipe, not a tap, so it is swallowed.
+        */
+        const DRAG_THRESHOLD_PX = 10;
+        let startX = 0;
+        let startY = 0;
+
+        strip.addEventListener('pointerdown', (event) => {
+            startX = event.clientX;
+            startY = event.clientY;
+        });
+
+        strip.addEventListener(
+            'click',
+            (event) => {
+                // `isTrusted` keeps the forwarded click below out of this: it
+                // carries no coordinates and would always look like a drag.
+                const movedX = Math.abs(event.clientX - startX);
+                const movedY = Math.abs(event.clientY - startY);
+                const dragged =
+                    movedX > DRAG_THRESHOLD_PX || movedY > DRAG_THRESHOLD_PX;
+
+                if (event.isTrusted && dragged) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+
+                // The second half of the strip is a copy, so a tap there opens
+                // the original rather than adding the photo to the list twice.
+                const target = event.target as HTMLElement;
+                const clone = target.closest<HTMLElement>('[data-lightbox-clone]');
+                if (!clone) return;
+
+                event.preventDefault();
+                const index = Number(clone.dataset.lightboxClone);
+                const originals = strip.querySelectorAll<HTMLElement>(
+                    '[data-lightbox-item]',
+                );
+                originals[index]?.click();
+            },
+            // Ahead of the lightbox, which listens on the strip itself.
+            true,
+        );
+    });
+</script>

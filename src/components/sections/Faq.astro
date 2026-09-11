@@ -1,0 +1,47 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Icon from '../ui/Icon.astro';
+import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
+
+/**
+ * The questions people actually ask before their first night.
+ *
+ * Native `<details>` elements: they open with the keyboard, work with no
+ * JavaScript, and every answer is in the HTML, which is what lets Google use
+ * the block for the question and answer result.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<Section id={sectionIds.faq} divider labelledBy="faq-heading">
+    <SectionHeading
+        eyebrow={t.faq.eyebrow}
+        headline={t.faq.headline}
+        id="faq-heading"
+    />
+
+    <div class="mt-10 max-w-[68rem]">
+        {
+            t.faq.items.map((item) => (
+                <details class="group border-b border-gold/20">
+                    <summary class="flex min-h-14 items-center gap-4 py-4 pr-1 sm:py-5">
+                        <h3 class="font-display text-xl leading-snug-2 font-normal text-cream">
+                            {item.question}
+                        </h3>
+                        <span
+                            class="disclosure-marker ml-auto shrink-0 text-gold"
+                            aria-hidden="true"
+                        >
+                            <Icon name="chevron-down" size={18} />
+                        </span>
+                    </summary>
+                    <p class="max-w-[62ch] pb-5 text-md leading-relaxed-2 text-cream/75">
+                        {item.answer}
+                    </p>
+                </details>
+            ))
+        }
+    </div>
+</Section>

@@ -1,0 +1,82 @@
+---
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import { site } from '../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../i18n';
+
+/**
+ * Google Maps behind an explicit click.
+ *
+ * Embedding the map directly would contact Google, and hand it the visitor's
+ * IP address, before anyone had a say. So the iframe is not in the page at all
+ * until the button is pressed; the script builds it on demand. This is the
+ * two-click solution German data protection authorities ask for, and it also
+ * removes a heavy third-party frame from the first page load.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<div
+    class="relative aspect-4/3 w-full border border-gold/20 bg-surface sm:aspect-3/2"
+    data-map
+    data-embed-url={site.venue.mapEmbedUrl}
+    data-frame-title={t.venue.map.title}
+>
+    <div
+        class="flex h-full flex-col items-center justify-center gap-4 p-6 text-center"
+        data-map-placeholder
+    >
+        <span class="text-gold" aria-hidden="true">
+            <Icon name="map-pin" size={26} />
+        </span>
+        <p class="max-w-[44ch] text-sm leading-snug-2 text-cream/65">
+            {t.venue.map.note}
+        </p>
+        <Button variant="secondary" data-map-load>{t.venue.map.load}</Button>
+        <a
+            href={pathFor('privacy', locale)}
+            class="text-sm underline underline-offset-2"
+        >
+            {t.venue.map.privacyLink}
+        </a>
+    </div>
+</div>
+
+<script>
+    import { hasConsent } from '../scripts/consent';
+
+    /**
+     * Replaces the placeholder with the real map frame.
+     *
+     * The URL comes from a data attribute written by the server, so nothing
+     * user-supplied ever reaches the iframe's src.
+     */
+    function loadMap(container: HTMLElement) {
+        const embedUrl = container.dataset.embedUrl;
+        if (!embedUrl || container.dataset.loaded === 'true') return;
+
+        const frame = document.createElement('iframe');
+        frame.src = embedUrl;
+        frame.title = container.dataset.frameTitle ?? 'Map';
+        frame.loading = 'lazy';
+        frame.referrerPolicy = 'no-referrer-when-downgrade';
+        frame.className = 'h-full w-full border-0';
+
+        container.dataset.loaded = 'true';
+        container.querySelector<HTMLElement>('[data-map-placeholder]')?.remove();
+        container.appendChild(frame);
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-map]').forEach((container) => {
+        // Someone who already accepted everything should not be asked again.
+        if (hasConsent('maps')) {
+            loadMap(container);
+            return;
+        }
+
+        container
+            .querySelector<HTMLButtonElement>('[data-map-load]')
+            ?.addEventListener('click', () => loadMap(container));
+    });
+</script>

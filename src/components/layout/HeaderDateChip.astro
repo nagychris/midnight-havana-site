@@ -1,0 +1,64 @@
+---
+import { nextEvent } from '../../lib/events';
+import { formatDateParts, todayInBerlin } from '../../lib/datetime';
+import {
+    localeFromAstro,
+    sectionHref,
+    sectionIds,
+    useTranslations,
+} from '../../i18n';
+
+/**
+ * The next-date chip in the header bar.
+ *
+ * Two states, as in the artboard: on the night itself it turns orange and says
+ * "heute Abend", on every other day it stays gold and names the next Friday.
+ * Either way it only appears once the hero has scrolled away, so the page still
+ * opens on the photograph. The fade is in the stylesheet, keyed off the
+ * header's scrolled state.
+ *
+ * Which state applies is decided in the browser, because the page is generated
+ * ahead of time; see `refreshEventBadges` in src/scripts/event-freshness.ts.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const event = nextEvent();
+const parts = event ? formatDateParts(event.date, locale) : null;
+const isToday = event?.date === todayInBerlin();
+---
+
+{
+    event && parts && (
+        <a
+            href={sectionHref(sectionIds.dates, locale)}
+            data-header-chip
+            data-event-when
+            data-event-date={event.date}
+            data-today={String(isToday)}
+            class="group hidden shrink-0 items-center gap-2.5 rounded-sharp border border-gold/40 bg-gold/6 px-3 py-1.5 whitespace-nowrap text-inherit transition-colors hover:bg-gold/12 data-[today=true]:border-orange/50 data-[today=true]:bg-orange/8 data-[today=true]:hover:bg-orange/14 xl:flex"
+        >
+            <span
+                class="mh-pulse size-1.5 shrink-0 rounded-full bg-orange group-data-[today=false]:hidden"
+                aria-hidden="true"
+            />
+            <span
+                class="size-1.5 shrink-0 rounded-full bg-gold group-data-[today=true]:hidden"
+                aria-hidden="true"
+            />
+
+            <span class="font-display text-2xs tracking-label text-cream uppercase">
+                <span class="text-gold group-data-[today=true]:hidden">
+                    {t.hero.eyebrowNext}
+                </span>
+                <span class="text-orange group-data-[today=false]:hidden">
+                    {t.nextEvent.todayLabel}
+                </span>
+                <span class="text-gold/35"> · </span>
+                <time datetime={event.date}>
+                    {parts.weekday} {parts.day} {parts.month}
+                </time>
+            </span>
+        </a>
+    )
+}

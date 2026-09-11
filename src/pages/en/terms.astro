@@ -1,0 +1,229 @@
+---
+import LegalPage from '../../layouts/LegalPage.astro';
+import { site } from '../../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../../i18n';
+
+/**
+ * English terms and conditions.
+ *
+ * A translation for readers; the German version is the one that applies, which
+ * the page says at the top.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const { legal } = site;
+---
+
+<LegalPage
+    page="terms"
+    title={t.meta.terms.title}
+    heading="Terms and Conditions"
+    description={t.meta.terms.description}
+    lastUpdated="Last updated: September 2026"
+>
+    <p>
+        This is a translation for convenience. The
+        <a href="/agb/" hreflang="de" lang="de">German version</a> is the one that
+        applies.
+    </p>
+
+    <h2>1. Provider and scope</h2>
+    <p>The organiser and contracting party for everything offered under the name Midnight Havana is:</p>
+    <address>
+        {legal.company}<br />
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}, Germany<br />
+        Register court: {legal.court}<br />
+        Commercial register: {legal.registerNumber}<br />
+        Email: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </address>
+    <p>
+        These terms cover our salsa and rueda group classes, social dance nights,
+        parties and combinations of a class and the evening that follows.
+        Bookings can be made through Eversports, through Urban Sports Club or at
+        the door. For bookings made through a third party, that platform's own
+        terms apply in addition.
+    </p>
+
+    <h2>2. Booking and reservation</h2>
+    <p>
+        Listing a class or an event is an invitation to book. For an online
+        booking the contract comes into being when we or the booking system
+        confirm it; at the door, when the booking is accepted and paid for. A
+        place is reserved once payment has gone through or a booking has been
+        confirmed. Where numbers are limited, there is no entitlement to take
+        part without a confirmed booking.
+    </p>
+
+    <h2>3. Prices and payment</h2>
+    <p>
+        The prices shown at the time of booking apply. You can pay through
+        Eversports, through Urban Sports Club, by card at the venue or in cash.
+        Unless stated otherwise, the full price is due before the class or event
+        begins.
+    </p>
+
+    <h2>4. Reduced price</h2>
+    <p>
+        For offers marked accordingly we give students and people on a low income
+        a reduction on the stated price. We may ask for current proof; without it
+        the difference to the standard price is payable. Discounts, vouchers and
+        special offers cannot be combined unless we say so explicitly.
+    </p>
+
+    <h2>5. Loyalty card</h2>
+    <p>
+        Dance ten times and the eleventh is free. After ten qualifying visits, a
+        completed card entitles you to one further free qualifying visit. It
+        cannot be exchanged for cash, is personal to you and is not
+        transferable. We may change or end the scheme for the future; anything
+        already earned in full is unaffected.
+    </p>
+
+    <h2>6. Cancellation and not turning up</h2>
+    <p>
+        A booked class can be cancelled up to six hours before it starts. If you
+        cancel in time, what you paid is credited towards a comparable future
+        visit rather than refunded.
+    </p>
+    <p>
+        Cancelling less than six hours before the class, or not turning up, gives
+        no right to a refund or a credit. Costs we save and any reallocation of
+        the place are taken into account, and you may show that we suffered no
+        loss or a much smaller one. Bookings through Eversports or Urban Sports
+        Club may be subject to those platforms' own rules.
+    </p>
+
+    <h2>7. Who can take part, and at which level</h2>
+    <p>
+        Participation is open to people aged 18 and over. Classes marked Advanced
+        assume practical knowledge of, in particular: pa' dentro y pa' fuera,
+        exhíbela, Lazo, dame, dame dos, directo, enchufla, una arriba, Interior
+        and La vecina.
+    </p>
+    <p>
+        Teachers may place someone in a different level according to their actual
+        ability where this is needed for the class to work or for safety. Your
+        own assessment alone does not create a right to a particular level.
+    </p>
+
+    <h2>8. Health</h2>
+    <p>
+        Dancing is physical activity. You are responsible for judging whether you
+        are physically and medically able to take part, and should stop any
+        movement that is clearly beyond your ability. Safety instructions from
+        the team must be followed. Our statutory duties of care are unaffected.
+    </p>
+
+    <h2>9. Changes to the programme</h2>
+    <p>
+        We may make reasonable changes to the announced programme as long as the
+        basic character of what you booked stays the same. This covers teachers,
+        DJs, individual class content, rooms, times and the order of the evening.
+        Where a change is substantial we will offer a reasonable alternative; if
+        that is not acceptable or not possible, we refund what you paid for the
+        affected part.
+    </p>
+
+    <h2>10. Cancelled classes and events</h2>
+    <p>
+        We may cancel a class or an event, in particular because a teacher is
+        ill, the venue is unavailable, there are serious technical or
+        organisational problems, or in cases of force majeure. We will offer a
+        replacement date where we can. If that is not taken up, or no suitable
+        replacement can be offered, we refund what you paid.
+    </p>
+
+    <h2>11. Conduct and exclusion</h2>
+    <p>
+        Midnight Havana is meant to be a respectful and safe space for everyone.
+        All guests are expected to treat each other with respect and to honour
+        personal boundaries.
+    </p>
+    <p>We do not tolerate:</p>
+    <ul>
+        <li>harassment or unwanted physical advances</li>
+        <li>aggressive or threatening behaviour</li>
+        <li>discriminatory, insulting or demeaning behaviour</li>
+        <li>
+            heavy intoxication or a comparable state that affects or endangers
+            other guests
+        </li>
+        <li>endangering other guests, teachers or staff</li>
+        <li>ignoring safety instructions from the Midnight Havana team</li>
+    </ul>
+    <p>
+        Serious or repeated breaches can lead to exclusion from a class or an
+        event and to being asked to leave, in serious cases without a warning
+        first. Where the exclusion follows a serious breach you are responsible
+        for, there is no right to a refund.
+    </p>
+
+    <h2>12. Photos and video</h2>
+    <p>
+        Photos and video may be taken at our events and used to document them and
+        to present Midnight Havana, where there is a legal basis for doing so.
+        Simply attending is not blanket consent to every form of publication of
+        your image. If you would rather not be photographed or filmed, tell the
+        event team or the photographer. See our
+        <a href={pathFor('privacy', locale)}>privacy policy</a> for more.
+    </p>
+
+    <h2>13. Cloakroom</h2>
+    <p>
+        Where a cloakroom is offered, it is free and included in the admission
+        price, and it is supervised during normal event hours. Liability follows
+        the statutory rules and clause 14. Please do not leave valuables in
+        clothing or bags.
+    </p>
+
+    <h2>14. Liability</h2>
+    <p>We are liable without limit:</p>
+    <ul>
+        <li>for intent and gross negligence</li>
+        <li>for injury to life, body or health</li>
+        <li>in other cases of mandatory statutory liability</li>
+    </ul>
+    <p>
+        For slight negligence in breaching an essential contractual duty, our
+        liability is limited to the foreseeable damage typical of this kind of
+        contract. Otherwise liability for slightly negligent damage to property
+        or financial loss is excluded as far as the law allows. These rules apply
+        equally in favour of our staff, teachers and agents.
+    </p>
+
+    <h2>15. Right of withdrawal for online bookings</h2>
+    <p>
+        For contracts about leisure services tied to a specific date, § 312g(2)
+        no. 9 of the German Civil Code means there is no statutory right of
+        withdrawal. That covers booking a class or an event online for a
+        particular date. The cancellation option we offer voluntarily under
+        clause 6 is unaffected.
+    </p>
+
+    <h2>16. Data protection</h2>
+    <p>
+        Personal data is processed in line with the applicable rules. See our
+        <a href={pathFor('privacy', locale)}>privacy policy</a>.
+    </p>
+
+    <h2>17. Consumer dispute resolution</h2>
+    <p>
+        {legal.company} is not obliged and is generally not willing to take part in
+        dispute resolution proceedings before a consumer arbitration board.
+    </p>
+
+    <h2>18. Final provisions</h2>
+    <p>
+        German law applies. For consumers this choice of law applies only so far
+        as it does not remove the protection of mandatory consumer rules of the
+        country where they normally live. If a provision is or becomes invalid,
+        the rest stays in force and the statutory rules take the place of the
+        invalid one.
+    </p>
+
+    <hr />
+    <p>
+        See also our <a href={pathFor('imprint', locale)}>imprint</a>.
+    </p>
+</LegalPage>

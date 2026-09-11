@@ -1,0 +1,73 @@
+---
+/**
+ * The one button in the design system.
+ *
+ * Renders an `<a>` when given an `href` and a `<button>` otherwise, so a link
+ * that looks like a button is still a link. Every variant is at least 48px
+ * tall, which is a comfortable tap target on a phone.
+ */
+interface Props {
+    href?: string;
+    variant?: 'primary' | 'secondary' | 'quiet';
+    size?: 'md' | 'lg';
+    /** Opens in a new tab and adds the safe rel attributes. */
+    external?: boolean;
+    /** Stretches to the width of its container. Useful in a stacked mobile row. */
+    fullWidth?: boolean;
+    type?: 'button' | 'submit';
+    class?: string;
+    id?: string;
+    'aria-label'?: string;
+    'data-analytics'?: string;
+}
+
+const {
+    href,
+    variant = 'primary',
+    size = 'md',
+    external = false,
+    fullWidth = false,
+    type = 'button',
+    class: className,
+    ...rest
+} = Astro.props;
+
+const base =
+    'inline-flex items-center justify-center gap-2.5 rounded-sharp text-center font-display font-medium uppercase tracking-label transition-colors duration-200 cursor-pointer';
+
+const variants = {
+    primary: 'bg-orange text-ink hover:bg-orange-hover hover:text-ink',
+    secondary:
+        'border border-gold/50 text-gold-light hover:bg-gold/12 hover:text-cream',
+    quiet: 'border border-gold/25 text-cream/80 hover:border-gold/50 hover:text-cream',
+} as const;
+
+const sizes = {
+    md: 'min-h-12 px-6 py-3.5 text-sm',
+    lg: 'min-h-14 px-8 py-4 text-base',
+} as const;
+
+const classes = [
+    base,
+    variants[variant],
+    sizes[size],
+    fullWidth ? 'w-full' : '',
+    className,
+];
+
+const externalAttributes = external
+    ? { target: '_blank', rel: 'noopener noreferrer' }
+    : {};
+---
+
+{
+    href ? (
+        <a href={href} class:list={classes} {...externalAttributes} {...rest}>
+            <slot />
+        </a>
+    ) : (
+        <button type={type} class:list={classes} {...rest}>
+            <slot />
+        </button>
+    )
+}

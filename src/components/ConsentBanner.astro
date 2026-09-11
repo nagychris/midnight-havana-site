@@ -1,0 +1,104 @@
+---
+import Button from './ui/Button.astro';
+import { useTranslations, localeFromAstro, pathFor } from '../i18n';
+
+/**
+ * Asks once whether analytics may load.
+ *
+ * Renders nothing at all when `PUBLIC_GA_MEASUREMENT_ID` is not set. Without
+ * analytics the site sets no cookies, reads no device storage and makes no
+ * third-party request, so there is nothing to ask about and a banner would be
+ * noise. The Google Maps embed asks separately, right where the map sits.
+ *
+ * The banner starts hidden and a script shows it only when no choice is
+ * stored, so it never flashes for a returning visitor.
+ */
+const analyticsId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const isEnabled = Boolean(analyticsId);
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const privacyPath = pathFor('privacy', locale);
+---
+
+{
+    isEnabled && (
+        <div
+            id="consent-banner"
+            hidden
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="consent-heading"
+            class="fixed inset-x-0 bottom-0 z-60 border-t border-gold/25 bg-surface/98 backdrop-blur-md"
+        >
+            <div class="mx-auto flex max-w-(--container-content) flex-col gap-5 px-5 py-5 sm:px-8 lg:flex-row lg:items-center lg:gap-10">
+                <div class="lg:flex-1">
+                    <h2
+                        id="consent-heading"
+                        class="font-display text-base font-medium tracking-label text-cream uppercase"
+                    >
+                        {t.consent.heading}
+                    </h2>
+                    <p class="mt-2 max-w-[68ch] text-sm leading-snug-2 text-cream/70">
+                        {t.consent.body}{' '}
+                        <a href={privacyPath} class="underline underline-offset-2">
+                            {t.consent.privacyLink}
+                        </a>
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-2.5 sm:flex-row lg:shrink-0">
+                    <Button id="consent-reject" variant="secondary" fullWidth>
+                        {t.consent.reject}
+                    </Button>
+                    <Button id="consent-accept" variant="primary" fullWidth>
+                        {t.consent.accept}
+                    </Button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+{
+    isEnabled && (
+        <script>
+            import { needsDecision, writeConsent } from '../scripts/consent';
+
+            const banner = document.querySelector<HTMLElement>('#consent-banner');
+            const accept = document.querySelector<HTMLButtonElement>('#consent-accept');
+            const reject = document.querySelector<HTMLButtonElement>('#consent-reject');
+
+            function setBannerVisible(visible: boolean) {
+                if (!banner) return;
+                banner.hidden = !visible;
+            }
+
+            function decide(analytics: boolean) {
+                // Accepting analytics also covers the map, so a visitor who
+                // agreed to everything is not asked a second time.
+                writeConsent({ analytics, maps: analytics });
+                setBannerVisible(false);
+            }
+
+            if (banner && needsDecision()) {
+                setBannerVisible(true);
+            }
+
+            accept?.addEventListener('click', () => decide(true));
+            reject?.addEventListener('click', () => decide(false));
+
+            // The footer link reopens the banner so a choice can be changed.
+            document
+                .querySelectorAll<HTMLElement>('[data-open-consent]')
+                .forEach((trigger) => {
+                    trigger.hidden = false;
+                    trigger.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        setBannerVisible(true);
+                        accept?.focus();
+                    });
+                });
+        </script>
+    )
+}

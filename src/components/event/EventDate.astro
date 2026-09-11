@@ -1,0 +1,58 @@
+---
+import { formatDateParts } from '../../lib/datetime';
+import { localeFromAstro } from '../../i18n';
+
+/**
+ * The date block: weekday, day number, month, year, stacked and centred.
+ *
+ * A fixed narrow column at every width, as in the artboard. Keeping it stacked
+ * on a phone rather than laying it out as a row means the title beside it gets
+ * a full-height column to sit against instead of being pushed down.
+ *
+ * Wrapped in a `<time>` so the machine-readable date sits next to the display
+ * one, which matters for accessibility and for structured data.
+ */
+interface Props {
+    date: string;
+    /** Highlights the weekday in the accent colour. */
+    accent?: boolean;
+    size?: 'md' | 'lg';
+    class?: string;
+}
+
+const { date, accent = false, size = 'lg', class: className } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const parts = formatDateParts(date, locale);
+---
+
+<time
+    datetime={date}
+    class:list={['block shrink-0 text-center', size === 'lg' ? 'w-14' : 'w-12', className]}
+>
+    <span
+        class:list={[
+            'block font-display text-2xs font-light tracking-label-wide uppercase',
+            accent ? 'text-orange' : 'text-gold/75',
+        ]}
+    >
+        {parts.weekday}
+    </span>
+
+    <span
+        class:list={[
+            'block font-display leading-flat font-semibold text-cream',
+            size === 'lg' ? 'text-[2.375rem] sm:text-date' : 'text-3xl',
+        ]}
+    >
+        {parts.day}
+    </span>
+
+    <span class="block font-display text-2xs tracking-label text-cream/70 uppercase">
+        {parts.month}
+    </span>
+
+    <span class="block font-display text-3xs tracking-label text-cream/35 uppercase">
+        {parts.year}
+    </span>
+</time>
