@@ -69,9 +69,19 @@ export default defineConfig({
     },
 
     image: {
-        // Every photo on the site is a wide landscape shot; nothing needs more.
-        responsiveStyles: true,
-        layout: 'constrained',
+        /*
+          Astro's generated image styles are off.
+
+          They are emitted unlayered, and unlayered CSS beats anything inside an
+          `@layer` no matter how specific it is. Tailwind's utilities live in a
+          layer, so `height: auto` from those styles silently overrode every
+          `h-full` and `aspect-*` class on the site, and a full-bleed background
+          photo collapsed to its own aspect ratio.
+
+          Astro still generates the resized files, the srcset and the width and
+          height attributes. Only the presentation is ours.
+        */
+        responsiveStyles: false,
     },
 
     integrations: [

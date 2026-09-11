@@ -38,7 +38,7 @@ const scrimHorizontal =
 <section
     id={sectionIds.top}
     class="relative flex flex-col overflow-hidden"
-    style="margin-top: calc(-1 * var(--header-height)); min-height: max(34rem, 100svh)"
+    style="margin-top: calc(-1 * var(--header-height)); min-height: max(35rem, 100svh)"
 >
     <div class="absolute inset-0" data-hero-slides aria-hidden="true">
         {
@@ -70,14 +70,14 @@ const scrimHorizontal =
     </div>
 
     <div
-        class="relative mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-5 pb-7 sm:px-8 sm:pb-10"
+        class="relative mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-5.5 pb-5.5 sm:px-8 sm:pb-10"
         style="padding-top: calc(var(--header-height) + 1.5rem)"
     >
-        <div class="mh-rise flex flex-col items-center gap-2 sm:gap-3">
-            <Logo size={44} loading="eager" class="sm:hidden" />
+        <div class="mh-rise flex flex-col items-center gap-3">
+            <Logo size={58} loading="eager" class="sm:hidden" />
             <Logo size={58} loading="eager" class="hidden sm:block" />
             <Wordmark
-                class="w-44 max-w-[58vw] text-cream sm:w-60 lg:w-[19rem]"
+                class="w-[238px] max-w-[64vw] text-cream sm:w-60 lg:w-[19rem]"
                 title="Midnight Havana"
             />
         </div>
@@ -102,7 +102,7 @@ const scrimHorizontal =
             </h1>
 
             <p
-                class="mh-rise mt-3 max-w-[52ch] text-xl leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
+                class="mh-rise mt-2.5 max-w-[52ch] text-lg leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
                 style="animation-delay:.26s"
             >
                 {t.hero.tagline}
@@ -113,14 +113,14 @@ const scrimHorizontal =
                 kept for larger screens and for search engines. */
             }
             <p
-                class="mh-rise mt-3 hidden max-w-[58ch] text-lead leading-snug-2 text-cream/75 sm:mt-3.5 sm:block"
+                class="mh-rise mt-2.5 max-w-[58ch] text-md leading-snug-2 text-cream/75 sm:mt-3.5 sm:text-lead"
                 style="animation-delay:.31s"
             >
                 {t.hero.body}
             </p>
 
             <p
-                class="mh-rise mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 font-display text-2xs tracking-label-wide text-gold uppercase sm:text-xs"
+                class="mh-rise mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-3xs tracking-label text-gold uppercase sm:gap-x-2.5 sm:text-xs sm:tracking-label-wide"
                 style="animation-delay:.37s"
             >
                 {
@@ -138,21 +138,17 @@ const scrimHorizontal =
             </p>
 
             <div
-                class="mh-rise mt-6 flex flex-wrap items-center gap-x-7 gap-y-3"
+                class="mh-rise mt-5 flex flex-col items-stretch gap-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7"
                 style="animation-delay:.44s"
             >
-                <Button
-                    href={sectionHref(sectionIds.dates, locale)}
-                    size="lg"
-                    class="max-sm:w-full"
-                >
+                <Button href={sectionHref(sectionIds.dates, locale)} size="lg">
                     {t.hero.ctaPrimary}
                     <Icon name="arrow-right" size={17} />
                 </Button>
 
                 <a
                     href={pathFor('classes', locale)}
-                    class="mh-nav-link inline-flex min-h-11 items-center font-display text-sm tracking-label text-cream uppercase"
+                    class="mh-nav-link inline-flex min-h-11 items-center justify-center font-display text-sm tracking-label text-cream uppercase sm:justify-start"
                 >
                     {t.hero.ctaSecondary}
                 </a>
@@ -163,7 +159,7 @@ const scrimHorizontal =
     <a
         href={sectionHref(sectionIds.dates, locale)}
         aria-label={t.hero.scrollCue}
-        class="mh-nudge relative mx-auto mb-5 hidden size-10 shrink-0 items-center justify-center rounded-full border border-gold-light/40 text-gold-light sm:flex"
+        class="mh-nudge relative mx-auto mb-5 flex size-10 shrink-0 items-center justify-center rounded-full border border-gold-light/40 text-gold-light"
     >
         <Icon name="chevron-down" size={16} />
     </a>
