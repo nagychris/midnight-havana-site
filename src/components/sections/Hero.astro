@@ -71,11 +71,11 @@ const scrimHorizontal =
         class="relative mx-auto flex w-full max-w-(--container-content) flex-1 flex-col px-5 pb-7 sm:px-8 sm:pb-10"
         style="padding-top: calc(var(--header-height) + 1.5rem)"
     >
-        <div class="mh-rise flex flex-col items-center gap-2.5 sm:gap-4">
-            <Logo size={48} loading="eager" class="sm:hidden" />
-            <Logo size={72} loading="eager" class="hidden sm:block" />
+        <div class="mh-rise flex flex-col items-center gap-2 sm:gap-3">
+            <Logo size={44} loading="eager" class="sm:hidden" />
+            <Logo size={58} loading="eager" class="hidden sm:block" />
             <Wordmark
-                class="w-48 max-w-[64vw] text-cream sm:w-72 lg:w-[21rem]"
+                class="w-44 max-w-[58vw] text-cream sm:w-60 lg:w-[19rem]"
                 title="Midnight Havana"
             />
         </div>
@@ -90,14 +90,14 @@ const scrimHorizontal =
             </p>
 
             <h1
-                class="mh-rise mt-3.5 max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
+                class="mh-rise mt-3 max-w-[17ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
                 style="animation-delay:.18s"
             >
                 {t.hero.headline}
             </h1>
 
             <p
-                class="mh-rise mt-3.5 max-w-[46ch] font-display text-h4 leading-tight-2 font-normal tracking-tiny text-orange-light uppercase sm:mt-4"
+                class="mh-rise mt-3 max-w-[52ch] text-xl leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
                 style="animation-delay:.26s"
             >
                 {t.hero.tagline}
@@ -106,14 +106,14 @@ const scrimHorizontal =
             {/* The full pitch. On a phone the buttons matter more, so it is
                 kept for larger screens and for search engines. */}
             <p
-                class="mh-rise mt-4 hidden max-w-[58ch] text-lead leading-relaxed-2 text-cream/75 sm:mt-5 sm:block"
+                class="mh-rise mt-3 hidden max-w-[58ch] text-lead leading-snug-2 text-cream/75 sm:mt-3.5 sm:block"
                 style="animation-delay:.31s"
             >
                 {t.hero.body}
             </p>
 
             <p
-                class="mh-rise mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 font-display text-2xs tracking-label-wide text-gold uppercase sm:mt-5 sm:text-xs"
+                class="mh-rise mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 font-display text-2xs tracking-label-wide text-gold uppercase sm:text-xs"
                 style="animation-delay:.37s"
             >
                 {
@@ -131,7 +131,7 @@ const scrimHorizontal =
             </p>
 
             <div
-                class="mh-rise mt-6 flex flex-wrap items-center gap-x-7 gap-y-3 sm:mt-7"
+                class="mh-rise mt-6 flex flex-wrap items-center gap-x-7 gap-y-3"
                 style="animation-delay:.44s"
             >
                 <Button

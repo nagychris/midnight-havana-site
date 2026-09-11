@@ -78,8 +78,14 @@ If a session is interrupted, the next one starts at the first unticked box.
       times/prices/address line, and the map, Instagram and WhatsApp buttons
 - [x] Clean-shoes rule and the full arrival details from the artboard, in the
       venue section in both languages
-- [x] Hero leads with the date and the name of the night, at display size, as
-      the artboard does. The H1 keeps its exact wording underneath it.
+- [x] Hero matched to the regenerated artboard: brand lockup centred high, then
+      eyebrow, headline at display size, tagline, the pitch, the three badges,
+      the orange button and a quiet text link, and the scroll cue
+- [x] Header matched: no brand, no chip and no booking button over the hero.
+      The wordmark fades in on scroll; the tonight chip appears on scroll and
+      only on the day itself. Nothing in the bar wraps.
+- [x] Official Instagram and WhatsApp marks, painted in the brand gold rather
+      than their own colours
 - [x] Fixed the empty cell that appeared wherever a hairline grid's last row
       was not full: the lines now belong to the cells, not to a background
       showing through the gaps. Affected the event page, the reviews and the

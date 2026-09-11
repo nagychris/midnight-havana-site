@@ -1,5 +1,4 @@
 ---
-import Logo from '../brand/Logo.astro';
 import Wordmark from '../brand/Wordmark.astro';
 import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
@@ -50,14 +49,15 @@ const homePath = pathFor('home', locale);
     <div
         class="mx-auto flex max-w-(--container-content) items-center gap-4 px-5 py-3 sm:px-8 lg:gap-6"
     >
+        {/* Over the hero this would repeat the lockup directly below it, so it
+            keeps its space but stays invisible until the hero is behind you.
+            Holding the space means the navigation does not jump on scroll. */}
         <a
             href={homePath}
-            class="flex shrink-0 items-center gap-2.5 text-cream"
+            class="site-header__brand flex shrink-0 items-center text-cream"
             aria-label={`${site.name} — Home`}
         >
-            <Logo size={30} loading="eager" class="sm:hidden" />
-            <Logo size={36} loading="eager" class="hidden sm:block" />
-            <Wordmark title="" class="h-7 w-auto text-cream sm:h-9" />
+            <Wordmark title="" class="h-8 w-auto text-cream sm:h-10" />
         </a>
 
         <HeaderDateChip />
@@ -113,11 +113,6 @@ const homePath = pathFor('home', locale);
                 class="hidden md:block"
             />
 
-            <Button href={site.booking.fallbackUrl} external size="md" class="px-4 sm:px-6">
-                <span class="sm:hidden">{t.nav.bookShort}</span>
-                <span class="hidden sm:inline">{t.nav.book}</span>
-            </Button>
-
             <button
                 type="button"
                 id="menu-toggle"
@@ -143,9 +138,8 @@ const homePath = pathFor('home', locale);
     class="fixed inset-0 z-60 flex flex-col overflow-y-auto overscroll-contain bg-ink/98 backdrop-blur-lg lg:hidden"
 >
     <div class="flex items-center gap-4 border-b border-gold/15 px-5 py-3 sm:px-8">
-        <a href={homePath} class="flex items-center gap-2.5 text-cream">
-            <Logo size={32} />
-            <Wordmark title="" class="h-7 w-auto text-cream" />
+        <a href={homePath} class="flex items-center text-cream">
+            <Wordmark title="" class="h-8 w-auto text-cream" />
         </a>
         <button
             type="button"

@@ -226,18 +226,47 @@
         text-shadow: 0 1px 12px rgba(11, 9, 8, 0.85);
     }
 
+    /*
+      The brand and the date chip belong to the scrolled state. They keep their
+      space so the navigation does not shift when they appear.
+    */
+    .site-header__brand,
+    .site-header [data-header-chip] {
+        transition: opacity 0.35s ease;
+    }
+
+    .site-header[data-overlay='true'][data-scrolled='false'] .site-header__brand,
+    .site-header[data-overlay='true'][data-scrolled='false'] [data-header-chip] {
+        opacity: 0;
+        pointer-events: none;
+    }
+
     .site-header[data-hidden='true'] {
         transform: translateY(-101%);
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .site-header {
+        .site-header,
+        .site-header__brand,
+        .site-header [data-header-chip] {
             transition: none;
         }
 
         .site-header[data-hidden='true'] {
             transform: none;
         }
+    }
+
+    /*
+      Nothing in the bar wraps. A two-line item there pushes the bar taller and
+      throws everything else out of line, so items are kept whole and the
+      navigation is hidden below the width where they all fit.
+    */
+    .site-header a,
+    .site-header button,
+    .site-header time,
+    .site-header span {
+        white-space: nowrap;
     }
 
     /*
