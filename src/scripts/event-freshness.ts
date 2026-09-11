@@ -54,6 +54,29 @@ function showOnlyUpcoming(
     return upcoming;
 }
 
+/**
+ * Keeps the small "next date" markers honest: the header chip and the booking
+ * bar at the foot of the screen.
+ *
+ * Both are rendered from the build date and both say whether the night is
+ * tonight, so both have to be checked against the real date in Berlin. A marker
+ * for a date that has already passed is removed rather than corrected, because
+ * there is nothing sensible left for it to say.
+ */
+export function refreshEventBadges(): void {
+    const today = todayInBerlin();
+
+    const badges = document.querySelectorAll<HTMLElement>('[data-event-when]');
+    for (const badge of badges) {
+        const date = badge.dataset.eventDate ?? '';
+        if (date < today) {
+            badge.remove();
+            continue;
+        }
+        badge.dataset.today = String(date === today);
+    }
+}
+
 export function refreshEventDates(): void {
     const today = todayInBerlin();
 
@@ -77,7 +100,12 @@ export function refreshEventDates(): void {
     // When every date on the page has passed, show the "no date yet" note
     // instead of an empty section.
     const emptyState = document.querySelector<HTMLElement>('[data-events-empty]');
-    const list = document.querySelector<HTMLElement>('[data-events-list]');
     if (emptyState) emptyState.hidden = upcoming.length > 0;
-    if (list) list.hidden = upcoming.length === 0;
+
+    // The list itself and the note under it both belong to the "there are
+    // dates" state, so they are marked the same way and hidden together.
+    const list = document.querySelectorAll<HTMLElement>('[data-events-list]');
+    for (const element of list) {
+        element.hidden = upcoming.length === 0;
+    }
 }

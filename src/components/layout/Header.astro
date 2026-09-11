@@ -4,7 +4,7 @@ import Icon from '../ui/Icon.astro';
 import Button from '../ui/Button.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import HeaderDateChip from './HeaderDateChip.astro';
-import { mainNavigation } from './navigation';
+import { mainNavigation, menuNavigation } from './navigation';
 import { site } from '../../data/site';
 import {
     localeFromAstro,
@@ -37,6 +37,8 @@ const { paths, transparent = false } = Astro.props;
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
 const navLinks = mainNavigation(t, locale);
+/* The full-screen menu has room for Kontakt; the bar does not. */
+const menuLinks = menuNavigation(t, locale);
 const homePath = pathFor('home', locale);
 ---
 
@@ -153,7 +155,7 @@ const homePath = pathFor('home', locale);
 
     <nav aria-label={t.nav.home} class="flex flex-col px-5 py-2 sm:px-8">
         {
-            navLinks.map((link) => (
+            menuLinks.map((link) => (
                 <a
                     href={link.href}
                     class="border-b border-gold/12 py-4 font-display text-2xl tracking-tiny text-cream uppercase last:border-b-0 hover:text-gold-light"

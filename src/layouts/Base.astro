@@ -4,6 +4,8 @@ import '../styles/global.css';
 import Seo from '../components/seo/Seo.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import MobileActionBar from '../components/layout/MobileActionBar.astro';
+import Lightbox from '../components/ui/Lightbox.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import WordmarkSprite from '../components/brand/WordmarkSprite.astro';
 import Analytics from '../components/Analytics.astro';
@@ -79,10 +81,23 @@ const t = useTranslations(locale);
         </main>
 
         <Footer />
+        <MobileActionBar />
+        <Lightbox />
         <ConsentBanner />
         <Analytics />
 
         <script>
+            import { refreshEventBadges } from '../scripts/event-freshness';
+
+            /* The header chip and the booking bar are on every page and both
+               name the next date, so both are checked against the real date in
+               Berlin rather than the date the site was built. */
+            refreshEventBadges();
+            window.addEventListener('pageshow', refreshEventBadges);
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) refreshEventBadges();
+            });
+
             /**
              * Fades sections in as they scroll into view.
              *

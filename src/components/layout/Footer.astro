@@ -2,14 +2,23 @@
 import Logo from '../brand/Logo.astro';
 import Wordmark from '../brand/Wordmark.astro';
 import Icon from '../ui/Icon.astro';
-import { legalNavigation, mainNavigation } from './navigation';
+import { legalNavigation, menuNavigation } from './navigation';
 import { site } from '../../data/site';
 import { localeFromAstro, useTranslations } from '../../i18n';
 
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
-const navLinks = mainNavigation(t, locale);
+const navLinks = menuNavigation(t, locale);
 const legalLinks = legalNavigation(t, locale);
+
+/* On a phone the artboard drops the column headings and lets the links wrap
+   into one block, each tall enough to hit with a thumb. The columns come back
+   as soon as there is width for them. */
+const linkListClass = 'flex flex-row flex-wrap gap-x-5 md:flex-col md:gap-3';
+const linkClass =
+    'inline-flex min-h-11 items-center text-md text-cream/75 hover:text-gold-light md:min-h-0';
+const headingClass =
+    'hidden font-display text-xs tracking-eyebrow text-cream/45 uppercase md:block';
 
 const year = new Date().getFullYear();
 
@@ -32,27 +41,23 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
             </p>
         </div>
 
-        <nav aria-labelledby="footer-nav-heading" class="flex flex-col gap-3">
-            <h2
-                id="footer-nav-heading"
-                class="font-display text-xs tracking-eyebrow text-cream/45 uppercase"
-            >
+        <nav aria-labelledby="footer-nav-heading">
+            <h2 id="footer-nav-heading" class={headingClass}>
                 {t.footer.navHeading}
             </h2>
-            {
-                navLinks.map((link) => (
-                    <a
-                        href={link.href}
-                        class="text-md text-cream/75 hover:text-gold-light"
-                    >
-                        {link.label}
-                    </a>
-                ))
-            }
+            <div class:list={[linkListClass, 'md:mt-3']}>
+                {
+                    navLinks.map((link) => (
+                        <a href={link.href} class={linkClass}>
+                            {link.label}
+                        </a>
+                    ))
+                }
+            </div>
         </nav>
 
         <div class="flex flex-col gap-3">
-            <h2 class="font-display text-xs tracking-eyebrow text-cream/45 uppercase">
+            <h2 class={headingClass}>
                 {t.footer.contactHeading}
             </h2>
             <address class="text-md leading-snug-2 text-cream/75 not-italic">
@@ -86,49 +91,47 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
             </div>
         </div>
 
-        <nav aria-labelledby="footer-legal-heading" class="flex flex-col gap-3">
-            <h2
-                id="footer-legal-heading"
-                class="font-display text-xs tracking-eyebrow text-cream/45 uppercase"
-            >
+        <nav aria-labelledby="footer-legal-heading">
+            <h2 id="footer-legal-heading" class={headingClass}>
                 {t.footer.legalHeading}
             </h2>
-            {
-                legalLinks.map((link) => (
-                    <a
-                        href={link.href}
-                        class="text-md text-cream/75 hover:text-gold-light"
-                    >
-                        {link.label}
-                    </a>
-                ))
-            }
-            {
-                hasConsentSettings && (
-                    <button
-                        type="button"
-                        data-open-consent
-                        hidden
-                        class="text-md text-left text-cream/75 hover:text-gold-light"
-                    >
-                        {t.footer.cookieSettings}
-                    </button>
-                )
-            }
-            <a
-                href={site.school.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-md text-cream/75 hover:text-gold-light"
-            >
-                {site.school.name}
-            </a>
+            <div class:list={[linkListClass, 'md:mt-3']}>
+                {
+                    legalLinks.map((link) => (
+                        <a href={link.href} class={linkClass}>
+                            {link.label}
+                        </a>
+                    ))
+                }
+                {
+                    hasConsentSettings && (
+                        <button
+                            type="button"
+                            data-open-consent
+                            hidden
+                            class:list={[linkClass, 'text-left']}
+                        >
+                            {t.footer.cookieSettings}
+                        </button>
+                    )
+                }
+                <a
+                    href={site.school.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={linkClass}
+                >
+                    {site.school.name}
+                </a>
+            </div>
         </nav>
     </div>
 
+    {/* The booking bar is fixed over the foot of the page on phones, so the
+        last line needs room to clear it. */}
     <div class="rule-top">
         <p
-            class="mx-auto max-w-(--container-content) px-5 py-6 text-sm text-cream/45 sm:px-8"
+            class="mx-auto max-w-(--container-content) px-5 pt-6 pb-28 text-sm text-cream/45 sm:px-8 lg:pb-6"
         >
             © {year} {t.footer.copyright}
         </p>

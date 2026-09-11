@@ -74,8 +74,7 @@ const scrimHorizontal =
         style="padding-top: calc(var(--header-height) + 1.5rem)"
     >
         <div class="mh-rise flex flex-col items-center gap-3">
-            <Logo size={58} loading="eager" class="sm:hidden" />
-            <Logo size={58} loading="eager" class="hidden sm:block" />
+            <Logo size={58} loading="eager" />
             <Wordmark
                 class="w-[238px] max-w-[64vw] text-cream sm:w-60 lg:w-[19rem]"
                 title="Midnight Havana"
@@ -85,8 +84,11 @@ const scrimHorizontal =
         <div
             class="mt-auto pt-10 [text-shadow:0_1px_22px_rgba(11,9,8,.9)] sm:pt-14"
         >
+            {/* The wordmark is directly above this and the sections below say
+                it again, so on a phone the line is spent for nothing. It
+                returns as soon as there is height to spare. */}
             <p
-                class="mh-rise flex items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:text-sm"
+                class="mh-rise hidden items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:flex sm:text-sm"
                 style="animation-delay:.05s"
             >
                 <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"
@@ -95,7 +97,7 @@ const scrimHorizontal =
             </p>
 
             <h1
-                class="mh-rise mt-3 max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
+                class="mh-rise max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
                 style="animation-delay:.18s"
             >
                 {t.hero.headline}
@@ -106,20 +108,6 @@ const scrimHorizontal =
                 style="animation-delay:.26s"
             >
                 {t.hero.tagline}
-            </p>
-
-            {
-                /* The full pitch. On a phone the buttons matter more, so it is
-                kept for larger screens and for search engines. */
-            }
-            {/* Every fact in this sentence is repeated by the sections below,
-                so on a phone it is three lines of prose between the promise and
-                the button. Kept in the markup, shown where there is room. */}
-            <p
-                class="mh-rise mt-3.5 hidden max-w-[58ch] text-lead leading-snug-2 text-cream/75 lg:block"
-                style="animation-delay:.31s"
-            >
-                {t.hero.body}
             </p>
 
             <p

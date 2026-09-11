@@ -80,6 +80,7 @@ export const sectionIds = {
     team: 'team',
     venue: 'location',
     reviews: 'reviews',
+    contact: 'kontakt',
     faq: 'faq',
 } as const;
 

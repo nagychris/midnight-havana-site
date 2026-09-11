@@ -53,6 +53,26 @@ export function mainNavigation(t: Translation, locale: Locale): NavLink[] {
     ];
 }
 
+/**
+ * The bar's links plus Kontakt, for the full-screen menu and the footer.
+ *
+ * Kontakt is left out of the header bar on purpose: the artboard keeps the bar
+ * to six items so nothing in it wraps, and anyone hunting for a way to get in
+ * touch opens the menu or scrolls to the foot of the page.
+ */
+export function menuNavigation(t: Translation, locale: Locale): NavLink[] {
+    const links = mainNavigation(t, locale);
+    const contact: NavLink = {
+        href: sectionHref(sectionIds.contact, locale),
+        label: t.nav.contact,
+        section: sectionIds.contact,
+    };
+
+    const faqIndex = links.findIndex((link) => link.section === sectionIds.faq);
+    links.splice(faqIndex, 0, contact);
+    return links;
+}
+
 export function legalNavigation(t: Translation, locale: Locale): NavLink[] {
     return [
         { href: pathFor('imprint', locale), label: t.footer.imprint },

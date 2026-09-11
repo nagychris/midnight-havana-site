@@ -50,7 +50,15 @@ const events = upcomingEvents(today);
         {t.nextEvent.noEvent}
     </p>
 
-    <p class="mt-6 text-sm text-cream/45">{t.nextEvent.bookNote}</p>
+    <p
+        class="mt-6 max-w-[62ch] text-sm text-cream/55"
+        data-events-list
+        hidden={events.length === 0}
+    >
+        {t.nextEvent.moreDates}
+    </p>
+
+    <p class="mt-3 text-sm text-cream/45">{t.nextEvent.bookNote}</p>
 </Section>
 
 <script>

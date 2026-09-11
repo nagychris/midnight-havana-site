@@ -23,7 +23,26 @@ export interface Photo {
     name: string;
     image: ImageMetadata;
     alt: Record<Locale, string>;
+    /**
+     * What has to stay in frame when the photo is cropped, as a CSS
+     * `object-position` value. Defaults to the middle of the picture.
+     */
+    focus: string;
 }
+
+const CENTRE = '50% 50%';
+
+/**
+ * Where the subject sits in a photo, for the places it is cropped.
+ *
+ * Only needed where the middle of the picture is the wrong thing to keep. Both
+ * teacher portraits are full-length shots, so a centred crop lands on the
+ * clothes and cuts the face off; these pull the frame up to the face.
+ */
+const focalPoints: Record<string, string> = {
+    'teacher-helen.jpg': '50% 14%',
+    'teacher-yago.jpg': '50% 10%',
+};
 
 /**
  * Alt text per file.
@@ -105,8 +124,8 @@ const descriptions: Record<string, Record<Locale, string>> = {
         en: 'The lounge with candelabra and a view over the Spree at night',
     },
     'venue-entrance.jpg': {
-        de: 'Eingangsbereich des Tangoloft im zweiten Hinterhof',
-        en: 'The entrance to Tangoloft in the second courtyard',
+        de: 'Eingangsbereich des Tangoloft im Hinterhof',
+        en: 'The entrance to Tangoloft in the rear courtyard',
     },
     'venue-floor-busy.jpg': {
         de: 'Volle Tanzfläche im Tangoloft während einer Rueda',
@@ -137,6 +156,7 @@ function toPhoto(filePath: string, module: { default: ImageMetadata }): Photo {
         name,
         image: module.default,
         alt: descriptions[name] ?? { de: '', en: '' },
+        focus: focalPoints[name] ?? CENTRE,
     };
 }
 

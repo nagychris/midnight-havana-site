@@ -93,9 +93,25 @@ If a session is interrupted, the next one starts at the first unticked box.
 - [x] Event timetable grouped by time, so 19:00 and 20:00 each appear once with
       their two parallel classes beside them instead of four rows repeating the
       same two times
-- [ ] Swap the body face to Inter and add Instrument Serif for pull quotes,
-      as DESIGN.md asks. Needs `pnpm add @fontsource-variable/inter
-      @fontsource/instrument-serif`, which this session had no network for.
+- [x] Contact section with a form. No backend: submitting hands the message to
+      the visitor's mail app, and the address is printed under the form for
+      anyone whose phone has no mail account set up.
+- [x] "Welcher Kurs ist meiner?" — four answers, one recommended class, kept in
+      `localStorage` so it survives a trip to Eversports
+- [x] Booking bar fixed to the foot of the screen on phones, hidden over the
+      hero and sliding up once it is behind you
+- [x] Header chip has a second state: the next Friday, not only tonight
+- [x] Venue reordered to the artboard: address, transit, the way in with the
+      shoe rule, then what is good to know, the map and the photos
+- [x] Team cards boxed, with the photo filling the top. A teacher with no
+      photo file starts at the name rather than showing a stand-in letter.
+- [x] Footer links wrap into one block on phones, each tall enough to tap
+- [x] Ground floor in the rear courtyard, not the third floor. The lift is gone
+      from "gut zu wissen" with it.
+
+DESIGN.md §4 asks for Inter and Instrument Serif. The artboard is newer and
+loads Oswald and Karla, which is what the site already self-hosts, so that swap
+is off the table.
 
 ## 5 · SEO
 

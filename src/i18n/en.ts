@@ -78,6 +78,7 @@ export const en: Translation = {
         classes: 'Classes',
         team: 'Team',
         venue: 'Venue',
+        contact: 'Contact',
         faq: 'FAQ',
         book: 'Book now',
         bookShort: 'Book',
@@ -99,7 +100,6 @@ export const en: Translation = {
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
         headline: 'Cuban Salsa & Rueda de Casino in Berlin',
         tagline: 'Learn salsa. Meet people. Dance your way into the weekend.',
-        body: 'Join our Cuban Salsa and Rueda de Casino classes from 19:00 and stay for the Social Dance from 21:00 at Tangoloft Berlin.',
         badges: ['No partner needed', 'Beginners welcome'],
         ctaPrimary: 'See upcoming dates',
         ctaSecondary: 'Explore classes',
@@ -126,6 +126,8 @@ export const en: Translation = {
         furtherDates: 'Further dates',
         noEvent:
             'The next date is not confirmed yet. New dates go out first in the WhatsApp community and on Instagram.',
+        moreDates:
+            'More dates to come. New dates go out first in the WhatsApp community and on Instagram.',
         bookingFallbackNote:
             'The individual class links for this date are not live yet. The button takes you to the class overview on Eversports.',
     },
@@ -201,6 +203,38 @@ export const en: Translation = {
         timeLabel: 'Time',
         prerequisitesLabel: 'Prerequisites',
         items: classCopy,
+        bookAll: 'All classes on Eversports',
+        finder: {
+            title: 'Which class is mine?',
+            question: 'Have you danced Cuban salsa before?',
+            answers: {
+                'salsa-basics': {
+                    label: 'Never',
+                    why: 'For complete beginners: the basic step, a feeling for the rhythm and the first elements of Cuban Salsa. No experience needed.',
+                },
+                'salsa-beginner': {
+                    label: 'A few evenings',
+                    why: 'You have taken a few classes already: partnerwork, movement, timing and the elements that are typical of Cuban Salsa.',
+                },
+                'rueda-beginner': {
+                    label: 'I can already dance Rueda',
+                    why: 'Calls, timing and switching partners in the circle. Got that down? Rueda Advanced at 20:00 is the next step.',
+                },
+                'rueda-advanced': {
+                    label: 'I dance Rueda at an advanced level',
+                    why: 'Long combinations, clean timing, pace. If the Rueda fundamentals are solid, this is your class.',
+                },
+            },
+            resultLabel: 'Your class',
+            nextOn: 'Next date:',
+            bookThis: 'Book this class',
+            seeNight: 'See how the night runs',
+            optionalNote:
+                'Booking is optional — you can also just turn up and pay at the door.',
+            unsureStrong: 'Not sure?',
+            unsureRest:
+                'Arrive around 10 minutes before the class starts and ask at the door — we will find the right class for you.',
+        },
     },
 
     venue: {
@@ -214,7 +248,9 @@ export const en: Translation = {
             'U1 / U3 Schlesisches Tor — an 8 minute walk along the water',
             'S-Bahn and U-Bahn Warschauer Straße',
         ],
-        accessNote: 'Second courtyard, third floor. There is a lift.',
+        accessLabel: 'How to find us',
+        accessNote:
+            'Ground floor in the rear courtyard: come in through the courtyard, then follow the signs to Midnight Havana.',
         goodToKnow: {
             heading: 'Good to know',
             shoeLead: 'One thing to bring:',
@@ -224,7 +260,7 @@ export const en: Translation = {
             items: [
                 'Coming alone is completely normal. Most people do.',
                 'You can watch the first class from the side before joining in.',
-                'There is a lift to the third floor, and a cloakroom for your things.',
+                'There is a cloakroom for your things.',
                 'Cash or card at the door, or book ahead via Eversports and Urban Sports Club.',
             ],
         },
@@ -285,6 +321,27 @@ export const en: Translation = {
         headline: 'What our community says',
         intro: 'Voices from guests who have spent a Friday at Midnight Havana.',
         sourceLabel: 'Source',
+        community: {
+            eyebrow: 'La comunidad',
+            headline: ['Come for the music.', 'Stay for the people.'],
+        },
+    },
+
+    contact: {
+        eyebrow: 'Contact',
+        headline: 'Write to us',
+        intro: 'Got a question about one of the nights? Left something behind? Want to reserve a table or celebrate your birthday with us? Write to us directly — we would love to hear from you.',
+        name: 'Name',
+        phone: 'Phone',
+        email: 'E-mail',
+        message: 'Message',
+        send: 'Send by e-mail',
+        orWrite: 'Or write straight to',
+        hint: 'Opens your e-mail app with your message to us.',
+        subject: 'Enquiry from the website',
+        privacyIntro:
+            'By sending this you agree to your details being processed to answer your enquiry. More about that in the ',
+        privacyLink: 'privacy policy',
     },
 
     faq: {
@@ -363,5 +420,12 @@ export const en: Translation = {
         backToTop: 'Back to top',
         clock: '',
         and: 'and',
+        lightbox: {
+            open: 'View the photo full screen',
+            close: 'Close',
+            zoom: 'Zoom',
+            previous: 'Previous photo',
+            next: 'Next photo',
+        },
     },
 };

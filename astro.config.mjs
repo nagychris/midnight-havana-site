@@ -55,7 +55,9 @@ export default defineConfig({
                 "default-src 'self'",
                 "base-uri 'self'",
                 "object-src 'none'",
-                // The site posts no forms; booking is a link to Eversports.
+                // Nothing on the site posts anywhere: booking is a link to
+                // Eversports, and the contact form hands its message to the
+                // visitor's mail app instead of submitting.
                 "form-action 'none'",
                 "img-src 'self' data:",
                 "font-src 'self'",

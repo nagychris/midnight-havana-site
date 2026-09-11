@@ -1,0 +1,70 @@
+---
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * Full-screen photo viewer, wired up once for the whole page.
+ *
+ * Every container marked `data-lightbox-gallery` becomes its own set: opening a
+ * venue photo lets you swipe the venue photos, not the teachers. PhotoSwipe
+ * handles the parts that are tedious to get right on a phone — pinch to zoom,
+ * swipe between photos, drag down to close — as well as the keyboard and the
+ * focus trap.
+ *
+ * Its own code is only fetched when a photo is actually opened, so a visitor
+ * who never taps one pays for the small binding script and nothing else.
+ *
+ * The labels are passed through the DOM because the script is bundled and
+ * cannot read server values directly.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<div
+    data-lightbox-labels
+    data-close={t.common.lightbox.close}
+    data-zoom={t.common.lightbox.zoom}
+    data-prev={t.common.lightbox.previous}
+    data-next={t.common.lightbox.next}
+    hidden
+>
+</div>
+
+<script>
+    import PhotoSwipeLightbox from 'photoswipe/lightbox';
+    import 'photoswipe/style.css';
+
+    const GALLERY = '[data-lightbox-gallery]';
+
+    const hasPhotos = document.querySelector(`${GALLERY} [data-lightbox-item]`);
+    const labels = document.querySelector<HTMLElement>('[data-lightbox-labels]');
+
+    if (hasPhotos) {
+        const lightbox = new PhotoSwipeLightbox({
+            gallery: GALLERY,
+            children: 'a[data-lightbox-item]',
+            pswpModule: () => import('photoswipe'),
+            // A solid backdrop rather than a tint: these are night photographs
+            // and a half-lit page behind them muddies the colour.
+            bgOpacity: 1,
+            closeTitle: labels?.dataset.close,
+            zoomTitle: labels?.dataset.zoom,
+            arrowPrevTitle: labels?.dataset.prev,
+            arrowNextTitle: labels?.dataset.next,
+            // Desktop only; on a phone the gesture is pinch, which is built in.
+            wheelToZoom: true,
+        });
+
+        lightbox.init();
+    }
+</script>
+
+<style is:global>
+    /* The viewer's chrome, in the brand's colours rather than PhotoSwipe's. */
+    .pswp {
+        --pswp-bg: var(--color-ink-deep);
+        --pswp-icon-color: var(--color-cream);
+        --pswp-icon-color-secondary: var(--color-ink);
+        --pswp-error-text-color: var(--color-cream);
+    }
+</style>

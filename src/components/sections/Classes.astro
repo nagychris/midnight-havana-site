@@ -4,6 +4,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Badge from '../ui/Badge.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import ClassFinder from '../classes/ClassFinder.astro';
 import { classes } from '../../data/classes';
 import { bookingUrlFor, nextEvent } from '../../lib/events';
 import { site } from '../../data/site';
@@ -43,7 +44,15 @@ const next = nextEvent();
         {t.classes.priceNote}
     </p>
 
-    <ul class="hairline-grid mt-10 grid md:grid-cols-2">
+    {/* The chooser sits beside the cards once there is room, and above them on
+        a phone, which is where someone who does not know the four classes yet
+        needs it. */}
+    <div
+        class="mt-10 grid items-start gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]"
+    >
+        <ClassFinder />
+
+        <ul class="hairline-grid grid md:grid-cols-2">
         {
             classes.map((danceClass) => {
                 const copy = t.classes.items[danceClass.id];
@@ -104,7 +113,18 @@ const next = nextEvent();
                 );
             })
         }
-    </ul>
+        </ul>
+    </div>
+
+    <Button
+        href={site.booking.fallbackUrl}
+        external
+        size="lg"
+        class="mt-8 w-full sm:w-auto"
+    >
+        {t.classes.bookAll}
+        <Icon name="external" size={16} />
+    </Button>
 
     <p class="mt-6 text-sm text-cream/45">{t.classes.bookNote}</p>
 </Section>

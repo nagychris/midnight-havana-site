@@ -119,6 +119,26 @@ responsive sizes and the `srcset`.
 A photo with no description still works; it just gets an empty `alt` and counts
 as decorative. Describe anything that carries meaning.
 
+If a photo is cropped somewhere and the crop cuts off the subject, give it an
+entry in `focalPoints` in the same file. It is a CSS `object-position` value,
+and the default is the middle of the picture. Both teacher portraits need one,
+because they are full-length shots and a centred crop lands on the clothes.
+
+### Opening a photo full screen
+
+Tapping a photo opens it full screen, and from there it can be swiped, pinched
+and dragged away. Wrap the thumbnail in `<Zoomable photo={photo}>` and mark the
+container it belongs to with `data-lightbox-gallery`. That container decides
+what you swipe through, so one section is one set of photos.
+
+The viewer is [PhotoSwipe](https://photoswipe.com/) 5 (MIT, no dependencies of
+its own). It is served from our own domain like everything else, and its main
+code is only fetched once someone actually opens a photo.
+
+The full-bleed photographs behind a headline — the hero, the closing call to
+action, the header of an event page — are deliberately left out. They are a
+backdrop for text, not pictures anyone wants to inspect.
+
 Names the layout looks for:
 
 | File | Where it appears |
@@ -194,6 +214,7 @@ src/
     layout/      header, footer, navigation, language picker
     sections/    one file per section of the home page
     event/       the date card, the timetable, the big date block
+    classes/     the "which class is mine?" chooser
     seo/         head tags and JSON-LD
   pages/         thin files; the real page bodies are components
   scripts/       the small amount of browser JavaScript

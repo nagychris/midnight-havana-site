@@ -4,6 +4,7 @@ import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import Zoomable from '../ui/Zoomable.astro';
 import { photoGroups, photoSet } from '../../data/photos';
 import {
     localeFromAstro,
@@ -64,17 +65,21 @@ const [photo] = photoSet(photoGroups.party);
 
         {
             photo && (
-                <Image
-                    src={photo.image}
-                    alt={photo.alt[locale]}
-                    widths={[480, 720, 1080]}
-                    sizes="(min-width: 1024px) 46vw, 100vw"
-                    format="webp"
-                    quality={78}
-                    loading="lazy"
-                    decoding="async"
-                    class="aspect-4/3 w-full border border-gold/20 object-cover lg:aspect-3/2"
-                />
+                <div data-lightbox-gallery>
+                    <Zoomable photo={photo}>
+                        <Image
+                            src={photo.image}
+                            alt={photo.alt[locale]}
+                            widths={[480, 720, 1080]}
+                            sizes="(min-width: 1024px) 46vw, 100vw"
+                            format="webp"
+                            quality={78}
+                            loading="lazy"
+                            decoding="async"
+                            class="aspect-4/3 w-full border border-gold/20 object-cover lg:aspect-3/2"
+                        />
+                    </Zoomable>
+                </div>
             )
         }
     </div>
@@ -89,17 +94,32 @@ const [photo] = photoSet(photoGroups.party);
             {t.party.more.intro}
         </p>
 
-        <ul class="hairline-grid mt-10 grid sm:grid-cols-2 lg:grid-cols-3">
+        {/* Numbered, as in the artboard. Five reasons in a row all look alike
+            at a glance; the count gives the eye somewhere to land and turns a
+            wall of paragraphs into something you can scan.
+
+            The panels are separated by a one-pixel gap that lets the page
+            through, plus a rule on top of each cell. No frame around the
+            cells, so a last row that does not fill its columns simply ends. */}
+        <ol class="mt-10 grid gap-px sm:grid-cols-2 lg:grid-cols-3">
             {
-                t.party.more.points.map((point) => (
-                    <li class="flex flex-col gap-2.5 p-6">
-                        <h4 class="font-display text-h4 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
+                t.party.more.points.map((point, index) => (
+                    <li class="flex flex-col border-t border-gold/20 bg-surface p-5 sm:p-6">
+                        <p
+                            class="font-display text-xs font-semibold tracking-label-wide text-orange"
+                            aria-hidden="true"
+                        >
+                            {String(index + 1).padStart(2, '0')}
+                        </p>
+                        <h4 class="mt-2.5 font-display text-h4 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
                             {point.title}
                         </h4>
-                        <p class="text-md leading-snug-2 text-cream/70">{point.body}</p>
+                        <p class="mt-2 text-md leading-snug-2 text-cream/70">
+                            {point.body}
+                        </p>
                     </li>
                 ))
             }
-        </ul>
+        </ol>
     </div>
 </Section>

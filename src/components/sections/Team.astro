@@ -4,6 +4,7 @@ import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
+import Zoomable from '../ui/Zoomable.astro';
 import { site } from '../../data/site';
 import { photoByName } from '../../data/photos';
 import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
@@ -11,9 +12,9 @@ import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
 /**
  * The teachers.
  *
- * A portrait is looked up by name, `teacher-helen.jpg` and so on. Until those
- * files land in src/assets/photos/ the card shows the initial in the brand
- * type, which reads as a deliberate choice rather than a missing image.
+ * A portrait is looked up by name, `teacher-helen.jpg` and so on. A card with
+ * no photo file simply starts at the name: an empty frame or a stand-in letter
+ * only draws attention to what is missing.
  */
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
@@ -35,50 +36,46 @@ const members = t.team.members.map((member) => ({
         <span class="mt-3 block">{t.team.intro2}</span>
     </SectionHeading>
 
-    <ul class="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+    <ul class="mt-12 grid gap-4 md:grid-cols-3" data-lightbox-gallery>
         {
             members.map((member) => (
-                <li class="flex flex-col">
-                    {member.photo ? (
-                        <Image
-                            src={member.photo.image}
-                            alt={`${member.name} — ${member.role}`}
-                            widths={[320, 480, 720]}
-                            sizes="(min-width: 768px) 30vw, 100vw"
-                            format="webp"
-                            quality={80}
-                            loading="lazy"
-                            decoding="async"
-                            class="aspect-4/5 w-full border border-gold/20 object-cover"
-                        />
-                    ) : (
-                        <div
-                            class="flex aspect-4/5 w-full items-center justify-center border border-gold/20 bg-surface"
-                            aria-hidden="true"
-                        >
-                            <span class="font-display text-hero leading-flat font-semibold text-gold/25">
-                                {member.name.slice(0, 1)}
-                            </span>
-                        </div>
+                <li class="flex flex-col border border-gold/25 bg-surface">
+                    {member.photo && (
+                        <Zoomable photo={member.photo}>
+                            <Image
+                                src={member.photo.image}
+                                alt={`${member.name} — ${member.role}`}
+                                widths={[320, 480, 720]}
+                                sizes="(min-width: 768px) 30vw, 100vw"
+                                format="webp"
+                                quality={80}
+                                loading="lazy"
+                                decoding="async"
+                                class="h-70 w-full object-cover md:h-75"
+                                style={`object-position:${member.photo.focus}`}
+                            />
+                        </Zoomable>
                     )}
 
-                    <h3 class="mt-5 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
-                        {member.name}
-                    </h3>
-                    <p class="mt-1.5 font-display text-sm tracking-label text-gold uppercase">
-                        {member.role}
-                    </p>
+                    <div class="flex flex-1 flex-col p-5 sm:p-6">
+                        <h3 class="font-display text-h3 leading-tight-2 font-semibold tracking-tiny text-cream uppercase">
+                            {member.name}
+                        </h3>
+                        <p class="mt-1.5 font-display text-sm tracking-label text-gold uppercase">
+                            {member.role}
+                        </p>
 
-                    <div class="mt-4 flex flex-col gap-3 text-md leading-snug-2 text-cream/70">
-                        {member.body.map((paragraph) => (
-                            <p>{paragraph}</p>
-                        ))}
+                        <div class="mt-4 flex flex-col gap-3 text-md leading-snug-2 text-cream/70">
+                            {member.body.map((paragraph) => (
+                                <p>{paragraph}</p>
+                            ))}
+                        </div>
+
+                        <p class="mt-auto border-t border-gold/20 pt-4 font-display text-md leading-snug-2 tracking-tiny text-gold">
+                            <span class="sr-only">{t.team.mottoLabel}: </span>
+                            {member.motto}
+                        </p>
                     </div>
-
-                    <p class="mt-4 border-t border-gold/15 pt-4 font-display text-md tracking-tiny text-orange-light">
-                        <span class="sr-only">{t.team.mottoLabel}: </span>
-                        {member.motto}
-                    </p>
                 </li>
             ))
         }

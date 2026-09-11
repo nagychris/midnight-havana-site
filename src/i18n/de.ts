@@ -13,6 +13,14 @@ export interface ClassCopy {
     cta: string;
 }
 
+/** One answer in the "which class is mine?" chooser, and its class. */
+export interface FinderAnswer {
+    /** The answer as the visitor would phrase it, e.g. "Ein paar Abende". */
+    label: string;
+    /** Why that answer leads to this class. */
+    why: string;
+}
+
 const classCopy: Record<ClassId, ClassCopy> = {
     'salsa-basics': {
         name: 'Salsa Cubana Basics',
@@ -96,6 +104,7 @@ export const de = {
         classes: 'Kurse',
         team: 'Team',
         venue: 'Location',
+        contact: 'Kontakt',
         faq: 'FAQ',
         book: 'Jetzt buchen',
         bookShort: 'Buchen',
@@ -121,7 +130,6 @@ export const de = {
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
         headline: 'Salsa Cubana & Rueda de Casino in Berlin',
         tagline: 'Lerne Salsa. Triff Menschen. Tanz durch den Freitagabend.',
-        body: 'Salsa-Kurse für Anfänger und Fortgeschrittene ab 19 Uhr. Ab 21 Uhr wird das Tangoloft zum Cuban Salsa Social mit Salsa Cubana, Timba und Son.',
         badges: ['Kein Tanzpartner nötig', 'Anfänger willkommen'],
         ctaPrimary: 'Nächsten Termin ansehen',
         ctaSecondary: 'Kurse entdecken',
@@ -148,6 +156,8 @@ export const de = {
         furtherDates: 'Weitere Termine',
         noEvent:
             'Der nächste Termin steht noch nicht fest. Neue Daten gibt es zuerst in der WhatsApp-Community und auf Instagram.',
+        moreDates:
+            'Weitere Termine folgen. Neue Daten gibt es zuerst in der WhatsApp-Community und auf Instagram.',
         bookingFallbackNote:
             'Für diesen Termin sind die einzelnen Kurslinks noch nicht freigeschaltet. Der Button führt zur Kursübersicht bei Eversports.',
     },
@@ -223,6 +233,38 @@ export const de = {
         timeLabel: 'Uhrzeit',
         prerequisitesLabel: 'Voraussetzungen',
         items: classCopy,
+        bookAll: 'Alle Kurse bei Eversports',
+        finder: {
+            title: 'Welcher Kurs ist meiner?',
+            question: 'Hast du schon mal kubanische Salsa getanzt?',
+            answers: {
+                'salsa-basics': {
+                    label: 'Noch nie',
+                    why: 'Für komplette Anfänger: Grundschritt, Rhythmusgefühl und die ersten Elemente der Salsa Cubana. Keine Vorkenntnisse nötig.',
+                },
+                'salsa-beginner': {
+                    label: 'Ein paar Abende',
+                    why: 'Du hast schon ein paar Kurse besucht: Partnerwork, Bewegung, Timing und typische Elemente der kubanischen Salsa.',
+                },
+                'rueda-beginner': {
+                    label: 'Ich kann schon Rueda tanzen',
+                    why: 'Ansagen, Timing und der Partnerwechsel im Kreis. Sitzt das schon? Rueda Advanced um 20:00 ist die nächste Stufe.',
+                },
+                'rueda-advanced': {
+                    label: 'Ich tanze Rueda fortgeschritten',
+                    why: 'Lange Kombinationen, sauberes Timing, Tempo. Wer die Rueda-Grundlagen sicher hat, ist hier richtig.',
+                },
+            } as Record<ClassId, FinderAnswer>,
+            resultLabel: 'Dein Kurs',
+            nextOn: 'Nächster Termin:',
+            bookThis: 'Diesen Kurs buchen',
+            seeNight: 'Ablauf des Abends ansehen',
+            optionalNote:
+                'Buchen ist optional — du kannst auch einfach kommen und an der Abendkasse zahlen.',
+            unsureStrong: 'Nicht sicher?',
+            unsureRest:
+                'Komm etwa 10 Minuten vor Kursbeginn und frag an der Tür — wir finden den richtigen Kurs für dich.',
+        },
     },
 
     venue: {
@@ -236,7 +278,9 @@ export const de = {
             'U1 / U3 Schlesisches Tor — 8 Minuten am Wasser entlang',
             'S- und U-Bahn Warschauer Straße',
         ],
-        accessNote: 'Zweiter Hinterhof, dritter Stock. Ein Aufzug ist vorhanden.',
+        accessLabel: 'So findest du uns',
+        accessNote:
+            'Erdgeschoss im Hinterhof: Eingang über den Innenhof, dann den Schildern zu Midnight Havana folgen.',
         goodToKnow: {
             heading: 'Gut zu wissen',
             shoeLead: 'Eine Sache mitbringen:',
@@ -246,7 +290,7 @@ export const de = {
             items: [
                 'Allein zu kommen ist völlig normal — die meisten tun es.',
                 'Du kannst beim ersten Kurs erst von der Seite zuschauen.',
-                'Es gibt einen Aufzug in den dritten Stock und eine Garderobe.',
+                'Es gibt eine Garderobe für deine Sachen.',
                 'An der Tür bar oder mit Karte, vorab über Eversports und Urban Sports Club.',
             ],
         },
@@ -307,6 +351,29 @@ export const de = {
         headline: 'Was unsere Community sagt',
         intro: 'Stimmen von Gästen, die einen Freitag bei Midnight Havana verbracht haben.',
         sourceLabel: 'Quelle',
+        /** Sits above the photo strip, below the quotes. */
+        community: {
+            eyebrow: 'La comunidad',
+            headline: ['Komm für die Musik.', 'Bleib für die Menschen.'],
+        },
+    },
+
+    contact: {
+        eyebrow: 'Kontakt',
+        headline: 'Schreib uns',
+        intro: 'Du hast eine spezielle Frage zu einem Abend? Du hast etwas bei uns vergessen? Du möchtest einen Tisch reservieren oder deinen Geburtstag bei uns feiern? Dann schreib uns direkt — wir freuen uns auf dich.',
+        name: 'Name',
+        phone: 'Telefon',
+        email: 'E-Mail',
+        message: 'Nachricht',
+        send: 'Per E-Mail senden',
+        orWrite: 'Oder schreib direkt an',
+        hint: 'Öffnet dein E-Mail-Programm mit deiner Nachricht an uns.',
+        /** Subject line of the generated mail. */
+        subject: 'Anfrage über die Website',
+        privacyIntro:
+            'Mit dem Absenden stimmst du der Verarbeitung deiner Angaben zur Bearbeitung der Anfrage zu. Mehr dazu in der ',
+        privacyLink: 'Datenschutzerklärung',
     },
 
     faq: {
@@ -385,6 +452,13 @@ export const de = {
         backToTop: 'Nach oben',
         clock: 'Uhr',
         and: 'und',
+        lightbox: {
+            open: 'Foto groß ansehen',
+            close: 'Schließen',
+            zoom: 'Vergrößern',
+            previous: 'Vorheriges Foto',
+            next: 'Nächstes Foto',
+        },
     },
 };
 

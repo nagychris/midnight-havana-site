@@ -89,11 +89,13 @@ const headingId = `event-${event.date}`;
             }
         </div>
 
+        {/* Boxed, as in the artboard: on a card this wide a bare chevron does
+            not read as something you can press. */}
         <span
-            class="disclosure-marker -mr-2 ml-auto flex size-11 shrink-0 items-center justify-center text-gold/70 transition-colors group-hover:text-gold-light"
+            class="disclosure-marker ml-auto flex size-10 shrink-0 items-center justify-center border border-gold/40 text-gold transition-colors group-hover:border-gold group-hover:text-gold-light sm:size-11"
             aria-hidden="true"
         >
-            <Icon name="chevron-down" size={20} />
+            <Icon name="chevron-down" size={18} />
         </span>
     </summary>
 

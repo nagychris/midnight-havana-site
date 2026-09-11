@@ -48,12 +48,30 @@ const strip = photoSetOrAll(photoGroups.community);
                 </ul>
             )
         }
+        {/* The strip below is the rest of the answer to "what is this like?",
+            so it gets a heading of its own rather than drifting loose under
+            the quotes. */}
+        <div class="mt-16">
+            <p class="font-display text-2xs tracking-eyebrow text-gold uppercase sm:text-xs">
+                {t.reviews.community.eyebrow}
+            </p>
+            <h3 class="mt-2.5 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase sm:mt-3">
+                {
+                    t.reviews.community.headline.map((line, index) => (
+                        <>
+                            {index > 0 && <br />}
+                            {line}
+                        </>
+                    ))
+                }
+            </h3>
+        </div>
     </div>
 
     <PhotoMarquee
         photos={strip}
         label={t.hero.slideshowLabel}
-        class="mt-12"
+        class="mt-6"
     />
 
     <a
