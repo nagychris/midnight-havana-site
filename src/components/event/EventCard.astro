@@ -54,12 +54,22 @@ const headingId = `event-${event.date}`;
     data-next={isNext}
     open={isNext}
 >
-    <summary
-        class="flex flex-wrap items-start gap-x-6 gap-y-4 p-5 sm:flex-nowrap sm:items-center sm:gap-8 sm:p-7"
-    >
-        <EventDate date={event.date} accent={isNext} class="shrink-0" />
+    <summary class="p-4 sm:flex sm:items-center sm:gap-8 sm:p-7">
+        {/* Phone: the date and the marker share the top row, then the title and
+            the summary get the full width underneath. From the small
+            breakpoint up the date moves into its own column. */}
+        <div class="flex items-center gap-4 sm:contents">
+            <EventDate date={event.date} accent={isNext} class="shrink-0" />
 
-        <div class="min-w-0 flex-1">
+            <span
+                class="disclosure-marker ml-auto flex size-9 shrink-0 items-center justify-center rounded-sharp border border-gold/25 text-gold sm:order-last sm:size-10"
+                aria-hidden="true"
+            >
+                <Icon name="chevron-down" size={18} />
+            </span>
+        </div>
+
+        <div class="mt-3 min-w-0 sm:mt-0 sm:flex-1">
             <div class="flex flex-wrap items-center gap-2">
                 <Badge
                     tone={isToday ? 'solid' : isNext ? 'gold' : 'muted'}
@@ -72,42 +82,38 @@ const headingId = `event-${event.date}`;
 
             <h3
                 id={headingId}
-                class="mt-2.5 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
+                class="mt-2 font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
             >
                 {heading}
             </h3>
 
+            {/* The date block already says this, so it only appears where
+                the two are not side by side. */}
             {
                 event.title && (
-                    <p class="mt-1 font-display text-md tracking-label text-gold uppercase">
+                    <p class="mt-1 hidden font-display text-md tracking-label text-gold uppercase sm:block">
                         {longDate}
                     </p>
                 )
             }
 
+            {/* The one-line summary, not the detail page's full description. */}
             {
-                event.description && (
-                    <p class="mt-2.5 max-w-[62ch] text-md leading-snug-2 text-cream/70">
-                        {event.description[locale]}
+                (event.summary ?? event.description) && (
+                    <p class="mt-2 max-w-[62ch] text-md leading-snug-2 text-cream/70">
+                        {(event.summary ?? event.description)![locale]}
                     </p>
                 )
             }
         </div>
-
-        <span
-            class="disclosure-marker ml-auto flex size-10 shrink-0 items-center justify-center rounded-sharp border border-gold/25 text-gold"
-            aria-hidden="true"
-        >
-            <Icon name="chevron-down" size={18} />
-        </span>
     </summary>
 
-    <div class="px-5 pb-1 sm:px-7">
+    <div class="px-4 pb-1 sm:px-7">
         <EventSchedule event={event} />
     </div>
 
     <div
-        class="flex flex-col gap-6 border-t border-gold/20 p-5 sm:p-7 lg:flex-row lg:items-end lg:justify-between"
+        class="flex flex-col gap-5 border-t border-gold/20 p-4 sm:p-7 lg:flex-row lg:items-end lg:justify-between"
     >
         <div class="flex flex-col gap-2">
             <p class="flex items-start gap-2.5 text-md leading-snug-2 text-cream/80">

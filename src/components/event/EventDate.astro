@@ -40,18 +40,15 @@ const parts = formatDateParts(date, locale);
     <span
         class:list={[
             'block font-display leading-flat font-semibold text-cream',
-            size === 'lg' ? 'text-date' : 'text-h3',
+            size === 'lg' ? 'text-h2 sm:text-date' : 'text-h3',
         ]}
     >
         {parts.day}
     </span>
-    <span
-        class="font-display text-sm tracking-label text-cream/65 uppercase sm:block"
-    >
+    <span class="font-display text-sm tracking-label text-cream/65 uppercase sm:block">
         {parts.month}
-        <span class="sm:hidden">{parts.year}</span>
     </span>
-    <span class="hidden font-display text-xs tracking-label text-cream/40 uppercase sm:block">
+    <span class="font-display text-sm tracking-label text-cream/40 uppercase sm:block sm:text-xs">
         {parts.year}
     </span>
 </time>
