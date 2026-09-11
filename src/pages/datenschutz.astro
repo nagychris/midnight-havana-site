@@ -1,0 +1,294 @@
+---
+import LegalPage from '../layouts/LegalPage.astro';
+import { site } from '../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../i18n';
+
+/**
+ * Privacy policy.
+ *
+ * Adapted from the text the client already had, with two changes that the move
+ * to this site made necessary: the host is Netlify rather than manitu, and
+ * there is a section on the optional Google Analytics behind the consent
+ * banner. Fonts and icons are served from our own domain, so there is nothing
+ * to declare for them.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const { legal, host } = site;
+const analyticsEnabled = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+---
+
+<LegalPage
+    page="privacy"
+    title={t.meta.privacy.title}
+    heading="Datenschutzerklärung"
+    description={t.meta.privacy.description}
+    lastUpdated="Stand: September 2026"
+>
+    <h2>1. Verantwortlicher</h2>
+    <address>
+        {legal.company}<br />
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}<br />
+        {legal.country}<br />
+        E-Mail: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </address>
+    <p>Midnight Havana ist ein Veranstaltungsangebot von {legal.company}.</p>
+
+    <h2>2. Allgemeine Hinweise</h2>
+    <p>
+        Wir verarbeiten personenbezogene Daten ausschließlich im Rahmen der
+        geltenden Datenschutzvorschriften, insbesondere der
+        Datenschutz-Grundverordnung (DSGVO), des Bundesdatenschutzgesetzes
+        (BDSG) und des Telekommunikation-Digitale-Dienste-Datenschutz-Gesetzes
+        (TDDDG).
+    </p>
+    <p>
+        Personenbezogene Daten sind Informationen, die sich auf eine
+        identifizierte oder identifizierbare natürliche Person beziehen,
+        beispielsweise Name, E-Mail-Adresse, Buchungsdaten oder Foto- und
+        Videoaufnahmen.
+    </p>
+
+    <h2>3. Rechtsgrundlagen</h2>
+    <ul>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. a DSGVO – Einwilligung</strong>, etwa für
+            die Einbindung von Google Maps oder die Reichweitenmessung.
+        </li>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. b DSGVO – Vertragserfüllung</strong>, etwa
+            bei der Buchung eines Tanzkurses.
+        </li>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. c DSGVO – rechtliche Verpflichtung</strong>,
+            etwa für steuerliche Aufbewahrungspflichten.
+        </li>
+        <li>
+            <strong>Art. 6 Abs. 1 lit. f DSGVO – berechtigte Interessen</strong>,
+            etwa für den sicheren Betrieb der Website und die Organisation
+            unserer Veranstaltungen.
+        </li>
+    </ul>
+
+    <h2>4. Hosting und Server-Logfiles</h2>
+    <p>Diese Website wird gehostet bei:</p>
+    <address>
+        {host.name}<br />
+        {host.address}
+    </address>
+    <p>
+        Beim Aufruf der Website verarbeitet der Webserver technisch erforderliche
+        Daten, insbesondere IP-Adresse, Datum und Uhrzeit des Zugriffs,
+        aufgerufene Seite, übertragene Datenmenge, Browser, Betriebssystem und
+        Referrer-URL. Die Verarbeitung ist erforderlich, um die Website technisch
+        bereitzustellen sowie ihre Stabilität und Sicherheit zu gewährleisten.
+        Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.
+    </p>
+    <p>
+        Netlify verarbeitet diese Daten in unserem Auftrag auf Grundlage eines
+        Vertrags zur Auftragsverarbeitung nach Art. 28 DSGVO. Eine Verarbeitung
+        in den USA kann nicht ausgeschlossen werden; sie erfolgt nach Maßgabe der
+        Art. 44 ff. DSGVO auf Grundlage der von Netlify eingesetzten
+        Standardvertragsklauseln.
+    </p>
+
+    <h2>5. Cookies und Speicherzugriff</h2>
+    <p>
+        Diese Website setzt von sich aus keine Cookies. Für die
+        Datenschutz-Einstellungen speichern wir deine Auswahl im lokalen Speicher
+        deines Browsers (<code>localStorage</code>). Diese Information bleibt auf
+        deinem Gerät und wird nicht an uns übertragen.
+    </p>
+    <p>
+        Nicht technisch notwendige Dienste werden erst eingesetzt, nachdem du
+        eingewilligt hast. Rechtsgrundlage ist § 25 Abs. 1 TDDDG in Verbindung
+        mit Art. 6 Abs. 1 lit. a DSGVO. Eine erteilte Einwilligung kannst du
+        jederzeit mit Wirkung für die Zukunft über die Cookie-Einstellungen im
+        Footer widerrufen.
+    </p>
+
+    <h2>6. Schriftarten und Symbole</h2>
+    <p>
+        Schriftarten und Symbole werden von unserem eigenen Server ausgeliefert.
+        Es besteht keine Verbindung zu Google Fonts oder einem anderen
+        Content-Delivery-Network, und es werden dabei keine Daten an Dritte
+        übertragen.
+    </p>
+
+    <h2>7. Google Maps</h2>
+    <p>
+        Auf unserer Website bieten wir eine Karte von Google Maps an. Anbieter
+        für Nutzer im Europäischen Wirtschaftsraum ist die Google Ireland
+        Limited, Gordon House, Barrow Street, Dublin 4, Irland.
+    </p>
+    <p>
+        <strong>Die Karte wird erst nach deiner Einwilligung geladen.</strong>
+        Vor dem Klick auf „Karte laden“ besteht keine Verbindung zu Google. Erst
+        danach werden Daten wie IP-Adresse, Browser- und Geräteinformationen,
+        Datum und Uhrzeit des Aufrufs sowie technische Nutzungsdaten an Google
+        übermittelt. Bist du gleichzeitig in einem Google-Konto angemeldet, kann
+        Google die Nutzung deinem Konto zuordnen.
+    </p>
+    <p>
+        Rechtsgrundlage ist deine Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO in
+        Verbindung mit § 25 Abs. 1 TDDDG. Eine Verarbeitung außerhalb der EU,
+        insbesondere in den USA, kann nicht ausgeschlossen werden und erfolgt
+        nach Maßgabe der Art. 44 ff. DSGVO.
+    </p>
+
+    {
+        analyticsEnabled && (
+            <>
+                <h2>8. Reichweitenmessung mit Google Analytics</h2>
+                <p>
+                    Wir nutzen Google Analytics 4 der Google Ireland Limited, um
+                    zu verstehen, welche Seiten besucht werden. Google Analytics
+                    wird <strong>ausschließlich nach deiner Einwilligung</strong>{' '}
+                    geladen. Ohne Einwilligung findet keine Messung statt und es
+                    werden keine Cookies gesetzt.
+                </p>
+                <p>
+                    Nach deiner Einwilligung können insbesondere verarbeitet
+                    werden: gekürzte IP-Adresse, Geräte- und Browserinformationen,
+                    aufgerufene Seiten, Verweildauer und Referrer. Die
+                    IP-Anonymisierung ist aktiviert, Google-Signale und
+                    personalisierte Werbung sind deaktiviert.
+                </p>
+                <p>
+                    Rechtsgrundlage ist deine Einwilligung nach Art. 6 Abs. 1 lit.
+                    a DSGVO in Verbindung mit § 25 Abs. 1 TDDDG. Du kannst sie
+                    jederzeit über die Cookie-Einstellungen im Footer widerrufen.
+                </p>
+            </>
+        )
+    }
+
+    <h2>{analyticsEnabled ? '9' : '8'}. Buchungen über Eversports</h2>
+    <p>
+        Für die Buchung und Verwaltung unserer Kurse nutzen wir Eversports.
+        Anbieter ist die Eversport GmbH, Jakov-Lind-Straße 13/H/5. Stock, 1020
+        Wien, Österreich. Auf unserer Website sind lediglich Links zu Eversports
+        eingebunden; eine Verbindung entsteht erst, wenn du einen solchen Link
+        anklickst.
+    </p>
+    <p>
+        Bei einer Buchung über Eversports können Name, E-Mail-Adresse,
+        Telefonnummer, Buchungs-, Zahlungs- und Rechnungsdaten verarbeitet
+        werden. Soweit Eversports die Buchungs- und Teilnehmerverwaltung für uns
+        bereitstellt, erfolgt die Verarbeitung in unserem Auftrag nach Art. 28
+        DSGVO; unsere eigene Verarbeitung stützt sich auf Art. 6 Abs. 1 lit. b
+        DSGVO. Für die eigenen Plattformfunktionen von Eversports gelten
+        ergänzend deren Datenschutzinformationen.
+    </p>
+
+    <h2>{analyticsEnabled ? '10' : '9'}. Urban Sports Club</h2>
+    <p>
+        Midnight Havana ist Partner der Urban Sports GmbH, Novalisstraße 10,
+        10115 Berlin. Nutzt du unsere Angebote über eine Mitgliedschaft, erhalten
+        wir Name, Mitgliedsnummer, Check-in-Informationen sowie Kurs, Datum und
+        Uhrzeit der Teilnahme. Die Verarbeitung erfolgt nach Art. 6 Abs. 1 lit. b
+        DSGVO zur Durchführung und Abrechnung deiner Teilnahme.
+    </p>
+
+    <h2>{analyticsEnabled ? '11' : '10'}. Zahlungen vor Ort</h2>
+    <p>
+        Kartenzahlungen wickeln wir über SumUp ab (SumUp Limited, Block 8,
+        Harcourt Centre, Charlotte Way, Dublin 2, D02 K580, Irland). Die
+        vollständigen Karteninformationen erhalten wir nicht. Die Verarbeitung
+        erfolgt nach Art. 6 Abs. 1 lit. b DSGVO, die Aufbewahrung von Zahlungs-
+        und Transaktionsdaten zusätzlich nach Art. 6 Abs. 1 lit. c DSGVO. Bei
+        Barzahlung werden grundsätzlich keine personenbezogenen Zahlungsdaten
+        verarbeitet.
+    </p>
+
+    <h2>{analyticsEnabled ? '12' : '11'}. Kontaktaufnahme</h2>
+    <p>
+        Wenn du uns per E-Mail, über Instagram oder über WhatsApp kontaktierst,
+        verarbeiten wir die von dir mitgeteilten Daten, um deine Anfrage zu
+        bearbeiten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO bei
+        vertragsbezogenen Anfragen und im Übrigen Art. 6 Abs. 1 lit. f DSGVO. Die
+        Daten werden gelöscht, sobald die Anfrage abschließend bearbeitet ist und
+        keine Aufbewahrungspflichten entgegenstehen.
+    </p>
+
+    <h2>{analyticsEnabled ? '13' : '12'}. WhatsApp-Community und Instagram</h2>
+    <p>
+        Die Teilnahme an unserer WhatsApp-Community ist freiwillig. Anbieter ist
+        die WhatsApp Ireland Limited, Merrion Road, Dublin 4, Irland. Verarbeitet
+        werden können Mobilfunknummer, Profilname, Nachrichten und der Zeitpunkt
+        der Kommunikation. Rechtsgrundlage ist deine Einwilligung nach Art. 6
+        Abs. 1 lit. a DSGVO; du kannst die Community jederzeit verlassen.
+    </p>
+    <p>
+        Wir unterhalten ein Profil auf Instagram (Meta Platforms Ireland Limited,
+        Merrion Road, Dublin 4, Irland). Auf unserer Website ist nur ein Link zu
+        Instagram eingebunden; eine Verbindung zu Meta entsteht erst, wenn du ihn
+        anklickst.
+    </p>
+
+    <h2>{analyticsEnabled ? '14' : '13'}. Foto- und Videoaufnahmen</h2>
+    <p>
+        Bei unseren Veranstaltungen können Foto- und Videoaufnahmen entstehen,
+        die wir zur Dokumentation und Öffentlichkeitsarbeit verwenden. Bei
+        Übersichts- und Gruppenaufnahmen stützen wir uns auf Art. 6 Abs. 1 lit. f
+        DSGVO sowie die §§ 22 und 23 Kunsturhebergesetz. Bei gezielten
+        Porträtaufnahmen holen wir eine Einwilligung nach Art. 6 Abs. 1 lit. a
+        DSGVO ein.
+    </p>
+    <p>
+        Wenn du nicht fotografiert oder gefilmt werden möchtest, sag dem
+        Veranstaltungsteam oder der fotografierenden Person Bescheid. Du kannst
+        einer Verarbeitung auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO nach Art.
+        21 DSGVO widersprechen.
+    </p>
+
+    <h2>{analyticsEnabled ? '15' : '14'}. Speicherdauer</h2>
+    <p>
+        Wir speichern personenbezogene Daten nur so lange, wie es für den
+        jeweiligen Zweck erforderlich ist. Danach werden sie gelöscht, sofern
+        keine handels- oder steuerrechtlichen Aufbewahrungspflichten oder andere
+        rechtmäßige Gründe entgegenstehen.
+    </p>
+
+    <h2>{analyticsEnabled ? '16' : '15'}. Deine Rechte</h2>
+    <p>
+        Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16
+        DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18
+        DSGVO) und Datenübertragbarkeit (Art. 20 DSGVO). Soweit wir Daten auf
+        Grundlage von Art. 6 Abs. 1 lit. f DSGVO verarbeiten, hast du nach Art. 21
+        DSGVO ein Widerspruchsrecht. Eine erteilte Einwilligung kannst du
+        jederzeit mit Wirkung für die Zukunft widerrufen.
+    </p>
+
+    <h2>{analyticsEnabled ? '17' : '16'}. Beschwerderecht</h2>
+    <p>
+        Du hast nach Art. 77 DSGVO das Recht, dich bei einer Aufsichtsbehörde zu
+        beschweren. Für uns zuständig ist die Berliner Beauftragte für Datenschutz
+        und Informationsfreiheit, Alt-Moabit 59–61, 10555 Berlin, Telefon +49 30
+        13889-0, E-Mail <a href="mailto:mailbox@datenschutz-berlin.de"
+            >mailbox@datenschutz-berlin.de</a
+        >.
+    </p>
+
+    <h2>{analyticsEnabled ? '18' : '17'}. Automatisierte Entscheidungsfindung</h2>
+    <p>
+        Eine ausschließlich automatisierte Entscheidungsfindung einschließlich
+        Profiling im Sinne von Art. 22 DSGVO findet nicht statt.
+    </p>
+
+    <h2>{analyticsEnabled ? '19' : '18'}. Änderungen dieser Erklärung</h2>
+    <p>
+        Wir passen diese Datenschutzerklärung an, wenn sich gesetzliche
+        Anforderungen, unsere Leistungen oder die eingesetzten technischen
+        Dienste ändern. Es gilt die jeweils auf dieser Seite veröffentlichte
+        Fassung.
+    </p>
+
+    <hr />
+    <p>
+        Unsere <a href={pathFor('terms', locale)}>Allgemeinen Geschäftsbedingungen</a
+        > und das <a href={pathFor('imprint', locale)}>Impressum</a> findest du auf
+        eigenen Seiten.
+    </p>
+</LegalPage>

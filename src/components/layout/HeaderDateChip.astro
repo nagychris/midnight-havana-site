@@ -1,0 +1,68 @@
+---
+import { nextEvent } from '../../lib/events';
+import { formatDateParts, todayInBerlin } from '../../lib/datetime';
+import {
+    localeFromAstro,
+    sectionHref,
+    sectionIds,
+    useTranslations,
+} from '../../i18n';
+
+/**
+ * The small "tonight" or "next Friday" chip in the header bar.
+ *
+ * The bar keeps the one fact the page is really about on screen wherever you
+ * are on it, with a way straight back to the dates. On the night itself the dot
+ * pulses and the chip turns orange.
+ *
+ * Rendered from the build-time next date. A page left open past midnight will
+ * show yesterday here until it is reloaded, which is a far smaller problem than
+ * the date list itself going stale, and that is corrected in the browser.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const today = todayInBerlin();
+const event = nextEvent(today);
+const isToday = event?.date === today;
+const parts = event ? formatDateParts(event.date, locale) : null;
+const name = event?.title?.[locale];
+---
+
+{
+    event && parts && (
+        <a
+            href={sectionHref(sectionIds.dates, locale)}
+            data-header-chip
+            class:list={[
+                'hidden items-center gap-2.5 rounded-sharp border px-3 py-1.5 text-inherit transition-colors lg:flex',
+                isToday
+                    ? 'border-orange/50 bg-orange/8 hover:bg-orange/14'
+                    : 'border-gold/35 bg-gold/6 hover:bg-gold/12',
+            ]}
+        >
+            <span
+                class:list={[
+                    'size-1.5 shrink-0 rounded-full',
+                    isToday ? 'mh-pulse bg-orange' : 'bg-gold',
+                ]}
+                aria-hidden="true"
+            />
+
+            <span class="font-display text-2xs tracking-label text-cream uppercase">
+                <span class={isToday ? 'text-orange' : 'text-gold'}>
+                    {isToday ? t.nextEvent.todayLabel : t.hero.eyebrowNext}
+                </span>
+                <span class="text-gold/35"> · </span>
+                <time datetime={event.date}>
+                    {parts.weekday} {parts.day} {parts.month}
+                </time>
+                {name && <> · {name}</>}
+            </span>
+
+            <span class="font-display text-2xs tracking-label text-orange-light uppercase">
+                {t.nav.details}
+            </span>
+        </a>
+    )
+}

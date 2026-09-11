@@ -1,0 +1,100 @@
+---
+import Badge from '../ui/Badge.astro';
+import Icon from '../ui/Icon.astro';
+import { classStartTimes, classesStartingAt } from '../../data/classes';
+import { site } from '../../data/site';
+import { bookingUrlFor } from '../../lib/booking';
+import type { SiteEvent } from '../../lib/events';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * The timetable for one date, with a booking link per class.
+ *
+ * Each class is one tappable row rather than a labelled button. Four buttons
+ * stacked on a phone read as a wall of equal-weight choices and push the card's
+ * real primary action off the screen; a row that is entirely a link is just as
+ * easy to hit, and leaves one obvious button at the bottom of the card.
+ */
+interface Props {
+    event: SiteEvent;
+}
+
+const { event } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const startTimes = classStartTimes();
+---
+
+<div class="flex flex-col">
+    {
+        startTimes.map((startTime) => (
+            <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
+                <p class="font-display text-h4 leading-flat font-medium text-orange">
+                    {startTime}
+                    {t.nextEvent.classesAt && (
+                        <span class="ml-1 text-sm font-normal text-cream/45">
+                            {t.nextEvent.classesAt}
+                        </span>
+                    )}
+                </p>
+
+                <ul class="grid gap-2 sm:grid-cols-2 sm:gap-3">
+                    {classesStartingAt(startTime).map((danceClass) => {
+                        const copy = t.classes.items[danceClass.id];
+                        return (
+                            <li>
+                                <a
+                                    href={bookingUrlFor(event, danceClass.id)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    data-analytics={`book:${danceClass.id}`}
+                                    class="group/row flex min-h-12 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2.5 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
+                                >
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block font-display text-base font-medium tracking-tiny text-cream uppercase">
+                                            {copy.name}
+                                        </span>
+                                        <span class="mt-0.5 block text-sm text-cream/50">
+                                            {t.nextEvent.bookOnPlatform}
+                                        </span>
+                                    </span>
+                                    <Badge
+                                        tone={danceClass.track === 'rueda' ? 'green' : 'gold'}
+                                    >
+                                        {danceClass.level}
+                                    </Badge>
+                                    <span
+                                        class="text-gold/60 transition-colors group-hover/row:text-gold-light"
+                                        aria-hidden="true"
+                                    >
+                                        <Icon name="external" size={15} />
+                                    </span>
+                                </a>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+        ))
+    }
+
+    <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
+        <p class="font-display text-h4 leading-flat font-medium text-orange">
+            {site.schedule.socialDance}
+        </p>
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <h4 class="font-display text-lg font-medium tracking-tiny text-cream uppercase">
+                {t.nextEvent.socialDance}
+            </h4>
+            {
+                event.dj && (
+                    <span class="font-display text-sm tracking-label text-gold uppercase">
+                        {event.dj}
+                    </span>
+                )
+            }
+            <p class="w-full text-sm text-cream/55">{t.event.socialNote}</p>
+        </div>
+    </div>
+</div>

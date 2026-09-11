@@ -1,0 +1,105 @@
+---
+import { Image } from 'astro:assets';
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { photoGroups, photoSet } from '../../data/photos';
+import {
+    localeFromAstro,
+    sectionHref,
+    sectionIds,
+    useTranslations,
+} from '../../i18n';
+
+/**
+ * The social dance, and the five reasons the night is more than a party.
+ *
+ * The points are a plain list on a phone and a three-column grid from the
+ * tablet breakpoint up, separated by hairlines rather than boxes.
+ */
+interface Props {
+    /** Renders the heading as an h1, for the dedicated party page. */
+    headingLevel?: 'h1' | 'h2';
+}
+
+const { headingLevel = 'h2' } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const [photo] = photoSet(photoGroups.party);
+---
+
+<Section id={sectionIds.party} divider labelledBy="party-heading">
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div>
+            <SectionHeading
+                eyebrow={t.party.eyebrow}
+                headline={t.party.headline}
+                level={headingLevel}
+                id="party-heading"
+            />
+
+            <div class="mt-6 flex flex-col gap-4 text-lead leading-relaxed-2 text-cream/75">
+                <p>{t.party.body1}</p>
+                <p>{t.party.body2}</p>
+            </div>
+
+            <p
+                class="mt-6 font-display text-md tracking-label text-orange-light uppercase"
+            >
+                {t.party.highlight}
+            </p>
+
+            <Button
+                href={sectionHref(sectionIds.dates, locale)}
+                variant="secondary"
+                size="lg"
+                class="mt-8"
+            >
+                {t.party.cta}
+                <Icon name="arrow-right" size={16} />
+            </Button>
+        </div>
+
+        {
+            photo && (
+                <Image
+                    src={photo.image}
+                    alt={photo.alt[locale]}
+                    widths={[480, 720, 1080]}
+                    sizes="(min-width: 1024px) 46vw, 100vw"
+                    format="webp"
+                    quality={78}
+                    loading="lazy"
+                    decoding="async"
+                    class="aspect-4/3 w-full border border-gold/20 object-cover lg:aspect-3/2"
+                />
+            )
+        }
+    </div>
+
+    <div class="mt-16 lg:mt-20">
+        <h3
+            class="font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
+        >
+            {t.party.more.headline}
+        </h3>
+        <p class="mt-4 max-w-[70ch] text-lead leading-relaxed-2 text-cream/70">
+            {t.party.more.intro}
+        </p>
+
+        <ul class="hairline-grid mt-10 grid sm:grid-cols-2 lg:grid-cols-3">
+            {
+                t.party.more.points.map((point) => (
+                    <li class="flex flex-col gap-2.5 p-6">
+                        <h4 class="font-display text-h4 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
+                            {point.title}
+                        </h4>
+                        <p class="text-md leading-snug-2 text-cream/70">{point.body}</p>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</Section>

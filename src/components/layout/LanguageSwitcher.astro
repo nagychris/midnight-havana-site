@@ -1,0 +1,125 @@
+---
+import Icon from '../ui/Icon.astro';
+import { localeName, locales, type Locale, type LocalisedPaths } from '../../i18n';
+
+/**
+ * Language picker: the current language, and a panel with the other ones.
+ *
+ * Built on `<details>` rather than a custom dropdown, so it opens with the
+ * keyboard and still works with no JavaScript at all. The options are real
+ * links to the same page in the other language, which means a search engine can
+ * follow them; a `<select>` that rewrote the URL in script would be a dead end.
+ */
+interface Props {
+    /** This page's path in every language. */
+    paths: LocalisedPaths;
+    locale: Locale;
+    label: string;
+    /** Opens upwards, for the picker at the bottom of the mobile menu. */
+    drop?: 'down' | 'up';
+    /** Fills the width of its container. */
+    fullWidth?: boolean;
+    class?: string;
+}
+
+const {
+    paths,
+    locale,
+    label,
+    drop = 'down',
+    fullWidth = false,
+    class: className,
+} = Astro.props;
+---
+
+<details
+    class:list={[
+        'group relative',
+        fullWidth ? 'w-full' : 'w-auto',
+        className,
+    ]}
+    data-language-picker
+>
+    <summary
+        class="flex h-11 items-center gap-2 rounded-sharp border border-gold/40 px-3 font-display text-xs tracking-label text-gold-light uppercase select-none hover:bg-gold/10 hover:text-cream"
+        aria-label={`${label}: ${localeName[locale]}`}
+    >
+        <span class="text-gold" aria-hidden="true"><Icon name="globe" size={15} /></span>
+        <span aria-hidden="true">{locale}</span>
+        <span
+            class="disclosure-marker ml-auto text-gold"
+            aria-hidden="true"
+        >
+            <Icon name="chevron-down" size={14} />
+        </span>
+    </summary>
+
+    <nav
+        aria-label={label}
+        class:list={[
+            'absolute right-0 z-50 min-w-[9rem] rounded-sharp border border-gold/30 bg-surface p-1 shadow-[0_14px_34px_rgba(11,9,8,.6)]',
+            fullWidth && 'left-0',
+            drop === 'up' ? 'bottom-full mb-2' : 'top-full mt-2',
+        ]}
+    >
+        {
+            locales.map((option) => {
+                const isCurrent = option === locale;
+                return (
+                    <a
+                        href={paths[option]}
+                        hreflang={option}
+                        lang={option}
+                        aria-current={isCurrent ? 'true' : undefined}
+                        class:list={[
+                            'flex min-h-11 items-center gap-2.5 rounded-sharp px-3 font-display text-xs tracking-label uppercase',
+                            isCurrent
+                                ? 'bg-gold/18 text-cream'
+                                : 'text-gold-light hover:bg-gold/10 hover:text-cream',
+                        ]}
+                    >
+                        <span class="w-6">{option}</span>
+                        <span class="text-cream/55 normal-case">{localeName[option]}</span>
+                        {isCurrent && (
+                            <span class="ml-auto text-green" aria-hidden="true">
+                                <Icon name="check" size={14} />
+                            </span>
+                        )}
+                    </a>
+                );
+            })
+        }
+    </nav>
+</details>
+
+<script>
+    /**
+     * Closes an open language picker when the page is clicked elsewhere or
+     * Escape is pressed. The picker opens and closes on its own without this;
+     * these are the two conveniences a native `<details>` does not give.
+     */
+    const pickers = document.querySelectorAll<HTMLDetailsElement>('[data-language-picker]');
+
+    const closeAll = (except?: HTMLDetailsElement) => {
+        pickers.forEach((picker) => {
+            if (picker !== except) picker.open = false;
+        });
+    };
+
+    pickers.forEach((picker) => {
+        picker.addEventListener('toggle', () => {
+            if (picker.open) closeAll(picker);
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        const target = event.target as Node;
+        pickers.forEach((picker) => {
+            if (picker.open && !picker.contains(target)) picker.open = false;
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeAll();
+    });
+</script>

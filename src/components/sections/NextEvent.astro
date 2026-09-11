@@ -1,0 +1,67 @@
+---
+import Section from '../ui/Section.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import EventCard from '../event/EventCard.astro';
+import { upcomingEvents } from '../../lib/events';
+import { todayInBerlin } from '../../lib/datetime';
+import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
+
+/**
+ * Every upcoming date, soonest first, with the next one open.
+ *
+ * Dates that have already happened are filtered out here at build time and
+ * again in the browser, so the section can never advertise a night that is
+ * over. See src/scripts/event-freshness.ts for the second pass.
+ */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const today = todayInBerlin();
+const events = upcomingEvents(today);
+---
+
+<Section id={sectionIds.dates} labelledBy="next-event-heading">
+    <SectionHeading
+        eyebrow={t.nextEvent.eyebrow}
+        headline={t.nextEvent.headline}
+        id="next-event-heading"
+        split
+    >
+        {t.nextEvent.intro}
+    </SectionHeading>
+
+    <div class="mt-10 flex flex-col gap-4" data-events-list hidden={events.length === 0}>
+        {
+            events.map((event, index) => (
+                <EventCard
+                    event={event}
+                    isNext={index === 0}
+                    isToday={index === 0 && event.date === today}
+                />
+            ))
+        }
+    </div>
+
+    <p
+        class="mt-10 max-w-[62ch] text-lead text-cream/65"
+        data-events-empty
+        hidden={events.length > 0}
+    >
+        {t.nextEvent.noEvent}
+    </p>
+
+    <p class="mt-6 text-sm text-cream/45">{t.nextEvent.bookNote}</p>
+</Section>
+
+<script>
+    import { refreshEventDates } from '../../scripts/event-freshness';
+
+    refreshEventDates();
+
+    // A page restored from the back/forward cache, or left open overnight, gets
+    // checked again when it becomes visible.
+    window.addEventListener('pageshow', refreshEventDates);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) refreshEventDates();
+    });
+</script>

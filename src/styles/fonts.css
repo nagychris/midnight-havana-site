@@ -1,0 +1,20 @@
+/*
+  Oswald for display, Karla for body text.
+
+  Both come from the @fontsource-variable packages, which are plain npm
+  dependencies, so the font files are bundled with the site and served from our
+  own domain. Loading them from Google's CDN would send every visitor's IP
+  address to Google on page load, which a German court ruled a GDPR violation
+  (LG München I, 3 O 17493/20).
+
+  Each package ships one variable file per subset, with a `unicode-range` per
+  face, so a German or English page only ever downloads the latin file.
+*/
+
+@import '@fontsource-variable/oswald/index.css';
+@import '@fontsource-variable/karla/wght.css';
+
+:root {
+    --font-oswald: 'Oswald Variable', Oswald, Impact, sans-serif;
+    --font-karla: 'Karla Variable', Karla, system-ui, sans-serif;
+}

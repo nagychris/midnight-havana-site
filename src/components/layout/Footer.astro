@@ -1,0 +1,136 @@
+---
+import Logo from '../brand/Logo.astro';
+import Wordmark from '../brand/Wordmark.astro';
+import Icon from '../ui/Icon.astro';
+import { legalNavigation, mainNavigation } from './navigation';
+import { site } from '../../data/site';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const navLinks = mainNavigation(t, locale);
+const legalLinks = legalNavigation(t, locale);
+
+const year = new Date().getFullYear();
+
+/* Only rendered when analytics is configured; without it there is no choice
+   to change, because nothing is ever stored. */
+const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
+---
+
+<footer class="rule-top mt-8">
+    <div
+        class="mx-auto grid max-w-(--container-content) gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-8"
+    >
+        <div class="flex flex-col gap-4 lg:col-span-1">
+            <div class="flex items-center gap-3">
+                <Logo size={44} />
+                <Wordmark title="" class="h-8 w-auto text-cream" />
+            </div>
+            <p class="font-display text-xs tracking-label-wide text-gold uppercase">
+                {t.footer.tagline}
+            </p>
+        </div>
+
+        <nav aria-labelledby="footer-nav-heading" class="flex flex-col gap-3">
+            <h2
+                id="footer-nav-heading"
+                class="font-display text-xs tracking-eyebrow text-cream/45 uppercase"
+            >
+                {t.footer.navHeading}
+            </h2>
+            {
+                navLinks.map((link) => (
+                    <a
+                        href={link.href}
+                        class="text-md text-cream/75 hover:text-gold-light"
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+        </nav>
+
+        <div class="flex flex-col gap-3">
+            <h2 class="font-display text-xs tracking-eyebrow text-cream/45 uppercase">
+                {t.footer.contactHeading}
+            </h2>
+            <address class="text-md leading-snug-2 text-cream/75 not-italic">
+                {site.venue.name}<br />
+                {site.venue.street}<br />
+                {site.venue.postalCode}
+                {site.venue.city}
+            </address>
+            <a href={`mailto:${site.email}`} class="text-md text-cream/75 hover:text-gold-light">
+                {site.email}
+            </a>
+            <div class="mt-1 flex gap-2.5">
+                <a
+                    href={site.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t.nav.instagram}
+                    class="flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light hover:bg-gold/12 hover:text-cream"
+                >
+                    <Icon name="instagram" size={19} />
+                </a>
+                <a
+                    href={site.social.whatsappCommunity}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={t.nav.whatsapp}
+                    class="flex size-11 items-center justify-center rounded-sharp border border-gold/30 text-gold-light hover:bg-gold/12 hover:text-cream"
+                >
+                    <Icon name="whatsapp" size={19} />
+                </a>
+            </div>
+        </div>
+
+        <nav aria-labelledby="footer-legal-heading" class="flex flex-col gap-3">
+            <h2
+                id="footer-legal-heading"
+                class="font-display text-xs tracking-eyebrow text-cream/45 uppercase"
+            >
+                {t.footer.legalHeading}
+            </h2>
+            {
+                legalLinks.map((link) => (
+                    <a
+                        href={link.href}
+                        class="text-md text-cream/75 hover:text-gold-light"
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+            {
+                hasConsentSettings && (
+                    <button
+                        type="button"
+                        data-open-consent
+                        hidden
+                        class="text-md text-left text-cream/75 hover:text-gold-light"
+                    >
+                        {t.footer.cookieSettings}
+                    </button>
+                )
+            }
+            <a
+                href={site.school.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-md text-cream/75 hover:text-gold-light"
+            >
+                {site.school.name}
+            </a>
+        </nav>
+    </div>
+
+    <div class="rule-top">
+        <p
+            class="mx-auto max-w-(--container-content) px-5 py-6 text-sm text-cream/45 sm:px-8"
+        >
+            © {year} {t.footer.copyright}
+        </p>
+    </div>
+</footer>

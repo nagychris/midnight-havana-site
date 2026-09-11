@@ -1,0 +1,88 @@
+# Netlify configuration for midnight-havana.de
+#
+# The site is static, so Netlify's job is to run the build and then serve files
+# with the right headers. Everything below is about those headers.
+
+[build]
+  command = "pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Corepack reads the packageManager field in package.json and installs the
+  # matching pnpm, so the deploy uses the same version as a local build.
+  NPM_FLAGS = "--version"
+  # Google Analytics 4. A measurement id is public by design; it identifies the
+  # property, it does not grant access to it. Setting it here turns on both the
+  # analytics loader and the consent banner. Remove it and the site sets no
+  # cookies and makes no third-party request at all.
+  PUBLIC_GA_MEASUREMENT_ID = "G-HG5RE0RSKF"
+
+# Deploy previews and branch builds must not tell Google they are the canonical
+# version of the live site.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Nothing the site needs, switched off so a third-party script could not use
+    # it either.
+    Permissions-Policy = "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+
+    # The Content Security Policy is not set here. Astro generates one per page
+    # as a meta tag, with a hash for each script it inlines, so inline script
+    # can be forbidden outright rather than allowed wholesale. Two policies
+    # would be intersected and the header, having no hashes, would block those
+    # scripts. See `security.csp` in astro.config.mjs.
+    #
+    # `frame-ancestors` is the one directive a meta tag cannot carry, which is
+    # why X-Frame-Options above is doing that job.
+
+# Fingerprinted build output never changes under the same name.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Icons and the social card change rarely, but they are not fingerprinted, so
+# they get a shorter life with revalidation.
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+[[headers]]
+  for = "/og-image.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, must-revalidate"
+
+# HTML is rebuilt whenever an event date changes, so it must not be held in a
+# browser cache. Netlify's CDN still caches it and is purged on every deploy.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Keep a preview deploy out of the index entirely.
+[context.deploy-preview]
+  [context.deploy-preview.build.environment]
+    ROBOTS = "noindex"
+
+[[context.deploy-preview.headers]]
+  for = "/*"
+  [context.deploy-preview.headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[context.branch-deploy.headers]]
+  for = "/*"
+  [context.branch-deploy.headers.values]
+    X-Robots-Tag = "noindex, nofollow"

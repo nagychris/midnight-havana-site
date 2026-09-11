@@ -1,0 +1,321 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import JsonLd from './seo/JsonLd.astro';
+import Badge from './ui/Badge.astro';
+import Button from './ui/Button.astro';
+import Icon from './ui/Icon.astro';
+import Timetable from './event/Timetable.astro';
+import EventDate from './event/EventDate.astro';
+import MapEmbed from './MapEmbed.astro';
+import { site } from '../data/site';
+import { photoByName } from '../data/photos';
+import { bookingUrlFor, otherUpcomingEvents, type SiteEvent } from '../lib/events';
+import { formatLongDate } from '../lib/datetime';
+import { breadcrumbSchema, danceEventSchema } from '../lib/structured-data';
+import {
+    eventPathFor,
+    eventPaths,
+    localeFromAstro,
+    pagePaths,
+    sectionHref,
+    sectionIds,
+    useTranslations,
+} from '../i18n';
+
+/**
+ * One event's own page.
+ *
+ * Poster and date first, then the running order, then the practical details,
+ * which is the order someone reads a physical flyer in. Each date gets a real
+ * URL so it can be shared, linked and indexed on its own.
+ */
+interface Props {
+    event: SiteEvent;
+}
+
+const { event } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+
+const longDate = formatLongDate(event.date, locale);
+const title = event.title?.[locale] ?? longDate;
+const summary = event.summary?.[locale] ?? t.meta.home.description;
+const heroPhoto = event.image ? photoByName(event.image) : undefined;
+const otherDates = otherUpcomingEvents(event.slug).slice(0, 3);
+
+const pageTitle = `${title} — ${longDate} | ${site.name}`;
+const scrim =
+    'linear-gradient(to top, rgba(11,9,8,.97) 0%, rgba(11,9,8,.8) 40%, rgba(11,9,8,.5) 100%)';
+---
+
+<Base
+    paths={eventPaths(event.slug)}
+    title={pageTitle}
+    description={summary}
+    ogType="article"
+>
+    <Fragment slot="head">
+        <JsonLd data={danceEventSchema(event, locale)} />
+        <JsonLd
+            data={breadcrumbSchema(
+                [
+                    { name: t.nav.home, url: pagePaths('home')[locale] },
+                    { name: t.nav.dates, url: sectionHref(sectionIds.dates, locale) },
+                    { name: title, url: eventPathFor(event.slug, locale) },
+                ],
+                site.url,
+            )}
+        />
+    </Fragment>
+
+    <article>
+        <header class="relative overflow-hidden">
+            {
+                heroPhoto && (
+                    <Image
+                        src={heroPhoto.image}
+                        alt=""
+                        widths={[640, 1024, 1600, 2000]}
+                        sizes="100vw"
+                        format="webp"
+                        quality={72}
+                        loading="eager"
+                        fetchpriority="high"
+                        decoding="sync"
+                        class="absolute inset-0 h-full w-full object-cover"
+                    />
+                )
+            }
+            <div class="pointer-events-none absolute inset-0" style={`background:${scrim}`}>
+            </div>
+
+            <div
+                class="relative mx-auto w-full max-w-(--container-content) px-5 pt-8 pb-14 sm:px-8 sm:pt-10 sm:pb-20"
+            >
+                <a
+                    href={sectionHref(sectionIds.dates, locale)}
+                    class="inline-flex min-h-11 items-center gap-2 font-display text-xs tracking-label-wide uppercase"
+                >
+                    <span class="rotate-180"><Icon name="arrow-right" size={15} /></span>
+                    {t.event.backToDates}
+                </a>
+
+                <div class="mt-10 flex flex-wrap items-center gap-2">
+                    {event.badges.map((badge) => (
+                        <Badge tone={badge.tone}>{badge[locale]}</Badge>
+                    ))}
+                    {event.cancelled && <Badge tone="muted">{t.nextEvent.cancelled}</Badge>}
+                </div>
+
+                <p
+                    class="mt-4 font-display text-xs tracking-eyebrow text-gold uppercase sm:text-sm"
+                >
+                    {t.event.eyebrow}
+                </p>
+
+                <h1
+                    class="mt-3 max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase"
+                >
+                    {title}
+                </h1>
+
+                <p
+                    class="mt-4 font-display text-h3 leading-tight-2 font-normal tracking-tiny text-orange uppercase"
+                >
+                    <time datetime={event.date}>{longDate}</time>
+                </p>
+
+                {
+                    event.summary && (
+                        <p class="mt-5 max-w-[56ch] text-lead leading-relaxed-2 text-cream/80">
+                            {event.summary[locale]}
+                        </p>
+                    )
+                }
+
+                {
+                    event.cancelled && (
+                        <p class="mt-5 max-w-[56ch] border border-gold/30 p-4 text-md text-cream/80">
+                            {t.event.cancelledNote}
+                        </p>
+                    )
+                }
+
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <Button
+                        href={bookingUrlFor(event, 'salsa-basics')}
+                        external
+                        size="lg"
+                    >
+                        {t.nextEvent.ctaClasses}
+                        <Icon name="external" size={16} />
+                    </Button>
+                    <Button
+                        href={site.venue.mapsUrl}
+                        external
+                        variant="secondary"
+                        size="lg"
+                    >
+                        {t.venue.cta}
+                    </Button>
+                </div>
+            </div>
+        </header>
+
+        <div
+            class="mx-auto grid w-full max-w-(--container-content) gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-16"
+        >
+            <div>
+                {
+                    event.description && (
+                        <p class="max-w-[66ch] text-lead leading-relaxed-2 text-cream/80">
+                            {event.description[locale]}
+                        </p>
+                    )
+                }
+
+                <h2
+                    class="mt-12 font-display text-h2 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
+                >
+                    {t.event.timetableHeading}
+                </h2>
+                <Timetable event={event} class="mt-6" />
+
+                <p class="mt-6 text-sm text-cream/50">{t.event.bookIntro}</p>
+            </div>
+
+            <aside class="flex flex-col gap-8">
+                <section class="border border-gold/25 bg-surface p-6">
+                    <h2
+                        class="font-display text-xl font-medium tracking-label text-cream uppercase"
+                    >
+                        {t.event.priceHeading}
+                    </h2>
+                    <dl class="mt-5 flex flex-col">
+                        <div
+                            class="flex items-baseline justify-between gap-4 border-b border-gold/15 py-3"
+                        >
+                            <dt class="text-md text-cream/80">{t.event.priceStandard}</dt>
+                            <dd class="font-display text-2xl font-medium text-cream">
+                                {site.prices.standard} €
+                            </dd>
+                        </div>
+                        <div class="flex items-baseline justify-between gap-4 py-3">
+                            <dt class="text-md text-cream/80">{t.event.priceReduced}</dt>
+                            <dd class="font-display text-2xl font-medium text-cream">
+                                {site.prices.reduced} €
+                            </dd>
+                        </div>
+                    </dl>
+                    <p class="mt-3 text-sm leading-snug-2 text-gold-light">
+                        {event.priceNote?.[locale] ?? t.event.priceIncluded}
+                    </p>
+                    <p class="mt-2 text-sm leading-snug-2 text-cream/45">
+                        {t.event.pricePayment}
+                    </p>
+                </section>
+
+                <section class="border border-gold/25 bg-surface p-6">
+                    <h2
+                        class="font-display text-xl font-medium tracking-label text-cream uppercase"
+                    >
+                        {t.event.crewHeading}
+                    </h2>
+                    <dl class="mt-5 flex flex-col gap-4">
+                        {
+                            event.teachers.length > 0 && (
+                                <div>
+                                    <dt class="font-display text-xs tracking-eyebrow text-gold uppercase">
+                                        {t.event.teachersLabel}
+                                    </dt>
+                                    <dd class="mt-1.5 text-md text-cream/85">
+                                        {event.teachers.join(' · ')}
+                                    </dd>
+                                </div>
+                            )
+                        }
+                        {
+                            event.dj && (
+                                <div>
+                                    <dt class="font-display text-xs tracking-eyebrow text-gold uppercase">
+                                        {t.event.djLabel}
+                                    </dt>
+                                    <dd class="mt-1.5 text-md text-cream/85">{event.dj}</dd>
+                                </div>
+                            )
+                        }
+                    </dl>
+                </section>
+
+                <section class="border border-gold/25 bg-surface p-6">
+                    <h2
+                        class="font-display text-xl font-medium tracking-label text-cream uppercase"
+                    >
+                        {t.event.whereHeading}
+                    </h2>
+                    <address class="mt-4 text-md leading-snug-2 text-cream/85 not-italic">
+                        <strong class="font-semibold text-cream">{site.venue.name}</strong><br
+                        />
+                        {site.venue.street}<br />
+                        {site.venue.postalCode} {site.venue.city}
+                    </address>
+                    <p class="mt-3 text-sm leading-snug-2 text-cream/55">
+                        {t.venue.accessNote}
+                    </p>
+                    <div class="mt-5">
+                        <MapEmbed />
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        {
+            otherDates.length > 0 && (
+                <section class="rule-top">
+                    <div class="mx-auto w-full max-w-(--container-content) px-5 py-14 sm:px-8 sm:py-16">
+                        <div class="flex flex-wrap items-end justify-between gap-6">
+                            <h2 class="font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
+                                {t.event.otherDatesHeading}
+                            </h2>
+                            <a
+                                href={sectionHref(sectionIds.dates, locale)}
+                                class="inline-flex min-h-11 items-center gap-2 font-display text-sm tracking-label uppercase"
+                            >
+                                {t.event.allDates}
+                                <Icon name="arrow-right" size={15} />
+                            </a>
+                        </div>
+
+                        <ul class="hairline-grid mt-8 grid sm:grid-cols-2 lg:grid-cols-3">
+                            {otherDates.map((other) => (
+                                <li>
+                                    <a
+                                        href={eventPathFor(other.slug, locale)}
+                                        class="flex h-full items-center gap-5 p-5 text-inherit hover:bg-gold/6"
+                                    >
+                                        <EventDate
+                                            date={other.date}
+                                            size="md"
+                                            class="shrink-0"
+                                        />
+                                        <span class="min-w-0">
+                                            <span class="block font-display text-lg font-medium tracking-tiny text-cream uppercase">
+                                                {other.title?.[locale] ??
+                                                    formatLongDate(other.date, locale)}
+                                            </span>
+                                            <span class="mt-1 block text-sm text-cream/55">
+                                                {other.dj ?? t.nextEvent.socialDanceFrom}
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
+            )
+        }
+    </article>
+</Base>

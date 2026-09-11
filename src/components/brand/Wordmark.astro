@@ -1,0 +1,31 @@
+---
+import { WORDMARK_ID } from './WordmarkSprite.astro';
+
+/**
+ * The "Midnight Havana" lettering.
+ *
+ * References the `<symbol>` that `WordmarkSprite` puts at the top of the page,
+ * so the path data is sent once however often the mark appears. The paths use
+ * `currentColor`, which means the mark takes the colour of its container and
+ * needs no second asset for a light surface.
+ */
+interface Props {
+    /** Accessible name. An empty string marks it decorative. */
+    title?: string;
+    class?: string;
+}
+
+const { title = 'Midnight Havana', class: className } = Astro.props;
+const isDecorative = title === '';
+---
+
+<svg
+    viewBox="0 0 1983 793"
+    role={isDecorative ? undefined : 'img'}
+    aria-label={isDecorative ? undefined : title}
+    aria-hidden={isDecorative ? 'true' : undefined}
+    focusable="false"
+    class:list={['w-full', className]}
+>
+    <use href={`#${WORDMARK_ID}`}></use>
+</svg>

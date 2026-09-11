@@ -1,0 +1,32 @@
+---
+import wordmarkFile from '../../assets/brand/wordmark.svg?raw';
+
+/**
+ * Defines the wordmark once per page, for `<Wordmark>` to reference.
+ *
+ * The lettering is about 20 kB of path data and appears four times on the home
+ * page: header, mobile menu, hero and footer. Inlining it each time would add
+ * 60 kB of markup for nothing, so it is declared once here as a `<symbol>` and
+ * pulled in with `<use>` wherever it is needed. The paths still paint with
+ * `currentColor`, so each instance takes the colour of its surroundings.
+ *
+ * Rendered once, near the top of `<body>`, by the base layout.
+ */
+export const WORDMARK_ID = 'brand-wordmark';
+
+/** The artboard the paths were drawn on. */
+const VIEW_BOX = '0 0 1983 793';
+
+/* Everything between the source file's own <svg> tags. */
+const inner = wordmarkFile
+    .replace(/^[\s\S]*?<svg[^>]*>/, '')
+    .replace(/<\/svg>\s*$/, '');
+---
+
+<svg
+    aria-hidden="true"
+    focusable="false"
+    style="position:absolute;width:0;height:0;overflow:hidden"
+>
+    <symbol id={WORDMARK_ID} viewBox={VIEW_BOX} set:html={inner} />
+</svg>

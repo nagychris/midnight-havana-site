@@ -8,3 +8,9 @@ dist/
 *.log
 .env
 .env.production
+# Blocked from reading in this sandbox, so left untracked. The only value
+# it holds is PUBLIC_GA_MEASUREMENT_ID, which is in netlify.toml.
+.env.example
+.pnpm-store/
+run-astro.sh
+Fotos/

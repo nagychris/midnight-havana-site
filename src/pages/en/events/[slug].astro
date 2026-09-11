@@ -1,0 +1,21 @@
+---
+import EventPage from '../../../components/EventPage.astro';
+import { upcomingEvents } from '../../../lib/events';
+
+/**
+ * English event detail pages at /en/events/<slug>/.
+ *
+ * Same slugs as the German pages, so the two versions line up one to one and
+ * the hreflang pair is always complete.
+ */
+export function getStaticPaths() {
+    return upcomingEvents().map((event) => ({
+        params: { slug: event.slug },
+        props: { event },
+    }));
+}
+
+const { event } = Astro.props;
+---
+
+<EventPage event={event} />

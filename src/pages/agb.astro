@@ -1,0 +1,255 @@
+---
+import LegalPage from '../layouts/LegalPage.astro';
+import { site } from '../data/site';
+import { localeFromAstro, pathFor, useTranslations } from '../i18n';
+
+/** Terms and conditions, taken over from the client's existing text. */
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+const { legal } = site;
+---
+
+<LegalPage
+    page="terms"
+    title={t.meta.terms.title}
+    heading="Allgemeine Geschäftsbedingungen"
+    description={t.meta.terms.description}
+    lastUpdated="Stand: September 2026"
+>
+    <h2>1. Anbieter und Geltungsbereich</h2>
+    <p>
+        Veranstalter und Vertragspartner der unter der Marke Midnight Havana
+        angebotenen Leistungen ist:
+    </p>
+    <address>
+        {legal.company}<br />
+        {legal.street}<br />
+        {legal.postalCode} {legal.city}<br />
+        Registergericht: {legal.court}<br />
+        Handelsregister: {legal.registerNumber}<br />
+        E-Mail: <a href={`mailto:${site.email}`}>{site.email}</a>
+    </address>
+    <p>
+        Diese Bedingungen gelten für Salsa- und Rueda-Gruppenkurse,
+        Social-Dance-Veranstaltungen, Partys sowie Kombinationen aus Tanzkurs und
+        anschließender Veranstaltung. Die Leistungen können über Eversports,
+        Urban Sports Club oder direkt vor Ort gebucht werden. Bei Buchungen über
+        Drittanbieter gelten deren Nutzungs-, Buchungs- und Zahlungsbedingungen
+        ergänzend.
+    </p>
+
+    <h2>2. Vertragsschluss und Reservierung</h2>
+    <p>
+        Die Darstellung von Kursen und Veranstaltungen ist eine Einladung zur
+        Buchung. Bei einer Online-Buchung kommt der Vertrag mit der Bestätigung
+        durch Midnight Havana beziehungsweise über das verwendete Buchungssystem
+        zustande, an der Abendkasse mit Annahme der Buchung und Zahlung.
+    </p>
+    <p>
+        Ein Platz gilt mit erfolgreicher Zahlung oder verbindlicher
+        Buchungsbestätigung als reserviert. Bei begrenzter Teilnehmerzahl besteht
+        ohne bestätigte Buchung kein Anspruch auf Teilnahme.
+    </p>
+
+    <h2>3. Preise und Zahlung</h2>
+    <p>
+        Es gelten die zum Zeitpunkt der Buchung ausgewiesenen Preise. Gezahlt
+        werden kann über Eversports, über Urban Sports Club, per Karte vor Ort
+        oder in bar. Soweit nichts anderes angegeben ist, ist der Teilnahme- oder
+        Eintrittspreis vor Beginn des Kurses oder der Veranstaltung vollständig zu
+        entrichten.
+    </p>
+
+    <h2>4. Ermäßigung</h2>
+    <p>
+        Für entsprechend gekennzeichnete Angebote gewähren wir Studierenden sowie
+        Personen mit geringem Einkommen eine Ermäßigung auf den ausgewiesenen
+        regulären Preis. Wir können einen geeigneten aktuellen Nachweis verlangen;
+        kann er nicht erbracht werden, ist die Differenz zum regulären Preis zu
+        entrichten. Rabatte, Gutscheine und Sonderaktionen sind nicht miteinander
+        kombinierbar, sofern nicht ausdrücklich etwas anderes angegeben ist.
+    </p>
+
+    <h2>5. Bonuskarte</h2>
+    <p>
+        Wir bieten eine Bonuskarte nach dem Prinzip: zehnmal tanzen, das elfte Mal
+        kostenlos. Nach zehn bonusfähigen Teilnahmen berechtigt die vollständig
+        ausgefüllte Karte zu einer weiteren kostenlosen, entsprechend
+        bonusfähigen Teilnahme. Eine Barauszahlung ist ausgeschlossen. Die Karte
+        ist personengebunden und nicht übertragbar. Wir können das Bonusprogramm
+        für die Zukunft ändern oder einstellen; bereits vollständig erworbene
+        Ansprüche bleiben davon unberührt.
+    </p>
+
+    <h2>6. Stornierung und Nichterscheinen</h2>
+    <p>
+        Eine verbindlich gebuchte Kursteilnahme kann bis spätestens sechs Stunden
+        vor Kursbeginn storniert werden. Bei fristgerechter Stornierung wird ein
+        bereits gezahlter Betrag als Guthaben für eine zukünftige vergleichbare
+        Teilnahme gutgeschrieben.
+    </p>
+    <p>
+        Bei einer Stornierung weniger als sechs Stunden vor Kursbeginn oder bei
+        Nichterscheinen besteht grundsätzlich kein Anspruch auf Erstattung oder
+        Guthaben. Ersparte Aufwendungen und eine anderweitige Vergabe des Platzes
+        werden berücksichtigt. Der Nachweis, dass kein oder ein wesentlich
+        geringerer Nachteil entstanden ist, bleibt zulässig. Für Buchungen über
+        Eversports oder Urban Sports Club können ergänzende oder abweichende
+        Bedingungen der jeweiligen Plattform gelten.
+    </p>
+
+    <h2>7. Teilnahmevoraussetzungen und Kurslevel</h2>
+    <p>
+        Die Teilnahme ist Personen ab 18 Jahren gestattet. Für als Advanced
+        gekennzeichnete Rueda-Kurse werden praktische Kenntnisse insbesondere
+        folgender Figuren vorausgesetzt: Pa' dentro y pa' fuera, exhíbela, Lazo,
+        dame, dame dos, directo, enchufla, una arriba, Interior und La vecina.
+    </p>
+    <p>
+        Die Trainer sind berechtigt, Teilnehmende entsprechend ihrer tatsächlichen
+        Kenntnisse einem anderen Kurslevel zuzuordnen, wenn dies aus didaktischen
+        Gründen, für einen sinnvollen Kursablauf oder aus Sicherheitsgründen
+        erforderlich ist. Ein Anspruch auf ein bestimmtes Kurslevel besteht nicht
+        allein aufgrund der Selbsteinschätzung.
+    </p>
+
+    <h2>8. Gesundheit</h2>
+    <p>
+        Tanzen ist eine körperliche Aktivität. Jede teilnehmende Person ist selbst
+        dafür verantwortlich einzuschätzen, ob sie körperlich und gesundheitlich
+        zur Teilnahme in der Lage ist, und hat Übungen zu unterlassen, die
+        erkennbar ihre Fähigkeiten übersteigen. Sicherheitsrelevante Anweisungen
+        des Teams sind zu beachten. Gesetzliche Schutz- und
+        Verkehrssicherungspflichten bleiben unberührt.
+    </p>
+
+    <h2>9. Änderungen von Programm und Ablauf</h2>
+    <p>
+        Wir sind berechtigt, zumutbare Änderungen am angekündigten Programm
+        vorzunehmen, sofern der grundlegende Charakter der gebuchten Leistung
+        erhalten bleibt. Das betrifft insbesondere Trainer, DJs, einzelne
+        Kursinhalte, Räumlichkeiten, Zeiten und die Reihenfolge der
+        Programmpunkte.
+    </p>
+    <p>
+        Bei einer wesentlichen Änderung bieten wir nach Möglichkeit eine
+        angemessene Alternative an. Ist diese nicht zumutbar oder wird sie nicht
+        angenommen, wird der für die betroffene Leistung gezahlte Betrag
+        erstattet.
+    </p>
+
+    <h2>10. Absage von Kursen oder Veranstaltungen</h2>
+    <p>
+        Wir können Kurse oder Veranstaltungen absagen, insbesondere bei Krankheit
+        oder Ausfall eines Trainers, Nichtverfügbarkeit der Veranstaltungsstätte,
+        erheblichen technischen oder organisatorischen Problemen oder höherer
+        Gewalt. Betroffenen bieten wir nach Möglichkeit einen Ersatztermin an.
+        Wird dieser nicht angenommen oder kann kein Ersatz angeboten werden, wird
+        der gezahlte Betrag erstattet.
+    </p>
+
+    <h2>11. Verhalten, Hausrecht und Ausschluss</h2>
+    <p>
+        Midnight Havana versteht seine Veranstaltungen als respektvollen und
+        sicheren Raum für alle Gäste. Alle Teilnehmenden sind verpflichtet,
+        respektvoll miteinander umzugehen und persönliche Grenzen zu achten.
+    </p>
+    <p>Insbesondere nicht toleriert werden:</p>
+    <ul>
+        <li>Belästigungen oder unerwünschte körperliche Annäherungen</li>
+        <li>aggressives oder bedrohliches Verhalten</li>
+        <li>diskriminierendes, beleidigendes oder herabwürdigendes Verhalten</li>
+        <li>
+            erhebliche Alkoholisierung oder ein vergleichbarer Zustand, durch den
+            andere Gäste beeinträchtigt oder gefährdet werden
+        </li>
+        <li>die Gefährdung anderer Gäste, Trainer oder Mitarbeitender</li>
+        <li>
+            die Nichtbefolgung sicherheitsrelevanter Weisungen des
+            Midnight-Havana-Teams
+        </li>
+    </ul>
+    <p>
+        Bei erheblichen oder wiederholten Verstößen kann eine Person von einem
+        Kurs oder einer Veranstaltung ausgeschlossen und zum Verlassen der Räume
+        aufgefordert werden; bei besonders schwerwiegendem Verhalten auch ohne
+        vorherige Verwarnung. Beruht der Ausschluss auf einem zu vertretenden
+        erheblichen Pflichtverstoß, besteht kein Anspruch auf Erstattung.
+    </p>
+
+    <h2>12. Foto- und Videoaufnahmen</h2>
+    <p>
+        Im Rahmen unserer Veranstaltungen können Foto- und Videoaufnahmen
+        angefertigt und zur Dokumentation sowie zur Öffentlichkeitsarbeit
+        verwendet werden, soweit dafür eine gesetzliche Grundlage besteht. Die
+        bloße Teilnahme stellt keine pauschale Einwilligung in jede Form der
+        Veröffentlichung eines personenbezogenen Bildnisses dar. Wer nicht
+        fotografiert oder gefilmt werden möchte, wendet sich an das
+        Veranstaltungsteam oder die fotografierende Person. Weitere Informationen
+        stehen in der <a href={pathFor('privacy', locale)}>Datenschutzerklärung</a
+        >.
+    </p>
+
+    <h2>13. Garderobe</h2>
+    <p>
+        Soweit eine Garderobe angeboten wird, ist ihre Nutzung kostenlos und im
+        Eintrittspreis enthalten. Sie wird während des regulären
+        Veranstaltungsbetriebs beaufsichtigt. Die Haftung richtet sich nach den
+        gesetzlichen Vorschriften und Ziffer 14. Wertgegenstände sollten nicht in
+        Kleidungsstücken oder Taschen zurückgelassen werden.
+    </p>
+
+    <h2>14. Haftung</h2>
+    <p>Wir haften unbeschränkt:</p>
+    <ul>
+        <li>bei Vorsatz und grober Fahrlässigkeit</li>
+        <li>
+            bei Schäden aus der Verletzung des Lebens, des Körpers oder der
+            Gesundheit
+        </li>
+        <li>in sonstigen Fällen gesetzlich zwingender Haftung</li>
+    </ul>
+    <p>
+        Bei leicht fahrlässiger Verletzung wesentlicher Vertragspflichten ist die
+        Haftung auf den vertragstypischen und bei Vertragsschluss vorhersehbaren
+        Schaden begrenzt. Im Übrigen ist die Haftung für leicht fahrlässig
+        verursachte Sach- und Vermögensschäden ausgeschlossen, soweit gesetzlich
+        zulässig. Diese Regelungen gelten entsprechend zugunsten unserer
+        Mitarbeitenden, Trainer und Erfüllungsgehilfen.
+    </p>
+
+    <h2>15. Widerrufsrecht bei Online-Buchungen</h2>
+    <p>
+        Bei Verträgen über Dienstleistungen im Zusammenhang mit
+        Freizeitbetätigungen besteht nach § 312g Abs. 2 Nr. 9 BGB kein
+        gesetzliches Widerrufsrecht, wenn für die Erbringung ein spezifischer
+        Termin vorgesehen ist. Das betrifft insbesondere die Online-Buchung eines
+        Tanzkurses oder einer Veranstaltung für ein festgelegtes Datum. Die
+        freiwillig eingeräumte Stornierungsmöglichkeit nach Ziffer 6 bleibt davon
+        unberührt.
+    </p>
+
+    <h2>16. Datenschutz</h2>
+    <p>
+        Personenbezogene Daten werden im Rahmen der geltenden Vorschriften
+        verarbeitet. Einzelheiten stehen in der
+        <a href={pathFor('privacy', locale)}>Datenschutzerklärung</a>.
+    </p>
+
+    <h2>17. Verbraucherstreitbeilegung</h2>
+    <p>
+        {legal.company} ist nicht verpflichtet und grundsätzlich nicht bereit, an
+        einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+        teilzunehmen.
+    </p>
+
+    <h2>18. Schlussbestimmungen</h2>
+    <p>
+        Es gilt das Recht der Bundesrepublik Deutschland. Gegenüber Verbrauchern
+        gilt diese Rechtswahl nur insoweit, als ihnen dadurch zwingende
+        Verbraucherschutzvorschriften des Staates ihres gewöhnlichen Aufenthalts
+        nicht entzogen werden. Sollten einzelne Bestimmungen unwirksam sein oder
+        werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt; an die
+        Stelle einer unwirksamen Bestimmung treten die gesetzlichen Vorschriften.
+    </p>
+</LegalPage>

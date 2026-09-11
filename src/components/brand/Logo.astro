@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import logoVinyl from '../../assets/brand/logo-vinyl.png';
+
+/**
+ * The vinyl record mark. Square, transparent background.
+ */
+interface Props {
+    size?: number;
+    /** Decorative by default: the wordmark next to it already names the brand. */
+    alt?: string;
+    loading?: 'eager' | 'lazy';
+    class?: string;
+}
+
+const { size = 48, alt = '', loading = 'lazy', class: className } = Astro.props;
+---
+
+<Image
+    src={logoVinyl}
+    alt={alt}
+    width={size * 2}
+    height={size * 2}
+    densities={[1, 2]}
+    format="webp"
+    quality={90}
+    loading={loading}
+    decoding={loading === 'eager' ? 'sync' : 'async'}
+    class:list={['aspect-square', className]}
+    style={`width:${size}px;height:${size}px`}
+/>

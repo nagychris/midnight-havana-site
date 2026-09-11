@@ -1,90 +1,121 @@
 ---
-// Head from the artboard's <helmet> block.
-import "../styles/global.css";
+import '../styles/global.css';
 
+import Seo from '../components/seo/Seo.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import WordmarkSprite from '../components/brand/WordmarkSprite.astro';
+import Analytics from '../components/Analytics.astro';
+import {
+    htmlLang,
+    localeFromAstro,
+    useTranslations,
+    type LocalisedPaths,
+} from '../i18n';
+
+/**
+ * The shell every page uses: head, header, footer, consent, analytics.
+ *
+ * A page passes its paths in both languages and its own title and description.
+ * Everything that has to stay consistent across the site is decided here.
+ */
 interface Props {
-  title?: string;
-  description?: string;
-  keywords?: string;
+    /** This page's path in every language, including its own. */
+    paths: LocalisedPaths;
+    title: string;
+    description: string;
+    ogImage?: string;
+    ogType?: 'website' | 'article';
+    noindex?: boolean;
+    /** Lets the hero run under the header instead of starting below it. */
+    transparentHeader?: boolean;
 }
 
 const {
-  title = "Salsa Friday Berlin — Cuban Salsa & Rueda de Casino | Midnight Havana",
-  description = "Salsa Friday in Berlin-Kreuzberg: Cuban salsa (casino) and rueda de casino classes for all levels from 19:00, social dance from 21:00 at Tangoloft Berlin. No partner needed, no registration, cash at the door.",
-  keywords = "salsa berlin, cuban salsa berlin, rueda de casino berlin, casino dance class berlin, salsa friday, kreuzberg salsa party, salsa for beginners berlin",
+    paths,
+    title,
+    description,
+    ogImage,
+    ogType,
+    noindex = false,
+    transparentHeader = false,
 } = Astro.props;
 
-// Verbatim from the artboard.
-const eventSeries = {
-  "@context": "https://schema.org",
-  "@type": "EventSeries",
-  name: "Salsa Friday by Midnight Havana",
-  description:
-    "Weekly Cuban salsa (casino) and rueda de casino classes plus social dance in Berlin-Kreuzberg.",
-  eventSchedule: {
-    "@type": "Schedule",
-    byDay: "Friday",
-    startTime: "19:00",
-    endTime: "01:00",
-  },
-  location: {
-    "@type": "Place",
-    name: "Tangoloft Berlin",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Pfuelstraße 5",
-      postalCode: "10997",
-      addressLocality: "Berlin",
-      addressCountry: "DE",
-    },
-  },
-  organizer: {
-    "@type": "Organization",
-    name: "Midnight Havana",
-    sameAs: "https://www.instagram.com/midnight.havana/",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "8",
-    priceCurrency: "EUR",
-    availability: "https://schema.org/InStock",
-  },
-};
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
 ---
 
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="keywords" content={keywords} />
+<html lang={htmlLang[locale]}>
+    <head>
+        <Seo
+            locale={locale}
+            paths={paths}
+            title={title}
+            description={description}
+            ogImage={ogImage}
+            ogImageAlt={t.meta.ogImageAlt}
+            ogType={ogType}
+            noindex={noindex}
+        />
+        <slot name="head" />
+    </head>
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content="/assets/hero-social.jpg" />
+    <body>
+        <WordmarkSprite />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Oswald:wght@300;400;500;600;700&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
+        <a
+            href="#main"
+            class="sr-only rounded-sharp bg-orange px-5 py-3 font-display text-sm tracking-label text-ink uppercase focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-70"
+        >
+            {t.nav.skipToContent}
+        </a>
 
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(eventSeries)}
-    />
-  </head>
-  <body>
-    <!-- `clip`, not `hidden` — `hidden` makes this a scroll container and breaks
-         the sticky header. -->
-    <div class="max-w-full overflow-x-clip">
-      <slot />
-    </div>
-  </body>
+        <Header paths={paths} transparent={transparentHeader} />
+
+        <main id="main">
+            <slot />
+        </main>
+
+        <Footer />
+        <ConsentBanner />
+        <Analytics />
+
+        <script>
+            /**
+             * Fades sections in as they scroll into view.
+             *
+             * Arming the effect is the first thing this does: the CSS only
+             * hides a section while the root element carries `is-revealing`.
+             * If this script never runs, every section renders as normal.
+             */
+            const sections = document.querySelectorAll<HTMLElement>('[data-reveal]');
+            const canObserve = 'IntersectionObserver' in window;
+
+            if (sections.length > 0 && canObserve) {
+                document.documentElement.classList.add('is-revealing');
+
+                const reveal = (section: HTMLElement) => {
+                    section.dataset.reveal = 'shown';
+                };
+
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (!entry.isIntersecting) return;
+                            reveal(entry.target as HTMLElement);
+                            observer.unobserve(entry.target);
+                        });
+                    },
+                    { rootMargin: '0px 0px -10% 0px', threshold: 0.05 },
+                );
+
+                sections.forEach((section) => observer.observe(section));
+
+                // Safety net: whatever happens, nothing stays hidden for long.
+                window.setTimeout(() => sections.forEach(reveal), 4000);
+            }
+        </script>
+    </body>
 </html>
