@@ -56,7 +56,8 @@ export const en: Translation = {
         },
         imprint: {
             title: 'Imprint | Midnight Havana',
-            description: 'Provider information for Midnight Havana, Berlin, as required by German law.',
+            description:
+                'Provider information for Midnight Havana, Berlin, as required by German law.',
         },
         privacy: {
             title: 'Privacy Policy | Midnight Havana',
@@ -68,7 +69,8 @@ export const en: Translation = {
             description:
                 'Terms and conditions for classes, social dance nights and parties run by Midnight Havana in Berlin.',
         },
-        ogImageAlt: 'Dancers on the floor at Midnight Havana in Tangoloft Berlin',
+        ogImageAlt:
+            'Dancers on the floor at Midnight Havana in Tangoloft Berlin',
     },
 
     nav: {
@@ -120,7 +122,7 @@ export const en: Translation = {
         ctaClasses: 'Book your class',
         ctaParty: 'Join the next salsa night',
         details: 'Details for this night',
-        bookOnPlatform: 'Book through Eversports',
+        bookNow: 'Book now',
         bookNote: 'Book in advance or pay at the door.',
         cancelled: 'Cancelled',
         furtherDates: 'Further dates',
@@ -137,22 +139,27 @@ export const en: Translation = {
         eyebrow: 'Salsa Friday · Berlin-Kreuzberg',
         timetableHeading: 'How the night runs',
         doorsOpen: 'Doors',
-        doorsNote: 'Pay, change your shoes, settle in. First time here? Say so and we will point you to the right room.',
-        socialNote: 'No ticket needed. The social dance is included in the class price.',
+        doorsNote:
+            'Pay, change your shoes, settle in. First time here? Say so and we will point you to the right room.',
+        socialNote:
+            'No ticket needed. The social dance is included in the class price.',
         bookHeading: 'Book a place',
-        bookIntro: 'Each class is booked separately. You can also just turn up and pay at the door.',
+        bookIntro:
+            'Each class is booked separately. You can also just turn up and pay at the door.',
         priceHeading: 'Admission',
         priceStandard: 'Standard',
         priceReduced: 'Students & people on a low income',
         priceIncluded: 'Class, social dance and cloakroom are always included.',
-        pricePayment: 'Cash or card at the door, or in advance through Eversports or Urban Sports Club.',
+        pricePayment:
+            'Cash or card at the door, or in advance through Eversports or Urban Sports Club.',
         crewHeading: 'Who is there',
         teachersLabel: 'Teaching',
         djLabel: 'Music',
         whereHeading: 'Where',
         otherDatesHeading: 'Cannot make it? The next dates',
         allDates: 'All dates',
-        cancelledNote: 'This date is cancelled. The next regular Salsa Friday is listed below.',
+        cancelledNote:
+            'This date is cancelled. The next regular Salsa Friday is listed below.',
         metaTitleSuffix: 'Salsa Friday in Berlin',
         addToCalendar: 'Add to calendar',
     },

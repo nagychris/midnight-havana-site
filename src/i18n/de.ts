@@ -82,7 +82,8 @@ export const de = {
         },
         imprint: {
             title: 'Impressum | Midnight Havana',
-            description: 'Anbieterkennzeichnung nach § 5 DDG für Midnight Havana, Berlin.',
+            description:
+                'Anbieterkennzeichnung nach § 5 DDG für Midnight Havana, Berlin.',
         },
         privacy: {
             title: 'Datenschutzerklärung | Midnight Havana',
@@ -94,7 +95,8 @@ export const de = {
             description:
                 'Allgemeine Geschäftsbedingungen für Kurse, Social-Dance-Abende und Partys von Midnight Havana in Berlin.',
         },
-        ogImageAlt: 'Tanzende auf der Tanzfläche bei Midnight Havana im Tangoloft Berlin',
+        ogImageAlt:
+            'Tanzende auf der Tanzfläche bei Midnight Havana im Tangoloft Berlin',
     },
 
     nav: {
@@ -150,7 +152,7 @@ export const de = {
         ctaClasses: 'Platz im Kurs sichern',
         ctaParty: 'Zur Salsa Party',
         details: 'Details zum Abend',
-        bookOnPlatform: 'Buchen über Eversports',
+        bookNow: 'Jetzt buchen',
         bookNote: 'Vorab buchen oder an der Abendkasse.',
         cancelled: 'Fällt aus',
         furtherDates: 'Weitere Termine',
@@ -167,22 +169,27 @@ export const de = {
         eyebrow: 'Salsa Friday · Berlin-Kreuzberg',
         timetableHeading: 'Ablauf des Abends',
         doorsOpen: 'Einlass',
-        doorsNote: 'Bezahlen, Schuhe wechseln, ankommen. Zum ersten Mal da? Sag Bescheid, wir zeigen dir den richtigen Raum.',
-        socialNote: 'Kein Ticket nötig. Der Social Dance ist im Kurspreis enthalten.',
+        doorsNote:
+            'Bezahlen, Schuhe wechseln, ankommen. Zum ersten Mal da? Sag Bescheid, wir zeigen dir den richtigen Raum.',
+        socialNote:
+            'Kein Ticket nötig. Der Social Dance ist im Kurspreis enthalten.',
         bookHeading: 'Platz sichern',
-        bookIntro: 'Jeder Kurs wird einzeln gebucht. Du kannst auch spontan an der Abendkasse bezahlen.',
+        bookIntro:
+            'Jeder Kurs wird einzeln gebucht. Du kannst auch spontan an der Abendkasse bezahlen.',
         priceHeading: 'Eintritt',
         priceStandard: 'Normalpreis',
         priceReduced: 'Studierende & geringes Einkommen',
         priceIncluded: 'Kurs, Social Dance und Garderobe sind immer enthalten.',
-        pricePayment: 'Bar oder Karte vor Ort, vorab über Eversports oder Urban Sports Club.',
+        pricePayment:
+            'Bar oder Karte vor Ort, vorab über Eversports oder Urban Sports Club.',
         crewHeading: 'Wer da ist',
         teachersLabel: 'Unterricht',
         djLabel: 'Musik',
         whereHeading: 'Wo',
         otherDatesHeading: 'Du kannst nicht? Die nächsten Termine',
         allDates: 'Alle Termine',
-        cancelledNote: 'Dieser Termin fällt aus. Der nächste reguläre Salsa Friday steht unten.',
+        cancelledNote:
+            'Dieser Termin fällt aus. Der nächste reguläre Salsa Friday steht unten.',
         metaTitleSuffix: 'Salsa Friday in Berlin',
         addToCalendar: 'Zum Kalender hinzufügen',
     },
@@ -385,7 +392,8 @@ export const de = {
                 answer: 'Nein. Du kannst problemlos alleine kommen. In den Kursen wechseln wir regelmäßig die Tanzpartner.',
             },
             {
-                question: 'Kann ich teilnehmen, wenn ich noch nie Salsa getanzt habe?',
+                question:
+                    'Kann ich teilnehmen, wenn ich noch nie Salsa getanzt habe?',
                 answer: 'Ja. Der Salsa Cubana Basics Kurs richtet sich speziell an komplette Anfänger ohne Vorkenntnisse.',
             },
             {
@@ -431,7 +439,8 @@ export const de = {
         privacy: 'Datenschutz',
         terms: 'AGB',
         cookieSettings: 'Cookie-Einstellungen',
-        copyright: 'Midnight Havana · ein Geschäftsbereich von Kaizen Travel e.K.',
+        copyright:
+            'Midnight Havana · ein Geschäftsbereich von Kaizen Travel e.K.',
     },
 
     consent: {
