@@ -45,13 +45,25 @@ if (rawId && !measurementId) {
                 document.head.appendChild(tag);
 
                 const dataLayer = ((window as unknown as { dataLayer?: unknown[] }).dataLayer ??= []);
-                const gtag = (...args: unknown[]) => {
-                    dataLayer.push(args);
-                };
+
+                /**
+                 * Queues a gtag command.
+                 *
+                 * gtag.js recognises a command by the pushed value being an
+                 * `arguments` object, which is array-like but fails
+                 * `Array.isArray`. Pushing a real array instead makes it treat
+                 * the entry as something else, and the command is dropped with
+                 * nothing logged. So this has to push `arguments` itself. The
+                 * rest parameter is unused on purpose, it only gives the call
+                 * sites below a type, and an arrow function would not work at
+                 * all because it has no `arguments` of its own.
+                 */
+                function gtag(..._args: unknown[]) {
+                    dataLayer.push(arguments);
+                }
 
                 gtag('js', new Date());
                 gtag('config', measurementId, {
-                    anonymize_ip: true,
                     allow_google_signals: false,
                     allow_ad_personalization_signals: false,
                 });

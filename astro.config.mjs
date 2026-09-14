@@ -99,10 +99,19 @@ export default defineConfig({
                 // Eversports, and the contact form hands its message to the
                 // visitor's mail app instead of submitting.
                 "form-action 'none'",
-                "img-src 'self' data:",
+                // Google Analytics falls back to an image request when it
+                // cannot use fetch or sendBeacon, so it needs the same hosts
+                // as connect-src below.
+                "img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com",
                 "font-src 'self'",
                 "manifest-src 'self'",
-                "connect-src 'self' https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
+                // The wildcard on google-analytics.com is the part that
+                // matters, and must not be narrowed to a single host: GA4
+                // sends hits from EU devices to a regional endpoint
+                // (region1.google-analytics.com and others), not to
+                // www.google-analytics.com. Naming only www meant the browser
+                // refused nearly every hit this site made.
+                "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
                 // Only the Google Maps embed, and only once a visitor asks.
                 'frame-src https://www.google.com https://maps.google.com',
                 'upgrade-insecure-requests',
