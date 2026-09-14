@@ -9,13 +9,13 @@
   },
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "node scripts/sync-eversports.mjs && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "test": "vitest run",
     "astro": "ASTRO_TELEMETRY_DISABLED=1 astro",
     "brand-assets": "node scripts/generate-brand-assets.mjs",
-    "import-photos": "node scripts/import-photos.mjs",
-    "sync-eversports": "node scripts/sync-eversports.mjs"
+    "import-photos": "node scripts/import-photos.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -30,6 +30,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "@types/node": "^26.2.0",
     "tailwindcss": "^4.1.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^3.2.4"
   }
 }

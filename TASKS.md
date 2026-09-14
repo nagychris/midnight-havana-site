@@ -24,13 +24,18 @@ If a session is interrupted, the next one starts at the first unticked box.
 ## 2 · Data layer
 
 - [x] `src/data/site.ts` — venue, prices, times, social links, legal entity
-- [x] `src/data/classes.ts` — the four classes, their times and booking links
+- [x] `src/data/classes.ts` — the four classes, their times and levels
 - [x] `src/data/events.json` — one block per date
 - [x] `src/data/events.schema.json` — JSON Schema for editors and a future UI
 - [x] `src/lib/events.ts` — load, validate, sort, drop past dates
 - [x] Booking links checked against a host allowlist
 - [x] Build fails loudly, naming the date and field, on invalid data
-- [x] Booking links inherited from the class, so a new date needs none
+- [x] Booking links entered per date in `bookingLinks`, so `events.json` is the
+      only file that needs touching each month. A class with no link falls back
+      to the studio's general Eversports page.
+- [x] The build names upcoming dates whose links are still missing, so a
+      forgotten month shows up in the deploy log instead of going unnoticed
+- [x] Unit tests for booking resolution and the missing-links report (vitest)
 
 ## 3 · Design system
 
@@ -121,12 +126,18 @@ is off the table.
       `FAQPage`, `BreadcrumbList`
 - [x] Open Graph and Twitter card, 1200×630, generated from the brand assets
 - [x] One H1 per page, ordered headings, descriptive alt text
-- [ ] Submit the sitemap in Google Search Console after the domain goes live
+- [x] Submit the sitemap in Google Search Console
+- [x] Legal pages kept out of the sitemap, since they are `noindex`
 
 ## 6 · Privacy, security, analytics
 
-- [x] Security headers in `netlify.toml` (CSP without inline script, HSTS,
-      Referrer-Policy, Permissions-Policy, frame-ancestors)
+- [x] Security headers in `netlify.toml` (HSTS, Referrer-Policy,
+      Permissions-Policy, frame-ancestors)
+- [x] CSP forbids inline script **and** inline style. The style half was a
+      lie for a while: `'unsafe-inline'` sat next to a hash, which makes a
+      browser ignore it, so every `style` attribute was dropped in the
+      built site while `astro dev` looked fine. Nothing in `src/` may use
+      one now; see `.hero` and friends in `src/styles/global.css`.
 - [x] Google Maps behind an explicit click
 - [x] Consent banner, shown only when analytics is configured
 - [x] Google Analytics 4 behind consent, off unless `PUBLIC_GA_MEASUREMENT_ID`
@@ -146,7 +157,7 @@ is off the table.
 
 - [x] `README.md`: adding an event, adding photos, deploying
 - [ ] Netlify build hook plus a daily trigger, so the next date never goes stale
-- [ ] Point `midnight-havana.de` at the Netlify site
+- [x] Point `midnight-havana.de` at the Netlify site
 
 ---
 
@@ -154,36 +165,41 @@ is off the table.
 
 In order. The first four are blockers.
 
-1. [ ] **Commit and push.** 77 changed paths, nothing committed yet.
-2. [ ] **Create the Netlify site** from this repo and point
-       `midnight-havana.de` at it. `netlify.toml` already carries the build
-       command, the headers and the analytics id.
+1. [x] **Commit and push.**
+2. [x] **Create the Netlify site** and point `midnight-havana.de` at it. The
+       DNS zone is at manitu; the nameservers were not moved.
 3. [ ] **Have the legal pages checked.** The wording was carried over, but the
        host changed from manitu to Netlify and an analytics section was added.
        This is the item with actual legal exposure.
-4. [ ] **Confirm the prices.** 10 € standard and 8 € reduced now appear in the
-       hero and on every date card, so a wrong number is wrong everywhere.
-5. [ ] **Daily build hook**, so the next date and the Eversports links stay
-       current without anyone touching the repo. The workflow is written
+4. [x] **Confirm the prices.** 10 € standard, 8 € reduced, party included.
+5. [ ] **Daily build hook**, so a date that has passed drops off without anyone
+       touching the repo. The workflow is written
        (`.github/workflows/daily-rebuild.yml`); it needs the build hook created
        in Netlify and its URL stored as the `NETLIFY_BUILD_HOOK_URL` secret in
        GitHub.
-6. [ ] **Run the Eversports sync once** where there is network:
-       `pnpm run sync-eversports -- --dry`. Until it is confirmed the site uses
-       the hand-entered links, which work.
+6. [ ] **Run `pnpm install`** once, to pull in vitest, then `pnpm test`. The
+       tests are written but have never been executed: the session that added
+       them could not install packages.
 7. [ ] **Check the Google Analytics property** is set up for this domain.
 8. [ ] **Lighthouse** against the deployed site.
-9. [ ] **Submit the sitemap** in Google Search Console once the domain resolves.
+9. [x] **Submit the sitemap** in Google Search Console. The domain is
+       verified through a TXT record in the manitu zone.
 
 ## Needs input from you
 
-- [ ] **Check the Eversports sync actually works.** The parser could not be
-      tested here, because this session had no network access to
-      eversports.de. Run `pnpm run sync-eversports -- --dry` on a machine that
-      does and confirm it finds all four classes. Until then the site uses the
-      hand-entered links in `src/data/classes.ts`, which still work.
-- [ ] **A portrait of Sassan.** Helen and Yago are in; his card shows his
-      initial until a photo lands in `Fotos/Punto Cubano/`.
+- [ ] **Paste the month's booking links into `events.json`.** This is now the
+      monthly routine: open each upcoming date, copy its four Eversports URLs
+      into `bookingLinks`, commit. The three dates in the file currently carry
+      the generic activity links, which land on the right class but not on the
+      specific date.
+
+      Automating this is off the table for now. Eversports serves its whole
+      site behind a Cloudflare challenge, so the old sync script was removed;
+      the details and the paid API alternative are in `README.md` under
+      "Why this is not automated".
+- [ ] **A portrait of Sassan.** Helen and Yago are in; his card starts at his
+      name until a photo lands in `Fotos/Punto Cubano/`. Add a line to
+      `focalPoints` in `src/data/photos.ts` if a centred crop cuts his face.
 - [x] **Prices.** The site says 10 € standard and 8 € reduced, party included.
       Confirm that is current, now that it appears on every date card.
 
@@ -194,7 +210,7 @@ pnpm install
 pnpm dev
 pnpm build
 pnpm check
-pnpm run brand-assets            # after changing the logo or the hero photo
-pnpm run import-photos           # after adding files to Fotos/
-pnpm run sync-eversports -- --dry  # see which booking links Eversports offers
+pnpm test                 # unit tests for the data layer
+pnpm run brand-assets     # after changing the logo or the hero photo
+pnpm run import-photos    # after adding files to Fotos/
 ```

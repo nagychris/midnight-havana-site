@@ -88,10 +88,10 @@
           "default": false,
           "description": "Keeps the date visible but marks it as cancelled."
         },
-        "booking": {
+        "bookingLinks": {
           "type": "object",
           "additionalProperties": false,
-          "description": "Booking link per class for this date. Null means no link yet, and the button falls back to the general Eversports page.",
+          "description": "The Eversports booking links for this date, one per class. Eversports gives every date its own URLs, so they are entered here by hand for each date. Add \"party\" only when the night itself is bookable. A class with no link falls back to the studio's general Eversports page, and the build names it in the log.",
           "properties": {
             "salsa-basics": { "$ref": "#/$defs/bookingUrl" },
             "rueda-beginner": { "$ref": "#/$defs/bookingUrl" },

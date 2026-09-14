@@ -60,7 +60,7 @@ export function parseEvent(entry: unknown): SiteEvent {
         flyer: parseImageFileName(date, 'flyer', raw.flyer),
         priceNote: parseLocalisedText(date, 'priceNote', raw.priceNote),
         cancelled: raw.cancelled === true,
-        booking: parseBooking(date, raw.booking),
+        bookingLinks: parseBookingLinks(date, raw.bookingLinks),
         extras: parseExtras(date, raw.extras),
     };
 }
@@ -249,28 +249,35 @@ function parseTimeOfDay(
     return value;
 }
 
-function parseBooking(
+function parseBookingLinks(
     date: string,
     value: unknown,
 ): Partial<Record<BookingTarget, string>> {
     if (value === null || value === undefined) return {};
     if (typeof value !== 'object') {
-        throw new EventDataError(date, '"booking" must be an object or null.');
+        throw new EventDataError(
+            date,
+            '"bookingLinks" must be an object or null.',
+        );
     }
 
-    const booking: Partial<Record<BookingTarget, string>> = {};
+    const links: Partial<Record<BookingTarget, string>> = {};
 
     for (const [key, url] of Object.entries(value as Record<string, unknown>)) {
         if (!BOOKING_TARGETS.includes(key as BookingTarget)) {
             throw new EventDataError(
                 date,
-                `"booking" has an unknown key "${key}". Allowed: ${BOOKING_TARGETS.join(', ')}.`,
+                `"bookingLinks" has an unknown key "${key}". Allowed: ${BOOKING_TARGETS.join(', ')}.`,
             );
         }
         if (url === null || url === undefined) continue;
-        booking[key as BookingTarget] = assertBookingUrl(date, `booking.${key}`, url);
+        links[key as BookingTarget] = assertBookingUrl(
+            date,
+            `bookingLinks.${key}`,
+            url,
+        );
     }
-    return booking;
+    return links;
 }
 
 /**

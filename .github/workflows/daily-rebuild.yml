@@ -6,9 +6,7 @@ name: Daily rebuild
 # alone, the site would go on advertising a Friday that has already happened,
 # and Google drops structured data for a past event.
 #
-# This asks Netlify for a fresh build every night, after midnight in Berlin. It
-# also picks up whatever `scripts/sync-eversports.mjs` finds, since that runs as
-# part of the build.
+# This asks Netlify for a fresh build every night, after midnight in Berlin.
 #
 # Setup, once:
 #   1. Netlify → Site configuration → Build & deploy → Build hooks → Add build

@@ -1,6 +1,6 @@
 {
   "$schema": "./events.schema.json",
-  "_readme": "Die Termine der Website. Neuen Termin anlegen: einen Block in 'events' kopieren, Datum, Slug und Texte anpassen, speichern, committen. Vergangene Termine verschwinden automatisch. Pflichtfelder sind nur 'date' und 'slug'. Buchungslinks müssen hier normalerweise nicht eingetragen werden: die Standardlinks der vier Kurse stehen in src/data/classes.ts und gelten für jeden Termin.",
+  "_readme": "Die Termine der Website. Neuen Termin anlegen: einen Block in 'events' kopieren, Datum, Slug und Texte anpassen, speichern, committen. Vergangene Termine verschwinden automatisch. Pflichtfelder sind nur 'date' und 'slug'. Diese Datei ist die einzige, die monatlich gepflegt werden muss: die Buchungslinks der vier Kurse stehen bei jedem Termin in 'bookingLinks', weil Eversports für jeden Termin eigene Links vergibt.",
   "_readmeFields": {
     "date": "JJJJ-MM-TT. Bestimmt die Reihenfolge und wann der Termin verschwindet.",
     "slug": "Teil der URL der Detailseite, z. B. /termine/al-son-de-cuba/. Nur Kleinbuchstaben, Zahlen und Bindestriche. Darf sich nach der Veröffentlichung nicht mehr ändern, sonst brechen Links.",
@@ -14,45 +14,10 @@
     "flyer": "Dateiname aus src/assets/flyers/ für das Plakat.",
     "priceNote": "Nur ausfüllen, wenn an dem Abend andere Preise gelten.",
     "cancelled": "true blendet den Termin nicht aus, sondern markiert ihn als abgesagt.",
-    "booking": "Nur ausfüllen, wenn an diesem Abend anders gebucht wird als sonst. Leer lassen heißt: es gelten die Kurslinks aus src/data/classes.ts. Erlaubt sind nur https-Adressen bei eversports.de oder urbansportsclub.com.",
+    "bookingLinks": "Die Eversports-Links der vier Kurse an diesem Termin. 'party' nur eintragen, wenn der Abend selbst buchbar ist. Fehlt ein Link, führt der Button zur allgemeinen Eversports-Seite des Studios, und der Build schreibt eine Warnung ins Log. Erlaubt sind nur https-Adressen bei eversports.de oder urbansportsclub.com.",
     "extras": "Zusatzangebote an dem Abend, z. B. ein Workshop vor den Kursen."
   },
   "events": [
-    {
-      "date": "2026-09-11",
-      "slug": "last-taste-of-summer",
-      "title": {
-        "de": "Last Taste of Summer",
-        "en": "Last Taste of Summer"
-      },
-      "summary": {
-        "de": "Sommerausklang im Tangoloft: Kurse ab 19 Uhr, danach kubanische Salsa und Timba mit EC Kuba an den Decks.",
-        "en": "The last taste of summer at Tangoloft: classes from 19:00, then Cuban salsa and timba with EC Kuba on the decks."
-      },
-      "description": {
-        "de": "Der Sommer geht, die Musik bleibt. Zwei Stunden Kurse für alle Level, danach Social Dance mit kubanischer Salsa, Timba und Son. Bei warmem Wetter ist der Außenbereich an der Spree offen.",
-        "en": "Summer is leaving, the music stays. Two hours of classes for every level, then a social dance with Cuban salsa, timba and son. In warm weather the outdoor area by the Spree is open."
-      },
-      "dj": "DJ EC Kuba",
-      "teachers": [
-        "Helen",
-        "Yago",
-        "Sassan"
-      ],
-      "badges": [
-        {
-          "de": "DJ EC Kuba",
-          "en": "DJ EC Kuba",
-          "tone": "gold"
-        }
-      ],
-      "image": "hero-dancer-arms-up.jpg",
-      "flyer": null,
-      "priceNote": null,
-      "cancelled": false,
-      "booking": {},
-      "extras": []
-    },
     {
       "date": "2026-09-25",
       "slug": "autumn-heat",
@@ -85,7 +50,12 @@
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
-      "booking": {},
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/activity/1b14ca43-ae66-4d6a-b814-3939d83575ad",
+        "rueda-beginner": "https://www.eversports.de/activity/3aaa4a39-b8ab-418d-b4ba-4493102eaf05",
+        "salsa-beginner": "https://www.eversports.de/activity/d7556b3e-6f61-4b62-8a9d-d362dfb2c43e",
+        "rueda-advanced": "https://www.eversports.de/activity/2618d183-ce28-4b4d-85e8-84368b91710d"
+      },
       "extras": []
     },
     {
@@ -125,7 +95,12 @@
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
-      "booking": {},
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/activity/1b14ca43-ae66-4d6a-b814-3939d83575ad",
+        "rueda-beginner": "https://www.eversports.de/activity/b0f49d7f-a5a1-4e9f-9576-21b395b9e57c",
+        "salsa-beginner": "https://www.eversports.de/activity/01185b41-b672-484f-96ea-745671775979",
+        "rueda-advanced": "https://www.eversports.de/activity/038b3de7-57de-4367-987f-85c0895dc568"
+      },
       "extras": []
     }
   ]

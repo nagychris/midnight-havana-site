@@ -23,7 +23,7 @@ slug and the texts, then commit. That is the whole job.
   "teachers": ["Helen", "Yago"],
   "badges": [{ "de": "Live-Percussion", "en": "Live percussion", "tone": "green" }],
   "image": "dj-night.jpg",
-  "booking": {}
+  "bookingLinks": {}
 }
 ```
 
@@ -38,45 +38,58 @@ A few things worth knowing:
 - **The slug is the URL.** `"slug": "noche-de-timba"` gives
   `/termine/noche-de-timba/` and `/en/events/noche-de-timba/`. Changing it after
   publishing breaks any link people have already shared.
-- **Booking links are usually not needed.** See below.
+- **Booking links go in `bookingLinks`, per date.** See below.
 - **The file must stay valid JSON.** `src/data/events.schema.json` describes
   every field; most editors will use it for autocomplete and warnings. If a
   value is wrong, the build stops and says which date and which field.
 
 ### Booking links
 
-Eversports gives every occurrence of a class its own URL, so the four booking
-links change week to week. You do not have to maintain them.
+Eversports gives every date its own URLs, so the four links are entered by hand,
+one set per date, in that date's `bookingLinks` block:
 
-`scripts/sync-eversports.mjs` runs before every build. It reads the studio's
-public schedule page, matches the four classes by name and writes what it finds
-to `src/data/eversports-links.json`. A daily rebuild therefore keeps the links
-current on its own.
-
-If the sync finds nothing, the site falls back in order to:
-
-1. a link set on that date in `events.json`, for a night booked differently;
-2. the link the sync last found;
-3. the hand-maintained link in `src/data/classes.ts`;
-4. the studio's general Eversports page.
-
-So a booking button is never dead, and a failed sync never breaks a deploy.
-
-To see what the sync would do without changing anything:
-
-```sh
-pnpm run sync-eversports -- --dry
+```json
+"bookingLinks": {
+  "salsa-basics": "https://www.eversports.de/e/…",
+  "rueda-beginner": "https://www.eversports.de/e/…",
+  "salsa-beginner": "https://www.eversports.de/e/…",
+  "rueda-advanced": "https://www.eversports.de/e/…"
+}
 ```
 
-If the class names on Eversports change, update `CLASS_PATTERNS` at the top of
-that script. It matches on words in the class title rather than on the page's
-markup, because the titles have to stay readable to humans and so change far
-less often than the HTML.
+Add `"party"` only when the night itself is bookable. Normally it is paid for at
+the door.
 
-Links are checked at build time wherever they come from: they must use https
-and point at `eversports.de` or `urbansportsclub.com`. Anything else stops the
-build, so a mistyped or tampered entry can never turn a booking button into a
-link somewhere unexpected.
+A class with no link still gets a working button, because it falls back to the
+studio's general Eversports page. The build names whatever is missing, so a
+forgotten month shows up in the deploy log:
+
+```text
+[midnight-havana:booking-links] 2026-10-02 al-son-de-cuba is missing salsa-beginner, rueda-advanced.
+```
+
+That check is an Astro integration in `astro.config.mjs` on top of
+`src/lib/booking-report.ts`. It only warns, so a missing link never stops a
+deploy.
+
+Links are checked at build time: they must use https and point at
+`eversports.de` or `urbansportsclub.com`. Anything else stops the build, so a
+mistyped or tampered entry can never turn a booking button into a link
+somewhere unexpected.
+
+#### Why this is not automated
+
+There used to be a script that read the links off the studio's public schedule
+page. Eversports now serves its whole site behind a Cloudflare challenge, which
+answers any plain HTTP request with `403` regardless of the headers it sends, so
+the script could not work and was removed.
+
+Eversports does have a read-only GraphQL Provider API at
+`provider-api.eversportsmanager.io/api/graphql`, and it exposes exactly the
+right field, `activity.bookable.checkoutURL`. Its schema is public but every
+real query needs an integration key, which the studio has to activate on its
+Eversports Manager account from about €50 per month per location. Until that is
+worth paying for, the links are typed in by hand.
 
 ### Something extra that night
 
@@ -165,6 +178,7 @@ pnpm install
 pnpm dev       # http://localhost:4321
 pnpm build     # writes dist/
 pnpm check     # types and Astro diagnostics
+pnpm test      # unit tests for the data layer (vitest)
 ```
 
 Node 22 or newer.

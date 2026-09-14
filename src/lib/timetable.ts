@@ -126,7 +126,7 @@ function socialRow(event: SiteEvent, t: Translation): Row {
             ? `${t.event.djLabel}: ${event.dj}. ${t.event.socialNote}`
             : t.event.socialNote,
         level: null,
-        bookingUrl: event.booking.party ?? null,
+        bookingUrl: event.bookingLinks.party ?? null,
         tone: 'social',
     };
 }

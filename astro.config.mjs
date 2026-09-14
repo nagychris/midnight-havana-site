@@ -3,6 +3,36 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import { SITE_URL } from './src/config/site-url.mjs';
+import {
+    eventsMissingBookingLinks,
+    formatMissingBookingLinks,
+} from './src/lib/booking-report.ts';
+import { allEvents } from './src/lib/events.ts';
+
+/**
+ * Names the upcoming dates whose Eversports booking links are still missing.
+ *
+ * The links are entered by hand, a set per date, so the thing that can quietly
+ * go stale is a forgotten month. This lives in an integration rather than in
+ * the data layer so it runs once per build instead of once per rendered page.
+ * It only warns: a date without links still builds, its buttons just lead to
+ * the studio's general Eversports page.
+ *
+ * @returns {import('astro').AstroIntegration}
+ */
+function reportMissingBookingLinks() {
+    return {
+        name: 'midnight-havana:booking-links',
+        hooks: {
+            'astro:build:start': ({ logger }) => {
+                const missing = eventsMissingBookingLinks(allEvents());
+                for (const line of formatMissingBookingLinks(missing)) {
+                    logger.warn(line);
+                }
+            },
+        },
+    };
+}
 
 export default defineConfig({
     // Base for canonical URLs, hreflang links and the sitemap.
@@ -108,6 +138,7 @@ export default defineConfig({
             filter: (page) =>
                 !/\/(impressum|datenschutz|agb|imprint|privacy|terms)\/$/.test(page),
         }),
+        reportMissingBookingLinks(),
     ],
 
     vite: {

@@ -36,7 +36,8 @@ export interface SiteEvent {
     flyer: string | null;
     priceNote: LocalisedText | null;
     cancelled: boolean;
-    booking: Partial<Record<BookingTarget, string>>;
+    /** The Eversports links for this date, one per class, plus the party. */
+    bookingLinks: Partial<Record<BookingTarget, string>>;
     extras: EventExtra[];
 }
 

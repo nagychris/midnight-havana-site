@@ -4,6 +4,9 @@
  * Only the language-independent facts live here. Names, descriptions and call
  * to action labels are in `src/i18n/`, keyed by the same ids, so adding a class
  * means adding one entry here and one translation block per language.
+ *
+ * Booking links are not here. Eversports gives each date its own URL, so they
+ * are entered per date in `src/data/events.json`.
  */
 
 export const CLASS_IDS = [
@@ -29,17 +32,6 @@ export interface DanceClass {
     level: string;
     /** Sort order, lowest first. */
     order: number;
-    /**
-     * The class's page on Eversports.
-     *
-     * An Eversports activity link stays the same from week to week and shows
-     * every upcoming date of that class, so it does not have to be repeated for
-     * each event. A single date can still override it in `events.json` when
-     * something about that night is different.
-     *
-     * Null falls back to the general Eversports page for the studio.
-     */
-    bookingUrl: string | null;
 }
 
 export const classes: readonly DanceClass[] = [
@@ -50,8 +42,6 @@ export const classes: readonly DanceClass[] = [
         track: 'salsa',
         level: 'A1',
         order: 1,
-        bookingUrl:
-            'https://www.eversports.de/org/activity/ce4aca4a-3a11-401e-bc9a-7f7229200b84',
     },
     {
         id: 'rueda-beginner',
@@ -60,8 +50,6 @@ export const classes: readonly DanceClass[] = [
         track: 'rueda',
         level: 'A2 – B1',
         order: 2,
-        bookingUrl:
-            'https://www.eversports.de/activity/4c51d961-2886-4f39-aa00-b567e668ef58',
     },
     {
         id: 'salsa-beginner',
@@ -70,8 +58,6 @@ export const classes: readonly DanceClass[] = [
         track: 'salsa',
         level: 'A2',
         order: 3,
-        bookingUrl:
-            'https://www.eversports.de/activity/0af660d1-ee2b-48a4-ab53-64b60cb32c40',
     },
     {
         id: 'rueda-advanced',
@@ -80,8 +66,6 @@ export const classes: readonly DanceClass[] = [
         track: 'rueda',
         level: 'B2 / C1',
         order: 4,
-        bookingUrl:
-            'https://www.eversports.de/activity/07b59f4b-6a79-43e5-bd04-c84f7d2961d9',
     },
 ];
 
