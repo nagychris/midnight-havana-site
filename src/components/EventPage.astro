@@ -128,7 +128,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
 
                 {
                     event.summary && (
-                        <p class="mt-5 max-w-[56ch] text-lead leading-relaxed-2 text-cream/80">
+                        <p class="mt-5 text-lead leading-relaxed-2 text-cream/80">
                             {event.summary[locale]}
                         </p>
                     )
@@ -136,7 +136,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
 
                 {
                     event.cancelled && (
-                        <p class="mt-5 max-w-[56ch] border border-gold/30 p-4 text-md text-cream/80">
+                        <p class="mt-5 border border-gold/30 p-4 text-md text-cream/80">
                             {t.event.cancelledNote}
                         </p>
                     )
@@ -173,7 +173,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
             <div>
                 {
                     event.description && (
-                        <p class="max-w-[66ch] text-lead leading-relaxed-2 text-cream/80">
+                        <p class="text-lead leading-relaxed-2 text-cream/80">
                             {event.description[locale]}
                         </p>
                     )
