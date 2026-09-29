@@ -25,6 +25,10 @@ interface Props {
 
 const { photos, label, class: className } = Astro.props;
 const locale = localeFromAstro(Astro.currentLocale);
+
+/** The tile's shape from the small breakpoint up: w-60 by h-72, i.e. 5:6. */
+const TILE_WIDTH = 480;
+const TILE_HEIGHT = 576;
 ---
 
 <div
@@ -46,10 +50,17 @@ const locale = localeFromAstro(Astro.currentLocale);
                             photo={photo}
                             duplicateOf={pass === 1 ? index : undefined}
                         >
+                            {/* Cropped to the portrait tile at build time. Scaling
+                                the landscape original by width alone left too
+                                few pixels in height, and object-cover then
+                                stretched it until it looked blurry. */}
                             <Image
                                 src={photo.image}
                                 alt={pass === 0 ? photo.alt[locale] : ''}
-                                widths={[240, 360, 480]}
+                                width={TILE_WIDTH}
+                                height={TILE_HEIGHT}
+                                fit="cover"
+                                widths={[240, 360, 480, 720]}
                                 sizes="(min-width: 640px) 15rem, 11rem"
                                 format="webp"
                                 quality={74}
