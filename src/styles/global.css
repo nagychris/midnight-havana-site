@@ -521,8 +521,34 @@
         transform: rotate(180deg);
     }
 
+    /*
+      Event cards slide open and closed instead of snapping. The content of a
+      closed <details> is hidden with content-visibility, so that is
+      transitioned as a discrete step alongside the height. Browsers without
+      ::details-content or interpolate-size keep the instant toggle.
+    */
+    [data-event-card] {
+        interpolate-size: allow-keywords;
+    }
+
+    [data-event-card]::details-content {
+        height: 0;
+        overflow: clip;
+        opacity: 0;
+        transition:
+            height 0.32s cubic-bezier(0.2, 0.7, 0.2, 1),
+            opacity 0.24s ease-out,
+            content-visibility 0.32s allow-discrete;
+    }
+
+    [data-event-card][open]::details-content {
+        height: auto;
+        opacity: 1;
+    }
+
     @media (prefers-reduced-motion: reduce) {
-        .disclosure-marker {
+        .disclosure-marker,
+        [data-event-card]::details-content {
             transition: none;
         }
     }
