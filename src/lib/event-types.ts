@@ -4,11 +4,11 @@ import type { Locale } from '../i18n/locales';
 /** The same text in both site languages. */
 export type LocalisedText = Record<Locale, string>;
 
-export type BadgeTone = 'gold' | 'green' | 'solid' | 'muted';
-
-export interface EventBadge extends LocalisedText {
-    tone: BadgeTone;
-}
+/**
+ * A short label on a date. Its colour is not stored: it comes from the
+ * badge's position, so every card looks the same (see event-badges.ts).
+ */
+export type EventBadge = LocalisedText;
 
 /** Anything in the timetable that is not one of the four standard classes. */
 export interface EventExtra {

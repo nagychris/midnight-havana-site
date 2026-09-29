@@ -6,7 +6,7 @@
  * never rests on colour alone.
  */
 interface Props {
-    tone?: 'solid' | 'gold' | 'green' | 'muted';
+    tone?: 'solid' | 'gold-solid' | 'gold' | 'green' | 'muted';
     class?: string;
 }
 
@@ -14,6 +14,7 @@ const { tone = 'gold', class: className } = Astro.props;
 
 const tones = {
     solid: 'bg-orange text-ink',
+    'gold-solid': 'bg-gold text-ink',
     gold: 'border border-gold/45 text-gold-light',
     green: 'border border-green-dark/60 text-green',
     muted: 'border border-cream/20 text-cream/60',

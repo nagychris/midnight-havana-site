@@ -2,7 +2,6 @@ import { CLASS_IDS, type ClassId } from '../data/classes';
 import { isValidDateKey } from './datetime';
 import {
     EventDataError,
-    type BadgeTone,
     type BookingTarget,
     type EventBadge,
     type EventExtra,
@@ -28,7 +27,6 @@ const ALLOWED_BOOKING_HOSTS = [
 ];
 
 const BOOKING_TARGETS: BookingTarget[] = [...CLASS_IDS, 'party'];
-const BADGE_TONES: BadgeTone[] = ['gold', 'green', 'solid', 'muted'];
 const MAX_TEXT_LENGTH = 600;
 const IMAGE_FILE = /^[A-Za-z0-9._-]+\.(png|jpg|jpeg|webp|avif)$/;
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -215,14 +213,14 @@ function parseBadges(date: string, value: unknown): EventBadge[] {
             throw new EventDataError(date, `"badges[${index}]" must not be null.`);
         }
 
-        const tone = (entry as Record<string, unknown>).tone ?? 'gold';
-        if (!BADGE_TONES.includes(tone as BadgeTone)) {
+        if ('tone' in (entry as Record<string, unknown>)) {
             throw new EventDataError(
                 date,
-                `"badges[${index}].tone" must be one of ${BADGE_TONES.join(', ')}.`,
+                `"badges[${index}].tone" is no longer used. Badge colours follow their position; remove the field.`,
             );
         }
-        return { ...text, tone: tone as BadgeTone };
+        assertKnownKeys(date, `"badges[${index}]"`, entry as Record<string, unknown>, ['de', 'en']);
+        return text;
     });
 }
 

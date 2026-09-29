@@ -52,6 +52,14 @@ describe('parseEvent courseLabels', () => {
     });
 });
 
+describe('parseEvent badges', () => {
+    it('rejects the old tone field', () => {
+        const raw = rawEvent({ badges: [{ de: 'Son', en: 'Son', tone: 'green' }] });
+
+        expect(() => parseEvent(raw)).toThrow(/tone" is no longer used/);
+    });
+});
+
 describe('parseEvent unknown fields', () => {
     it('rejects an unknown event field', () => {
         expect(() => parseEvent(rawEvent({ djs: 'Helen' }))).toThrow(

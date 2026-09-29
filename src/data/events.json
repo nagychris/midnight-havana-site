@@ -9,7 +9,7 @@
     "description": "Zwei bis vier Sätze für die Detailseite.",
     "dj": "Wer an dem Abend auflegt.",
     "teachers": "Wer an dem Abend unterrichtet, z. B. [\"Helen\", \"Yago\"].",
-    "badges": "Kleine Labels auf der Karte. 'tone' ist 'gold', 'green' oder 'solid'.",
+    "badges": "Kleine Labels auf der Karte. Die Farbe ergibt sich aus der Reihenfolge: das erste gold, das zweite grün, das dritte gedämpft. Labels, die nur den Titel wiederholen, werden nicht angezeigt.",
     "image": "Dateiname aus src/assets/photos/ für das große Bild der Detailseite.",
     "flyer": "Dateiname aus src/assets/flyers/ für das Plakat.",
     "priceNote": "Nur ausfüllen, wenn an dem Abend andere Preise gelten.",
@@ -44,13 +44,11 @@
       "badges": [
         {
           "de": "Son-Special",
-          "en": "Son special",
-          "tone": "green"
+          "en": "Son special"
         },
         {
           "de": "DJ Helen",
-          "en": "DJ Helen",
-          "tone": "gold"
+          "en": "DJ Helen"
         }
       ],
       "image": "social-pair-smiling.jpg",
@@ -86,8 +84,8 @@
       "date": "2026-10-16",
       "slug": "tambolys-timba-night",
       "title": {
-        "de": "Tamboly’s Timba Night",
-        "en": "Tamboly’s Timba Night"
+        "de": "Tamboly's Timba Night",
+        "en": "Tamboly's Timba Night"
       },
       "summary": {
         "de": "Tamboly sorgt für den Sound der Nacht: kubanischer Puls, griechische Seele und genug Timba für beide Hüften.",
@@ -105,14 +103,8 @@
       ],
       "badges": [
         {
-          "de": "Timba Night",
-          "en": "Timba night",
-          "tone": "gold"
-        },
-        {
           "de": "DJ Tamboly",
-          "en": "DJ Tamboly",
-          "tone": "solid"
+          "en": "DJ Tamboly"
         }
       ],
       "image": "social-couple-hat.jpg",
@@ -150,14 +142,8 @@
       ],
       "badges": [
         {
-          "de": "Salsa Friday",
-          "en": "Salsa Friday",
-          "tone": "green"
-        },
-        {
-          "de": "TBA",
-          "en": "TBA",
-          "tone": "solid"
+          "de": "DJ: TBA",
+          "en": "DJ: TBA"
         }
       ],
       "image": "social-pair-smiling.jpg",
@@ -193,18 +179,11 @@
       "badges": [
         {
           "de": "Star Workshop",
-          "en": "Star workshop",
-          "tone": "gold"
-        },
-        {
-          "de": "Show Night",
-          "en": "Show night",
-          "tone": "solid"
+          "en": "Star workshop"
         },
         {
           "de": "DJ Reza",
-          "en": "DJ Reza",
-          "tone": "green"
+          "en": "DJ Reza"
         }
       ],
       "image": "social-couple-hat.jpg",
@@ -256,14 +235,8 @@
       ],
       "badges": [
         {
-          "de": "EC Kuba DJ",
-          "en": "EC Kuba DJ",
-          "tone": "gold"
-        },
-        {
           "de": "Matanzas",
-          "en": "Matanzas",
-          "tone": "green"
+          "en": "Matanzas"
         }
       ],
       "image": "social-pair-smiling.jpg",
@@ -299,18 +272,7 @@
         "Yago",
         "Sassan"
       ],
-      "badges": [
-        {
-          "de": "DJ Helen",
-          "en": "DJ Helen",
-          "tone": "gold"
-        },
-        {
-          "de": "Salsa Friday",
-          "en": "Salsa Friday",
-          "tone": "green"
-        }
-      ],
+      "badges": [],
       "image": "social-couple-hat.jpg",
       "flyer": null,
       "priceNote": null,
@@ -347,13 +309,11 @@
       "badges": [
         {
           "de": "Christmas Party",
-          "en": "Christmas party",
-          "tone": "gold"
+          "en": "Christmas party"
         },
         {
           "de": "EC Kuba DJ",
-          "en": "EC Kuba DJ",
-          "tone": "green"
+          "en": "EC Kuba DJ"
         }
       ],
       "image": "social-pair-smiling.jpg",

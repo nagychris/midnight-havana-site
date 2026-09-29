@@ -11,6 +11,7 @@ import {
     type SiteEvent,
 } from '../../lib/events';
 import { formatLongDate } from '../../lib/datetime';
+import { badgesBesideTitle } from '../../lib/event-badges';
 import {
     eventPathFor,
     localeFromAstro,
@@ -63,12 +64,15 @@ const headingId = `event-${event.date}`;
         <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-2">
                 <Badge
-                    tone={isToday ? 'solid' : isNext ? 'gold' : 'muted'}
+                    tone={isToday ? 'solid' : isNext ? 'gold-solid' : 'muted'}
                     class="group-data-[next=false]:hidden"
                 >
                     {isToday ? t.nextEvent.todayLabel : t.nextEvent.nextLabel}
                 </Badge>
                 {event.cancelled && <Badge tone="muted">{t.nextEvent.cancelled}</Badge>}
+                {badgesBesideTitle(event, locale).map((badge) => (
+                    <Badge tone={badge.tone}>{badge[locale]}</Badge>
+                ))}
             </div>
 
             <h3

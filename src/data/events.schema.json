@@ -69,7 +69,7 @@
           "type": "array",
           "maxItems": 3,
           "items": { "$ref": "#/$defs/badge" },
-          "description": "Short labels on the date card, for example a special or a guest DJ."
+          "description": "Short labels on the date card, for example a special or a guest DJ. Their colour follows their position: the first is gold, the second green, the third muted. A label that repeats the title is not shown."
         },
         "image": {
           "$ref": "#/$defs/imageFileName",
@@ -158,12 +158,7 @@
       "additionalProperties": false,
       "properties": {
         "de": { "type": "string", "minLength": 1, "maxLength": 40 },
-        "en": { "type": "string", "minLength": 1, "maxLength": 40 },
-        "tone": {
-          "enum": ["gold", "green", "solid", "muted"],
-          "default": "gold",
-          "description": "gold is neutral, green marks a rueda or son special, solid is the strongest emphasis."
-        }
+        "en": { "type": "string", "minLength": 1, "maxLength": 40 }
       }
     },
     "localisedText": {

@@ -10,6 +10,7 @@ import EventDate from './event/EventDate.astro';
 import MapEmbed from './MapEmbed.astro';
 import { site } from '../data/site';
 import { photoByName } from '../data/photos';
+import { badgesBesideTitle } from '../lib/event-badges';
 import { bookingUrlFor, otherUpcomingEvents, type SiteEvent } from '../lib/events';
 import { formatLongDate } from '../lib/datetime';
 import { breadcrumbSchema, danceEventSchema } from '../lib/structured-data';
@@ -101,7 +102,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                 </a>
 
                 <div class="mt-10 flex flex-wrap items-center gap-2">
-                    {event.badges.map((badge) => (
+                    {badgesBesideTitle(event, locale).map((badge) => (
                         <Badge tone={badge.tone}>{badge[locale]}</Badge>
                     ))}
                     {event.cancelled && <Badge tone="muted">{t.nextEvent.cancelled}</Badge>}
