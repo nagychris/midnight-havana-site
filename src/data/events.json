@@ -57,24 +57,25 @@
       "cancelled": false,
       "courseLabels": {
         "salsa-basics": {
-          "de": "Salsa Basics Partnerwork 19:00",
-          "en": "Salsa Basics Partnerwork 19:00"
+          "de": "Salsa Basics Partnerwork",
+          "en": "Salsa Basics Partnerwork"
         },
         "rueda-beginner": {
-          "de": "Rueda de Son Basics 19:00",
-          "en": "Rueda de Son Basics 19:00"
+          "de": "Rueda de Son Basics",
+          "en": "Rueda de Son Basics"
         },
         "salsa-beginner": {
-          "de": "Son Beginner Partnerwork 20:00",
-          "en": "Son Beginner Partnerwork 20:00"
+          "de": "Son Beginner Partnerwork",
+          "en": "Son Beginner Partnerwork"
         },
         "rueda-advanced": {
-          "de": "Rueda de Son 2 Levels 20:00",
-          "en": "Rueda de Son 2 Levels 20:00"
+          "de": "Rueda de Son 2 Levels",
+          "en": "Rueda de Son 2 Levels"
         }
       },
       "bookingLinks": {
         "salsa-basics": "https://www.eversports.de/org/activity/954d9b22-9a65-40ba-95cd-5ad20b4737b5",
+        "rueda-beginner": "https://www.eversports.de/activity/4fec8e5c-9929-4ebf-9da9-e88629c5455c",
         "salsa-beginner": "https://www.eversports.de/org/activity/39b91ab2-7107-4c01-bc7f-119e32098aaa",
         "rueda-advanced": "https://www.eversports.de/org/activity/02b1e3fc-9e37-4cb5-b221-688acdd105d7"
       },
@@ -152,6 +153,7 @@
       "cancelled": false,
       "bookingLinks": {
         "salsa-basics": "https://www.eversports.de/org/activity/408b093b-7972-4195-be33-0b2719e961a3",
+        "salsa-beginner": "https://www.eversports.de/activity/d5ea0c47-d02f-4377-b1de-8656104f286a",
         "rueda-beginner": "https://www.eversports.de/org/activity/3bc6b0c9-c91c-41ca-ae21-1bcce4bd156e",
         "rueda-advanced": "https://www.eversports.de/org/activity/08198cf5-ae10-407b-adff-860dc111ed56"
       },

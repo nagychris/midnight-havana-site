@@ -179,6 +179,7 @@ export const de = {
         priceHeading: 'Eintritt',
         priceStandard: 'Normalpreis',
         priceReduced: 'Studierende & geringes Einkommen',
+        priceReducedShort: 'ermäßigt',
         priceIncluded: 'Kurs, Social Dance und Garderobe sind immer enthalten.',
         pricePayment:
             'Bar oder Karte vor Ort, vorab über Eversports oder Urban Sports Club.',

@@ -39,8 +39,8 @@ const extras = [...event.extras].sort((a, b) =>
 <div class="flex flex-col">
     {
         extras.map((extra) => (
-            <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
-                <p class="font-display text-h4 leading-flat font-medium text-gold-light">
+            <div class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
+                <p class="font-display text-xl leading-flat font-medium text-gold-light sm:text-h4">
                     {extra.startTime}
                     {extra.endTime && (
                         <span class="mt-0.5 block text-sm font-normal text-cream/45">
@@ -76,8 +76,8 @@ const extras = [...event.extras].sort((a, b) =>
 
     {
         startTimes.map((startTime) => (
-            <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
-                <p class="font-display text-h4 leading-flat font-medium text-orange">
+            <div class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
+                <p class="font-display text-xl leading-flat font-medium text-orange sm:text-h4">
                     {startTime}
                     {t.nextEvent.classesAt && (
                         <span class="ml-1 text-sm font-normal text-cream/45">
@@ -96,7 +96,7 @@ const extras = [...event.extras].sort((a, b) =>
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     data-analytics={`book:${danceClass.id}`}
-                                    class="group/row flex min-h-12 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
+                                    class="group/row flex min-h-11 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
                                 >
                                     <span class="min-w-0 flex-1 font-display text-base font-medium tracking-tiny text-cream uppercase">
                                         {name}
@@ -130,9 +130,9 @@ const extras = [...event.extras].sort((a, b) =>
     }
 
     <div
-        class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6"
+        class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5"
     >
-        <p class="font-display text-h4 leading-flat font-medium text-orange">
+        <p class="font-display text-xl leading-flat font-medium text-orange sm:text-h4">
             {site.schedule.socialDance}
         </p>
         <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
@@ -148,7 +148,7 @@ const extras = [...event.extras].sort((a, b) =>
                     </span>
                 )
             }
-            <p class="w-full text-sm text-cream/55">{t.event.socialNote}</p>
+            <p class="hidden w-full text-sm text-cream/55 sm:block">{t.event.socialNote}</p>
         </div>
     </div>
 </div>

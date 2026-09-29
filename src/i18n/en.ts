@@ -149,6 +149,7 @@ export const en: Translation = {
         priceHeading: 'Admission',
         priceStandard: 'Standard',
         priceReduced: 'Students & people on a low income',
+        priceReducedShort: 'reduced',
         priceIncluded: 'Class, social dance and cloakroom are always included.',
         pricePayment:
             'Cash or card at the door, or in advance through Eversports or Urban Sports Club.',

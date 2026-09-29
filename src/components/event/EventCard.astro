@@ -116,17 +116,21 @@ const headingId = `event-${event.date}`;
     </div>
 
     <div
-        class="flex flex-col gap-5 border-t border-gold/20 p-4 sm:p-7 lg:flex-row lg:items-end lg:justify-between"
+        class="flex flex-col gap-4 border-t border-gold/20 p-4 sm:gap-5 sm:p-7 lg:flex-row lg:items-end lg:justify-between"
     >
         <div class="flex flex-col gap-2">
             <p class="flex items-start gap-2.5 text-md leading-snug-2 text-cream/80">
                 <span class="mt-0.5 text-gold" aria-hidden="true">
                     <Icon name="map-pin" size={17} />
                 </span>
+                {/* One line on a phone, the full address from sm up. */}
                 <span>
-                    <strong class="font-semibold text-cream">{site.venue.name}</strong><br
-                    />
-                    {site.venue.street} · {site.venue.postalCode} {site.venue.city}
+                    <strong class="font-semibold text-cream">{site.venue.name}</strong>
+                    <span class="text-cream/40"> · </span>
+                    {site.venue.street}{' '}
+                    <span class="hidden sm:inline">
+                        · {site.venue.postalCode} {site.venue.city}
+                    </span>
                 </span>
             </p>
             <p class="flex items-start gap-2.5 text-md leading-snug-2 text-cream/80">
@@ -136,7 +140,9 @@ const headingId = `event-${event.date}`;
                 <span>
                     {t.event.priceStandard} {site.prices.standard} €
                     <span class="text-cream/40"> · </span>
-                    {t.event.priceReduced} {site.prices.reduced} €
+                    <span class="sm:hidden">{t.event.priceReducedShort}</span>
+                    <span class="hidden sm:inline">{t.event.priceReduced}</span>{' '}
+                    {site.prices.reduced} €
                 </span>
             </p>
             <p class="text-sm text-cream/55">{t.nextEvent.arriveNote}</p>
@@ -152,7 +158,14 @@ const headingId = `event-${event.date}`;
         <div class="flex flex-col gap-3 sm:flex-row lg:shrink-0">
             {
                 event.regularClasses && (
-                    <Button href={bookingUrlFor(event, 'salsa-basics')} external size="lg">
+                    // On a phone the class rows above and the sticky bar
+                    // already book, so a third booking button only adds height.
+                    <Button
+                        href={bookingUrlFor(event, 'salsa-basics')}
+                        external
+                        size="lg"
+                        class="max-sm:hidden"
+                    >
                         {t.nextEvent.ctaClasses}
                         <Icon name="external" size={16} />
                     </Button>
