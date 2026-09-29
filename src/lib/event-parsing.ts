@@ -1,4 +1,4 @@
-import { CLASS_IDS } from '../data/classes';
+import { CLASS_IDS, type ClassId } from '../data/classes';
 import { isValidDateKey } from './datetime';
 import {
     EventDataError,
@@ -34,6 +34,37 @@ const IMAGE_FILE = /^[A-Za-z0-9._-]+\.(png|jpg|jpeg|webp|avif)$/;
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const TIME_OF_DAY = /^([01]\d|2[0-3]):[0-5]\d$/;
 
+/**
+ * Every field the site knows. Anything else is rejected, because a field the
+ * build silently ignores looks correct in the file but never reaches the page.
+ */
+const EVENT_KEYS = [
+    'date',
+    'slug',
+    'title',
+    'summary',
+    'description',
+    'dj',
+    'teachers',
+    'badges',
+    'image',
+    'flyer',
+    'priceNote',
+    'cancelled',
+    'regularClasses',
+    'courseLabels',
+    'bookingLinks',
+    'extras',
+];
+const EXTRA_KEYS = [
+    'startTime',
+    'endTime',
+    'title',
+    'description',
+    'level',
+    'booking',
+];
+
 export function parseEvent(entry: unknown): SiteEvent {
     if (typeof entry !== 'object' || entry === null) {
         throw new Error('events.json contains an entry that is not an object.');
@@ -46,6 +77,7 @@ export function parseEvent(entry: unknown): SiteEvent {
             `events.json contains an invalid date: ${JSON.stringify(date)}. Use YYYY-MM-DD.`,
         );
     }
+    assertKnownKeys(date, 'the event', raw, EVENT_KEYS);
 
     return {
         date,
@@ -60,6 +92,8 @@ export function parseEvent(entry: unknown): SiteEvent {
         flyer: parseImageFileName(date, 'flyer', raw.flyer),
         priceNote: parseLocalisedText(date, 'priceNote', raw.priceNote),
         cancelled: raw.cancelled === true,
+        regularClasses: parseRegularClasses(date, raw.regularClasses),
+        courseLabels: parseCourseLabels(date, raw.courseLabels),
         bookingLinks: parseBookingLinks(date, raw.bookingLinks),
         extras: parseExtras(date, raw.extras),
     };
@@ -81,6 +115,21 @@ export function assertUniqueDatesAndSlugs(events: SiteEvent[]): void {
         }
         dates.add(event.date);
         slugs.add(event.slug);
+    }
+}
+
+function assertKnownKeys(
+    date: string,
+    where: string,
+    raw: Record<string, unknown>,
+    allowed: string[],
+): void {
+    const unknown = Object.keys(raw).filter((key) => !allowed.includes(key));
+    if (unknown.length > 0) {
+        throw new EventDataError(
+            date,
+            `${where} has unknown fields: ${unknown.join(', ')}. Allowed: ${allowed.join(', ')}.`,
+        );
     }
 }
 
@@ -201,6 +250,7 @@ function parseExtras(date: string, value: unknown): EventExtra[] {
     return value.map((entry, index) => {
         const raw = (entry ?? {}) as Record<string, unknown>;
         const where = `extras[${index}]`;
+        assertKnownKeys(date, `"${where}"`, raw, EXTRA_KEYS);
 
         const title = parseLocalisedText(date, `${where}.title`, raw.title);
         if (!title) {
@@ -247,6 +297,38 @@ function parseTimeOfDay(
         throw new EventDataError(date, `"${field}" must be a time such as 19:00.`);
     }
     return value;
+}
+
+function parseRegularClasses(date: string, value: unknown): boolean {
+    if (value === null || value === undefined) return true;
+    if (typeof value !== 'boolean') {
+        throw new EventDataError(date, '"regularClasses" must be true or false.');
+    }
+    return value;
+}
+
+function parseCourseLabels(
+    date: string,
+    value: unknown,
+): Partial<Record<ClassId, LocalisedText>> {
+    if (value === null || value === undefined) return {};
+    if (typeof value !== 'object' || Array.isArray(value)) {
+        throw new EventDataError(date, '"courseLabels" must be an object or null.');
+    }
+
+    const labels: Partial<Record<ClassId, LocalisedText>> = {};
+
+    for (const [key, text] of Object.entries(value as Record<string, unknown>)) {
+        if (!CLASS_IDS.includes(key as ClassId)) {
+            throw new EventDataError(
+                date,
+                `"courseLabels" has an unknown key "${key}". Allowed: ${CLASS_IDS.join(', ')}.`,
+            );
+        }
+        const label = parseLocalisedText(date, `courseLabels.${key}`, text);
+        if (label) labels[key as ClassId] = label;
+    }
+    return labels;
 }
 
 function parseBookingLinks(

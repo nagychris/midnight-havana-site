@@ -88,6 +88,22 @@
           "default": false,
           "description": "Keeps the date visible but marks it as cancelled."
         },
+        "regularClasses": {
+          "type": "boolean",
+          "default": true,
+          "description": "Set to false when the four standard classes do not run that night, for example when a guest workshop replaces them. The date then shows only its extras and the social dance."
+        },
+        "courseLabels": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional class names for this date, used only when they differ from the standard names. The keys are the same class ids as in bookingLinks.",
+          "properties": {
+            "salsa-basics": { "$ref": "#/$defs/localisedText" },
+            "rueda-beginner": { "$ref": "#/$defs/localisedText" },
+            "salsa-beginner": { "$ref": "#/$defs/localisedText" },
+            "rueda-advanced": { "$ref": "#/$defs/localisedText" }
+          }
+        },
         "bookingLinks": {
           "type": "object",
           "additionalProperties": false,

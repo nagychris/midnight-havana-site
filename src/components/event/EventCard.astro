@@ -102,7 +102,7 @@ const headingId = `event-${event.date}`;
     <div class="px-4 pb-1 sm:px-7">
         {
             (event.summary ?? event.description) && (
-                <p class="max-w-[62ch] pb-1 text-md leading-snug-2 text-cream/70">
+                <p class="pb-1 text-md leading-snug-2 text-cream/70">
                     {(event.summary ?? event.description)![locale]}
                 </p>
             )
@@ -137,7 +137,7 @@ const headingId = `event-${event.date}`;
             </p>
             <p class="text-sm text-cream/55">{t.nextEvent.arriveNote}</p>
             {
-                !hasSpecificBookingLinks(event) && (
+                event.regularClasses && !hasSpecificBookingLinks(event) && (
                     <p class="max-w-[62ch] text-sm text-cream/45">
                         {t.nextEvent.bookingFallbackNote}
                     </p>
@@ -146,10 +146,14 @@ const headingId = `event-${event.date}`;
         </div>
 
         <div class="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-            <Button href={bookingUrlFor(event, 'salsa-basics')} external size="lg">
-                {t.nextEvent.ctaClasses}
-                <Icon name="external" size={16} />
-            </Button>
+            {
+                event.regularClasses && (
+                    <Button href={bookingUrlFor(event, 'salsa-basics')} external size="lg">
+                        {t.nextEvent.ctaClasses}
+                        <Icon name="external" size={16} />
+                    </Button>
+                )
+            }
             <Button
                 href={eventPathFor(event.slug, locale)}
                 variant="secondary"

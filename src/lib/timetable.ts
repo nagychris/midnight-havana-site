@@ -1,6 +1,6 @@
-import { classes } from '../data/classes';
 import { site } from '../data/site';
 import { bookingUrlFor } from './booking';
+import { classNameOn, classesOn } from './event-classes';
 import type { SiteEvent } from './event-types';
 import type { Locale } from '../i18n/locales';
 import type { Translation } from '../i18n/de';
@@ -50,7 +50,7 @@ export function timetableFor(
     const rows = [
         doorsRow(t),
         ...extraRows(event, locale),
-        ...classRows(event, t),
+        ...classRows(event, locale, t),
         socialRow(event, t),
     ];
 
@@ -105,11 +105,11 @@ function extraRows(event: SiteEvent, locale: Locale): Row[] {
     }));
 }
 
-function classRows(event: SiteEvent, t: Translation): Row[] {
-    return classes.map((danceClass) => ({
+function classRows(event: SiteEvent, locale: Locale, t: Translation): Row[] {
+    return classesOn(event).map((danceClass) => ({
         startTime: danceClass.startTime,
         endTime: danceClass.endTime,
-        title: t.classes.items[danceClass.id].name,
+        title: classNameOn(event, danceClass.id, locale, t),
         description: null,
         level: danceClass.level,
         bookingUrl: bookingUrlFor(event, danceClass.id),

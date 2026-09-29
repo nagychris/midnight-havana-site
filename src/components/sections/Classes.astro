@@ -6,7 +6,7 @@ import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import ClassFinder from '../classes/ClassFinder.astro';
 import { classes } from '../../data/classes';
-import { bookingUrlFor, nextEvent } from '../../lib/events';
+import { bookingUrlFor, nextEventWithClasses } from '../../lib/events';
 import { site } from '../../data/site';
 import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
 
@@ -26,7 +26,7 @@ const { headingLevel = 'h2' } = Astro.props;
 
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
-const next = nextEvent();
+const next = nextEventWithClasses();
 ---
 
 <Section id={sectionIds.classes} divider labelledBy="classes-heading">

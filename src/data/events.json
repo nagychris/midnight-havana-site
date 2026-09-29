@@ -14,50 +14,12 @@
     "flyer": "Dateiname aus src/assets/flyers/ für das Plakat.",
     "priceNote": "Nur ausfüllen, wenn an dem Abend andere Preise gelten.",
     "cancelled": "true blendet den Termin nicht aus, sondern markiert ihn als abgesagt.",
-    "bookingLinks": "Die Eversports-Links der vier Kurse an diesem Termin. 'party' nur eintragen, wenn der Abend selbst buchbar ist. Fehlt ein Link, führt der Button zur allgemeinen Eversports-Seite des Studios, und der Build schreibt eine Warnung ins Log. Erlaubt sind nur https-Adressen bei eversports.de oder urbansportsclub.com.",
-    "extras": "Zusatzangebote an dem Abend, z. B. ein Workshop vor den Kursen."
+    "bookingLinks": "Die Eversports-Links der Kurse an diesem Termin. 'party' nur eintragen, wenn der Abend selbst buchbar ist. Fehlt ein Link, führt der Button zur allgemeinen Eversports-Seite des Studios, und der Build schreibt eine Warnung ins Log. Erlaubt sind nur https-Adressen bei eversports.de oder urbansportsclub.com.",
+    "courseLabels": "Optional: Nur nutzen, wenn die Kursnamen an einem Termin vom Standard abweichen. Keys entsprechen bookingLinks.",
+    "extras": "Zusatzangebote an dem Abend, z. B. ein Workshop vor den Kursen. Felder: startTime, endTime, title, description, level, booking.",
+    "regularClasses": "false, wenn die vier normalen Kurse an dem Abend nicht stattfinden, z. B. bei einem Gast-Workshop. Dann zeigt die Seite nur die Extras und den Social Dance."
   },
   "events": [
-    {
-      "date": "2026-09-25",
-      "slug": "autumn-heat",
-      "title": {
-        "de": "Autumn Heat",
-        "en": "Autumn Heat"
-      },
-      "summary": {
-        "de": "Draußen wird es kühl, drinnen nicht: Kurse ab 19 Uhr, danach Timba und Son mit EC Kuba.",
-        "en": "Cold outside, not in here: classes from 19:00, then timba and son with EC Kuba."
-      },
-      "description": {
-        "de": "Erste kalte Nächte, warme Tanzfläche. Kurse ab 19 Uhr für Anfänger und Fortgeschrittene, ab 21 Uhr gehört der Holzboden dem Social Dance.",
-        "en": "First cold nights, a warm dance floor. Classes from 19:00 for beginners and advanced dancers, and from 21:00 the wooden floor belongs to the social dance."
-      },
-      "dj": "DJ EC Kuba",
-      "teachers": [
-        "Helen",
-        "Yago",
-        "Sassan"
-      ],
-      "badges": [
-        {
-          "de": "DJ EC Kuba",
-          "en": "DJ EC Kuba",
-          "tone": "gold"
-        }
-      ],
-      "image": "social-couple-hat.jpg",
-      "flyer": null,
-      "priceNote": null,
-      "cancelled": false,
-      "bookingLinks": {
-        "salsa-basics": "https://www.eversports.de/activity/e00d3d66-75ac-4614-a797-62062c60fb79",
-        "rueda-beginner": "https://www.eversports.de/activity/3aaa4a39-b8ab-418d-b4ba-4493102eaf05",
-        "salsa-beginner": "https://www.eversports.de/activity/d7556b3e-6f61-4b62-8a9d-d362dfb2c43e",
-        "rueda-advanced": "https://www.eversports.de/activity/2618d183-ce28-4b4d-85e8-84368b91710d"
-      },
-      "extras": []
-    },
     {
       "date": "2026-10-02",
       "slug": "al-son-de-cuba",
@@ -66,12 +28,12 @@
         "en": "Al Son de Cuba"
       },
       "summary": {
-        "de": "Unser Son-Special mit etwas mehr Eleganz, viel Son und hoffentlich einigen Zeitreisenden aus den 20er- und 30er-Jahren.",
-        "en": "Our son special: a little more elegance, a lot of son, and hopefully a few time travellers from the 1920s and 30s."
+        "de": "Salsa und Son Nacht: warme Nächte Havannas im Herzen von Berlin.",
+        "en": "Salsa and son night: warm Havana nights in the heart of Berlin."
       },
       "description": {
-        "de": "Ein Abend für den Son: langsamer, eleganter, mit Musik aus der Zeit, in der alles anfing. Die Kurse laufen wie immer ab 19 Uhr, danach legt Helen Son, Bolero und kubanische Klassiker auf. Wer mag, kommt im Stil der 20er und 30er.",
-        "en": "A night for son: slower, more elegant, with music from the era where it all began. Classes run from 19:00 as always, then Helen plays son, bolero and Cuban classics. Dress in 1920s or 30s style if you like."
+        "de": "Midnight Havana wird für eine Nacht ein kleines Stück Havanna: Salsa, Son und genau die Eleganz, bei der sogar der Holzboden etwas gerader steht. Kurse ab 19 Uhr, Social Dance ab 21 Uhr und DJ Helen sorgt dafür, dass Berlin kurz vergisst, dass draußen Herbst ist.",
+        "en": "For one night, Midnight Havana turns into a small piece of Havana: salsa, son and just enough elegance to make even the wooden floor stand a little taller. Classes from 19:00, social dance from 21:00, and DJ Helen makes Berlin forget that autumn is waiting outside."
       },
       "dj": "DJ Helen",
       "teachers": [
@@ -95,11 +57,314 @@
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
+      "courseLabels": {
+        "salsa-basics": {
+          "de": "Salsa Basics Partnerwork 19:00",
+          "en": "Salsa Basics Partnerwork 19:00"
+        },
+        "rueda-beginner": {
+          "de": "Rueda de Son Basics 19:00",
+          "en": "Rueda de Son Basics 19:00"
+        },
+        "salsa-beginner": {
+          "de": "Son Beginner Partnerwork 20:00",
+          "en": "Son Beginner Partnerwork 20:00"
+        },
+        "rueda-advanced": {
+          "de": "Rueda de Son 2 Levels 20:00",
+          "en": "Rueda de Son 2 Levels 20:00"
+        }
+      },
       "bookingLinks": {
-        "salsa-basics": "https://www.eversports.de/activity/1b14ca43-ae66-4d6a-b814-3939d83575ad",
-        "rueda-beginner": "https://www.eversports.de/activity/b0f49d7f-a5a1-4e9f-9576-21b395b9e57c",
-        "salsa-beginner": "https://www.eversports.de/activity/01185b41-b672-484f-96ea-745671775979",
-        "rueda-advanced": "https://www.eversports.de/activity/038b3de7-57de-4367-987f-85c0895dc568"
+        "salsa-basics": "https://www.eversports.de/org/activity/954d9b22-9a65-40ba-95cd-5ad20b4737b5",
+        "salsa-beginner": "https://www.eversports.de/org/activity/39b91ab2-7107-4c01-bc7f-119e32098aaa",
+        "rueda-advanced": "https://www.eversports.de/org/activity/02b1e3fc-9e37-4cb5-b221-688acdd105d7"
+      },
+      "extras": []
+    },
+    {
+      "date": "2026-10-16",
+      "slug": "tambolys-timba-night",
+      "title": {
+        "de": "Tamboly’s Timba Night",
+        "en": "Tamboly’s Timba Night"
+      },
+      "summary": {
+        "de": "Tamboly sorgt für den Sound der Nacht: kubanischer Puls, griechische Seele und genug Timba für beide Hüften.",
+        "en": "Tamboly brings the sound of the night: Cuban pulse, Greek soul and enough timba for both hips."
+      },
+      "description": {
+        "de": "Salsa Friday in Berlin mit Tamboly an den Decks. Er bringt griechische Seele, kubanischen Vibe und die Art von Musik, bei der aus „nur kurz tanzen“ sehr schnell „okay, noch ein Song“ wird.",
+        "en": "Salsa Friday in Berlin with Tamboly on the decks. He brings Greek soul, Cuban drive and the kind of music that turns “just one dance” into “okay, one more song” very quickly."
+      },
+      "dj": "DJ Tamboly",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "Timba Night",
+          "en": "Timba night",
+          "tone": "gold"
+        },
+        {
+          "de": "DJ Tamboly",
+          "en": "DJ Tamboly",
+          "tone": "solid"
+        }
+      ],
+      "image": "social-couple-hat.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/org/activity/764480be-b7ff-4777-9f88-000bcc8b71c5",
+        "rueda-beginner": "https://www.eversports.de/org/activity/83d90e58-c5ad-424a-97fb-871462ab5657",
+        "salsa-beginner": "https://www.eversports.de/org/activity/cfff5700-b72d-4856-abe6-b902d52ca230",
+        "rueda-advanced": "https://www.eversports.de/org/activity/dce18144-c035-43f3-8acc-e4527218a11d"
+      },
+      "extras": []
+    },
+    {
+      "date": "2026-10-30",
+      "slug": "salsa-friday",
+      "title": {
+        "de": "Salsa Friday",
+        "en": "Salsa Friday"
+      },
+      "summary": {
+        "de": "Der DJ ist noch geheim. Die Tanzfläche tut trotzdem schon so, als wüsste sie mehr.",
+        "en": "The DJ is still a secret. The dance floor is already acting like it knows more."
+      },
+      "description": {
+        "de": "Midnight Havana bleibt Berlins Salsa Friday: Kurse ab 19 Uhr, Social Dance ab 21 Uhr und ein Line-up, das wir noch ankündigen. Manchmal ist Vorfreude auch nur Rueda mit Geduld.",
+        "en": "Midnight Havana remains Berlin’s Salsa Friday: classes from 19:00, social dance from 21:00 and a line-up we will announce soon. Sometimes anticipation is just rueda with patience."
+      },
+      "dj": null,
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "Salsa Friday",
+          "en": "Salsa Friday",
+          "tone": "green"
+        },
+        {
+          "de": "TBA",
+          "en": "TBA",
+          "tone": "solid"
+        }
+      ],
+      "image": "social-pair-smiling.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/org/activity/408b093b-7972-4195-be33-0b2719e961a3",
+        "rueda-beginner": "https://www.eversports.de/org/activity/3bc6b0c9-c91c-41ca-ae21-1bcce4bd156e",
+        "rueda-advanced": "https://www.eversports.de/org/activity/08198cf5-ae10-407b-adff-860dc111ed56"
+      },
+      "extras": []
+    },
+    {
+      "date": "2026-11-06",
+      "slug": "eloy-rojas-workshop-shownight",
+      "title": {
+        "de": "Eloy Rojas Workshop & Shownight",
+        "en": "Eloy Rojas Workshop & Shownight"
+      },
+      "summary": {
+        "de": "Eloy Rojas ist presente: 90 Minuten Workshop, Show mit seinen Ladys und danach Social Dance mit DJ Reza.",
+        "en": "Eloy Rojas is presente: a 90-minute workshop, a show with his ladies and social dance with DJ Reza afterwards."
+      },
+      "description": {
+        "de": "Nach seinen Auftritten beim Salsa Congress Berlin und Berlin Salsa Festival 2026 bringt Eloy Rojas das Spektakel zu Midnight Havana. Von 19:00 bis 20:30 gibt es den Workshop, ab 21:00 Social Dance mit DJ Reza. Diese Nacht ist er presente mit seinen Ladys.",
+        "en": "After his performances at Salsa Congress Berlin and Berlin Salsa Festival 2026, Eloy Rojas brings the spectacle to Midnight Havana. The workshop runs from 19:00 to 20:30, followed by social dance from 21:00 with DJ Reza. This night he is presente with his ladies."
+      },
+      "dj": "DJ Reza",
+      "teachers": [
+        "Eloy Rojas"
+      ],
+      "badges": [
+        {
+          "de": "Star Workshop",
+          "en": "Star workshop",
+          "tone": "gold"
+        },
+        {
+          "de": "Show Night",
+          "en": "Show night",
+          "tone": "solid"
+        },
+        {
+          "de": "DJ Reza",
+          "en": "DJ Reza",
+          "tone": "green"
+        }
+      ],
+      "image": "social-couple-hat.jpg",
+      "flyer": null,
+      "priceNote": {
+        "de": "An diesem Abend gibt es nur das Early Bird Ticket für den Workshop über Eversports.",
+        "en": "This night only the Early Bird workshop ticket is bookable via Eversports."
+      },
+      "cancelled": false,
+      "regularClasses": false,
+      "bookingLinks": {},
+      "extras": [
+        {
+          "startTime": "19:00",
+          "endTime": "20:30",
+          "title": {
+            "de": "Eloy Rojas Workshop",
+            "en": "Eloy Rojas Workshop"
+          },
+          "description": {
+            "de": "90 Minuten Workshop mit Eloy Rojas. Jetzt Early Bird Ticket bei Eversports sichern.",
+            "en": "90-minute workshop with Eloy Rojas. Get your Early Bird ticket on Eversports now."
+          },
+          "level": null,
+          "booking": "https://www.eversports.de/scl/salsa-im-tangoloft-berlin"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-13",
+      "slug": "salsa-friday-ec-kuba-dj-night",
+      "title": {
+        "de": "Salsa Friday: EC Kuba DJ Night",
+        "en": "Salsa Friday: EC Kuba DJ Night"
+      },
+      "summary": {
+        "de": "EC Kuba DJ aus Matanzas wärmt kühle Herbstnächte mit der richtigen Auswahl an Musik auf.",
+        "en": "EC Kuba DJ from Matanzas warms up chilly autumn nights with exactly the right selection of music."
+      },
+      "description": {
+        "de": "Wenn Berlin langsam Richtung Winter schielt, kommt EC Kuba DJ aus Matanzas mit der passenden Medizin: Cuban Salsa, Timba, Son und genug Wärme für die Tanzfläche. Salsa Friday in Berlin, wie er sein soll.",
+        "en": "When Berlin starts looking suspiciously like winter, EC Kuba DJ from Matanzas brings the right medicine: Cuban salsa, timba, son and enough warmth for the dance floor. Salsa Friday in Berlin, the way it should be."
+      },
+      "dj": "DJ EC Kuba",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "EC Kuba DJ",
+          "en": "EC Kuba DJ",
+          "tone": "gold"
+        },
+        {
+          "de": "Matanzas",
+          "en": "Matanzas",
+          "tone": "green"
+        }
+      ],
+      "image": "social-pair-smiling.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/org/activity/2e7fe9d6-0c62-407d-868e-c1f7eec432ec",
+        "rueda-beginner": "https://www.eversports.de/org/activity/15bcd0aa-56fa-4236-8a38-404c93371736",
+        "salsa-beginner": "https://www.eversports.de/org/activity/b3fca75e-53d0-4e39-8625-125305e03f1b",
+        "rueda-advanced": "https://www.eversports.de/org/activity/ec057941-b2da-4866-b357-a866dbc5b4a9"
+      },
+      "extras": []
+    },
+    {
+      "date": "2026-11-27",
+      "slug": "salsa-friday-dj-helen",
+      "title": {
+        "de": "Salsa Friday: DJ Helen",
+        "en": "Salsa Friday: DJ Helen"
+      },
+      "summary": {
+        "de": "DJ Helen legt wieder auf: eine der ersten weiblichen DJs der Berliner Salsa Szene mit feiner Musikauswahl.",
+        "en": "DJ Helen is back: one of the first female DJs in Berlin’s salsa scene, known for her fine music selection."
+      },
+      "description": {
+        "de": "DJ Helen gehört zu den ersten weiblichen DJs der Berliner Salsa Szene und zeigt, dass gute Musik keine laute Ansage braucht. Sie überzeugt durch Auswahl, Gefühl und Songs, bei denen man kurz vergisst, dass morgen vielleicht wieder Alltag ist.",
+        "en": "DJ Helen is one of the first female DJs in Berlin’s salsa scene and proves that good music does not need a loud announcement. Her selection brings feeling, flow and songs that make everyday life wait outside for a while."
+      },
+      "dj": "DJ Helen",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "DJ Helen",
+          "en": "DJ Helen",
+          "tone": "gold"
+        },
+        {
+          "de": "Salsa Friday",
+          "en": "Salsa Friday",
+          "tone": "green"
+        }
+      ],
+      "image": "social-couple-hat.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/org/activity/83993c5c-7161-4222-88bd-88bf99abf495",
+        "rueda-beginner": "https://www.eversports.de/org/activity/b9fa0557-2f7b-4671-a3b3-93b218d13753",
+        "salsa-beginner": "https://www.eversports.de/org/activity/d3299f2e-8a84-488d-b627-15c4a8677de8",
+        "rueda-advanced": "https://www.eversports.de/org/activity/929e67db-0d27-42e7-b95d-d3903b9b029a"
+      },
+      "extras": []
+    },
+    {
+      "date": "2026-12-18",
+      "slug": "noche-navidena",
+      "title": {
+        "de": "Noche Navideña",
+        "en": "Noche Navideña"
+      },
+      "summary": {
+        "de": "EC Kuba kommt als Weihnachtsmann und bringt Geschenke in Form von Songs. Socken sind hoffentlich nicht dabei.",
+        "en": "EC Kuba arrives as Santa and brings gifts in the form of songs. Hopefully no socks included."
+      },
+      "description": {
+        "de": "Unsere Christmas Salsa Party heißt Noche Navideña, weil selbst der Weihnachtsmann bei uns mehr Clave als Glocke hat. EC Kuba DJ bringt Geschenke in Form von Songs, und Berlin bekommt eine letzte warme Salsa Friday Nacht vor den Feiertagen.",
+        "en": "Our Christmas Salsa Party is called Noche Navideña, because even Santa has more clave than bells at Midnight Havana. EC Kuba DJ brings gifts in the form of songs, and Berlin gets one last warm Salsa Friday night before the holidays."
+      },
+      "dj": "DJ EC Kuba",
+      "teachers": [
+        "Helen",
+        "Yago",
+        "Sassan"
+      ],
+      "badges": [
+        {
+          "de": "Christmas Party",
+          "en": "Christmas party",
+          "tone": "gold"
+        },
+        {
+          "de": "EC Kuba DJ",
+          "en": "EC Kuba DJ",
+          "tone": "green"
+        }
+      ],
+      "image": "social-pair-smiling.jpg",
+      "flyer": null,
+      "priceNote": null,
+      "cancelled": false,
+      "bookingLinks": {
+        "salsa-basics": "https://www.eversports.de/org/activity/6e4f81a2-b7c5-4236-96bf-76514e53b100",
+        "rueda-beginner": "https://www.eversports.de/org/activity/dc9bc090-887b-4d73-83c8-7cd5b019da75",
+        "salsa-beginner": "https://www.eversports.de/org/activity/c18caff1-bdc5-4766-8fe2-9a53e9bde796",
+        "rueda-advanced": "https://www.eversports.de/org/activity/1d4f6c74-3c07-4592-b1ec-5f4bbb4681c9"
       },
       "extras": []
     }

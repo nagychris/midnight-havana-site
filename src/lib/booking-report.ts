@@ -10,7 +10,8 @@ import type { SiteEvent } from './event-types';
  * missing instead of failing: a date without links still renders, its buttons
  * just lead to the studio's general page.
  *
- * The party is not checked. It is paid for at the door and only sometimes has a
+ * Dates without the standard classes are skipped, since they have no class
+ * links to miss. The party is not checked. It is paid for at the door and only sometimes has a
  * link of its own.
  */
 
@@ -26,7 +27,8 @@ export function eventsMissingBookingLinks(
     today: string = todayInBerlin(),
 ): MissingBookingLinks[] {
     const relevant = events.filter(
-        (event) => event.date >= today && !event.cancelled,
+        (event) =>
+            event.date >= today && !event.cancelled && event.regularClasses,
     );
 
     return relevant

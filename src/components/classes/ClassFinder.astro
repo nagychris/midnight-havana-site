@@ -2,7 +2,7 @@
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { getClass, type ClassId } from '../../data/classes';
-import { bookingUrlFor, nextEvent } from '../../lib/events';
+import { bookingUrlFor, nextEventWithClasses } from '../../lib/events';
 import { formatDateParts } from '../../lib/datetime';
 import { site } from '../../data/site';
 import {
@@ -35,7 +35,7 @@ const ANSWER_ORDER: ClassId[] = [
     'rueda-advanced',
 ];
 
-const next = nextEvent();
+const next = nextEventWithClasses();
 const nextParts = next ? formatDateParts(next.date, locale) : null;
 const nextLine =
     next && nextParts

@@ -1,9 +1,9 @@
 ---
 import Badge from '../ui/Badge.astro';
 import Icon from '../ui/Icon.astro';
-import { classStartTimes, classesStartingAt } from '../../data/classes';
 import { site } from '../../data/site';
 import { bookingUrlFor } from '../../lib/booking';
+import { classNameOn, classesOn } from '../../lib/event-classes';
 import type { SiteEvent } from '../../lib/events';
 import { localeFromAstro, useTranslations } from '../../i18n';
 
@@ -14,6 +14,8 @@ import { localeFromAstro, useTranslations } from '../../i18n';
  * stacked on a phone read as a wall of equal-weight choices and push the card's
  * real primary action off the screen; a row that is entirely a link is just as
  * easy to hit, and leaves one obvious button at the bottom of the card.
+ *
+ * Extras such as a guest workshop get a row of their own above the classes.
  */
 interface Props {
     event: SiteEvent;
@@ -23,10 +25,55 @@ const { event } = Astro.props;
 
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
-const startTimes = classStartTimes();
+const classesTonight = classesOn(event);
+const startTimes = [...new Set(classesTonight.map((c) => c.startTime))].sort();
+const classesStartingAt = (startTime: string) =>
+    classesTonight
+        .filter((danceClass) => danceClass.startTime === startTime)
+        .sort((a, b) => a.order - b.order);
+const extras = [...event.extras].sort((a, b) =>
+    a.startTime.localeCompare(b.startTime),
+);
 ---
 
 <div class="flex flex-col">
+    {
+        extras.map((extra) => (
+            <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
+                <p class="font-display text-h4 leading-flat font-medium text-gold-light">
+                    {extra.startTime}
+                    {extra.endTime && (
+                        <span class="mt-0.5 block text-sm font-normal text-cream/45">
+                            – {extra.endTime}
+                        </span>
+                    )}
+                </p>
+                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h4 class="font-display text-lg font-medium tracking-tiny text-cream uppercase">
+                        {extra.title[locale]}
+                    </h4>
+                    {extra.level && <Badge tone="gold">{extra.level}</Badge>}
+                    {extra.description && (
+                        <p class="w-full text-sm text-cream/55">
+                            {extra.description[locale]}
+                        </p>
+                    )}
+                    {extra.booking && (
+                        <a
+                            href={extra.booking}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 font-display text-sm tracking-label text-gold uppercase hover:text-gold-light"
+                        >
+                            {t.nextEvent.bookNow}
+                            <Icon name="external" size={14} />
+                        </a>
+                    )}
+                </div>
+            </div>
+        ))
+    }
+
     {
         startTimes.map((startTime) => (
             <div class="rule-top grid gap-3 py-5 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6">
@@ -41,7 +88,7 @@ const startTimes = classStartTimes();
 
                 <ul class="grid gap-2 sm:grid-cols-2 sm:gap-3">
                     {classesStartingAt(startTime).map((danceClass) => {
-                        const copy = t.classes.items[danceClass.id];
+                        const name = classNameOn(event, danceClass.id, locale, t);
                         return (
                             <li>
                                 <a
@@ -52,7 +99,7 @@ const startTimes = classStartTimes();
                                     class="group/row flex min-h-12 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
                                 >
                                     <span class="min-w-0 flex-1 font-display text-base font-medium tracking-tiny text-cream uppercase">
-                                        {copy.name}
+                                        {name}
                                         <span class="sr-only">
                                             {' — '}
                                             {t.nextEvent.bookNow}

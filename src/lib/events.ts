@@ -39,6 +39,18 @@ export function nextEvent(today: string = todayInBerlin()): SiteEvent | null {
     return upcomingEvents(today)[0] ?? null;
 }
 
+/**
+ * The next event where the standard classes run, or null.
+ *
+ * The class section books the next class, so a workshop night without the
+ * usual classes is skipped.
+ */
+export function nextEventWithClasses(
+    today: string = todayInBerlin(),
+): SiteEvent | null {
+    return upcomingEvents(today).find((event) => event.regularClasses) ?? null;
+}
+
 /** One event by its slug, or null. Used by the detail pages. */
 export function eventBySlug(slug: string): SiteEvent | null {
     return allEvents().find((event) => event.slug === slug) ?? null;

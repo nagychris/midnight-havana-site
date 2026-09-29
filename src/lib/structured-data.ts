@@ -1,8 +1,9 @@
-import { classes, type ClassId } from '../data/classes';
+import type { ClassId } from '../data/classes';
 import { site } from '../data/site';
 import type { SiteEvent } from './events';
 import { bookingUrlFor } from './events';
 import { toIsoDateTime, toIsoEndOfNight } from './datetime';
+import { classNameOn, classesOn } from './event-classes';
 import {
     absoluteUrl,
     eventPathFor,
@@ -219,9 +220,9 @@ function offersFor(event: SiteEvent): JsonObject[] {
 function subEventsFor(event: SiteEvent, locale: Locale): JsonObject[] {
     const t = useTranslations(locale);
 
-    return classes.map((danceClass) => ({
+    return classesOn(event).map((danceClass) => ({
         '@type': 'DanceEvent',
-        name: t.classes.items[danceClass.id as ClassId].name,
+        name: classNameOn(event, danceClass.id, locale, t),
         description: t.classes.items[danceClass.id as ClassId].body,
         startDate: toIsoDateTime(event.date, danceClass.startTime),
         endDate: toIsoDateTime(event.date, danceClass.endTime),

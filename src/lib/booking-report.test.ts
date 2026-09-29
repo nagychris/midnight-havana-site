@@ -32,6 +32,8 @@ function event(overrides: Partial<SiteEvent> = {}): SiteEvent {
         flyer: null,
         priceNote: null,
         cancelled: false,
+        regularClasses: true,
+        courseLabels: {},
         bookingLinks: allClassLinks(),
         extras: [],
         ...overrides,
@@ -78,6 +80,12 @@ describe('eventsMissingBookingLinks', () => {
         const off = event({ cancelled: true, bookingLinks: {} });
 
         expect(eventsMissingBookingLinks([off], TODAY)).toEqual([]);
+    });
+
+    it('ignores dates without the standard classes', () => {
+        const workshopNight = event({ regularClasses: false, bookingLinks: {} });
+
+        expect(eventsMissingBookingLinks([workshopNight], TODAY)).toEqual([]);
     });
 
     it('does not treat a missing party link as a problem', () => {

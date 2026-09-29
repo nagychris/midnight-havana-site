@@ -23,6 +23,8 @@ function eventWithBookingLinks(
         flyer: null,
         priceNote: null,
         cancelled: false,
+        regularClasses: true,
+        courseLabels: {},
         bookingLinks,
         extras: [],
     };

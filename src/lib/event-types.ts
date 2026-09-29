@@ -36,6 +36,13 @@ export interface SiteEvent {
     flyer: string | null;
     priceNote: LocalisedText | null;
     cancelled: boolean;
+    /**
+     * False on nights where the four standard classes do not run, for example
+     * when a guest workshop replaces them.
+     */
+    regularClasses: boolean;
+    /** Class names that differ from the standard ones on this date. */
+    courseLabels: Partial<Record<ClassId, LocalisedText>>;
     /** The Eversports links for this date, one per class, plus the party. */
     bookingLinks: Partial<Record<BookingTarget, string>>;
     extras: EventExtra[];
