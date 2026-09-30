@@ -77,28 +77,37 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
     </Fragment>
 
     <article>
-        <header class="relative overflow-hidden">
+        <header class="relative">
+            {/* On a phone the photo is shown whole, as a 4:3 band at the top,
+                and the title starts on its faded lower edge. Stretched behind
+                the whole tall header it would be cropped to a slice of wall.
+                From sm up it runs past the header and fades into the page, so
+                the description and the price box start on it. */}
             {
                 heroPhoto && (
-                    <Image
-                        src={heroPhoto.image}
-                        alt=""
-                        widths={[640, 1024, 1600, 2000]}
-                        sizes="100vw"
-                        format="webp"
-                        quality={72}
-                        loading="eager"
-                        fetchpriority="high"
-                        decoding="sync"
-                        class="absolute inset-0 h-full w-full object-cover"
-                    />
+                    <div
+                        class="event-backdrop pointer-events-none absolute inset-x-0 top-0 aspect-4/3 sm:-bottom-96 sm:aspect-auto"
+                        aria-hidden="true"
+                    >
+                        <Image
+                            src={heroPhoto.image}
+                            alt=""
+                            widths={[640, 1024, 1600, 2000]}
+                            sizes="100vw"
+                            format="webp"
+                            quality={72}
+                            loading="eager"
+                            fetchpriority="high"
+                            decoding="sync"
+                            class="absolute inset-0 h-full w-full object-cover brightness-90"
+                        />
+                        <div class="event-backdrop-scrim absolute inset-0"></div>
+                    </div>
                 )
             }
-            <div class="photo-scrim-soft pointer-events-none absolute inset-0">
-            </div>
 
             <div
-                class="relative mx-auto w-full max-w-(--container-content) px-5 pt-4 pb-8 sm:px-8 sm:pt-10 sm:pb-20"
+                class="relative mx-auto w-full max-w-(--container-content) px-5 pt-4 pb-8 sm:px-8 sm:pt-10 sm:pb-10"
             >
                 <a
                     href={sectionHref(sectionIds.dates, locale)}
@@ -110,7 +119,13 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     {t.event.backToDates}
                 </a>
 
-                <div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-10">
+                <div
+                    class:list={[
+                        'flex flex-wrap items-center gap-2 sm:mt-10',
+                        // Leaves the photo band visible above the title.
+                        heroPhoto ? 'mt-[38vw]' : 'mt-6',
+                    ]}
+                >
                     {
                         badgesBesideTitle(event, locale).map((badge) => (
                             <Badge tone={badge.tone}>{badge[locale]}</Badge>
@@ -181,7 +196,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
         </header>
 
         <div
-            class="mx-auto grid w-full max-w-content gap-stack px-5 py-section sm:px-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]"
+            class="relative mx-auto grid w-full max-w-content gap-stack px-5 pt-heading pb-section sm:px-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]"
         >
             <div>
                 {

@@ -406,9 +406,8 @@
             );
     }
 
-    /* The gradient that keeps text readable over a full-bleed photograph. Two
-       weights: the closing call to action sits on a brighter frame than the
-       header of an event page does. */
+    /* The gradient that keeps text readable over a full-bleed photograph,
+       used by the closing call to action. */
     .photo-scrim {
         background: linear-gradient(
             to top,
@@ -418,13 +417,37 @@
         );
     }
 
-    .photo-scrim-soft {
+    /* Event page photo. It reaches past the header and fades out into the
+       page instead of ending on a hard edge. The scrim keeps the top dark
+       enough for the small gold text there (back link, badges, eyebrow) over
+       a bright, warm venue photo, and gets darker where body text sits. */
+    .event-backdrop {
+        -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    }
+
+    /* On a phone the photo is a band above the title: lighter in the middle
+       so the room shows, dark at the top for the back link and at the bottom
+       where the badges and title begin. */
+    .event-backdrop-scrim {
         background: linear-gradient(
-            to top,
-            rgba(11, 9, 8, 0.97) 0%,
-            rgba(11, 9, 8, 0.8) 40%,
-            rgba(11, 9, 8, 0.5) 100%
+            to bottom,
+            rgba(11, 9, 8, 0.55) 0%,
+            rgba(11, 9, 8, 0.3) 35%,
+            rgba(11, 9, 8, 0.8) 75%,
+            rgba(11, 9, 8, 0.95) 100%
         );
+    }
+
+    @media (width >= theme(--breakpoint-sm)) {
+        .event-backdrop-scrim {
+            background: linear-gradient(
+                to bottom,
+                rgba(11, 9, 8, 0.72) 0%,
+                rgba(11, 9, 8, 0.86) 40%,
+                rgba(11, 9, 8, 0.92) 100%
+            );
+        }
     }
 
     /*
