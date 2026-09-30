@@ -122,6 +122,14 @@ const descriptions: Record<string, Record<Locale, string>> = {
         de: 'Der Saal am Abend, in warmes rotes Licht getaucht',
         en: 'The hall in the evening, lit in warm red light',
     },
+    'venue-hall-amber.jpg': {
+        de: 'Der Saal des Tangoloft in orangem Licht, mit Flügel, Kronleuchter und Säulen',
+        en: 'The Tangoloft hall in orange light, with the grand piano, chandelier and pillars',
+    },
+    'venue-bar.jpg': {
+        de: 'Die Bar im Tangoloft mit Kronleuchter, Blumen und rundem roten Sofa',
+        en: 'The bar at Tangoloft with a chandelier, flowers and a round red sofa',
+    },
     'venue-lounge-night.jpg': {
         de: 'Lounge mit Kerzenleuchtern und Blick auf die Spree bei Nacht',
         en: 'The lounge with candelabra and a view over the Spree at night',
@@ -215,9 +223,11 @@ export const photoGroups = {
         'class-group.jpg',
         'hero-dancer-smiling.jpg',
     ],
+    /** The first one is shown full width above the others. */
     venue: [
+        'venue-hall-amber.jpg',
+        'venue-bar.jpg',
         'venue-hall-evening.jpg',
-        'venue-floor-busy.jpg',
         'venue-lounge-night.jpg',
         'venue-hall-daylight.jpg',
     ],

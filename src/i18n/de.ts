@@ -128,7 +128,7 @@ export const de = {
         eyebrowNext: 'Nächster Salsa Friday',
         /** The practical line under the headline, from the artboard. */
         metaTimes: 'Kurse 19:00 & 20:00 · Party ab 21:00',
-        metaPrices: 'Normalpreis 10 € · Studierende 8 € · Garderobe inklusive',
+        metaPrices: 'Social 10 € · mit Kurs ab 12 € · Garderobe inklusive',
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
         headline: 'Salsa Cubana & Rueda de Casino in Berlin',
         tagline: 'Lerne Salsa. Triff Menschen. Tanz durch den Freitagabend.',
@@ -180,7 +180,21 @@ export const de = {
         priceStandard: 'Normalpreis',
         priceReduced: 'Studierende & geringes Einkommen',
         priceReducedShort: 'ermäßigt',
-        priceIncluded: 'Kurs, Social Dance und Garderobe sind immer enthalten.',
+        priceReducedHeading: 'Ermäßigt',
+        priceReducedNote:
+            'Ermäßigt gilt für Studierende und Menschen mit geringem Einkommen.',
+        priceTiers: {
+            social: 'Nur Social',
+            oneClass: '1 Kurs + Social',
+            twoClasses: '2 Kurse + Social',
+        },
+        priceTiersShort: {
+            social: 'Social',
+            oneClass: '+1 Kurs',
+            twoClasses: '+2 Kurse',
+        },
+        cloakroomIncluded: 'Garderobe inklusive',
+        priceIncluded: 'Die Garderobe ist immer inklusive.',
         pricePayment:
             'Bar oder Karte vor Ort, vorab über Eversports oder Urban Sports Club.',
         crewHeading: 'Wer da ist',
@@ -235,8 +249,6 @@ export const de = {
         headline: 'Salsa-Kurse in Berlin',
         intro: 'Unsere Kurse richten sich an verschiedene Erfahrungsstufen, von kompletten Anfängern bis zu Tänzerinnen und Tänzern, die sich auf der Tanzfläche längst zu Hause fühlen. Einen Tanzpartner brauchst du nicht.',
         bookNote: 'Vorab buchen oder an der Abendkasse',
-        priceNote:
-            'Kurs und Party: Normalpreis 10 € · Studierende und geringes Einkommen 8 € · Garderobe inklusive',
         levelLabel: 'Level',
         timeLabel: 'Uhrzeit',
         prerequisitesLabel: 'Voraussetzungen',

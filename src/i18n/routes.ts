@@ -51,6 +51,18 @@ export function eventPathFor(slug: string, locale: Locale): string {
     return eventPaths(slug)[locale];
 }
 
+/** Anchor of the timetable on an event page. */
+export const eventTimetableId = 'ablauf';
+
+/**
+ * A link to the timetable of an event, where every class has its own booking
+ * link. General "book" buttons point here, so visitors pick their own level
+ * instead of landing on one particular class.
+ */
+export function eventTimetableHref(slug: string, locale: Locale): string {
+    return `${eventPathFor(slug, locale)}#${eventTimetableId}`;
+}
+
 /** Absolute URL from a path, for canonical tags and structured data. */
 export function absoluteUrl(path: string, siteUrl: string): string {
     return new URL(path, `${siteUrl}/`).toString();

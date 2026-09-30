@@ -32,6 +32,12 @@ interface Props {
     noindex?: boolean;
     /** Lets the hero run under the header instead of starting below it. */
     transparentHeader?: boolean;
+    /**
+     * Shows the booking bar at the foot of the screen on phones. Turned off
+     * where the page itself already leads to booking or nobody books from it,
+     * because the bar costs a lot of height on a small screen.
+     */
+    bookingBar?: boolean;
 }
 
 const {
@@ -42,6 +48,7 @@ const {
     ogType,
     noindex = false,
     transparentHeader = false,
+    bookingBar = true,
 } = Astro.props;
 
 const locale = localeFromAstro(Astro.currentLocale);
@@ -80,8 +87,8 @@ const t = useTranslations(locale);
             <slot />
         </main>
 
-        <Footer />
-        <MobileActionBar />
+        <Footer clearBookingBar={bookingBar} />
+        {bookingBar && <MobileActionBar />}
         <Lightbox />
         <ConsentBanner />
         <Analytics />

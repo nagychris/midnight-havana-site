@@ -62,12 +62,16 @@ export const site = {
 
     prices: {
         currency: 'EUR',
-        /** One or both classes plus the social dance. */
-        standard: 10,
-        /** Students and people on a low income. */
-        reduced: 8,
-        /** Social dance only, arriving after the classes. */
-        socialOnly: 8,
+        /**
+         * What a night costs, from the social dance alone up to both classes
+         * plus the social dance. `reduced` is for students and people on a
+         * low income. The cloakroom is always included.
+         */
+        tiers: [
+            { id: 'social', standard: 10, reduced: 8 },
+            { id: 'oneClass', standard: 12, reduced: 8 },
+            { id: 'twoClasses', standard: 20, reduced: 15 },
+        ],
     },
 
     /** Required for the Impressum under German law (§ 5 DDG). */

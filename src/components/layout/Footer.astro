@@ -6,6 +6,13 @@ import { legalNavigation, menuNavigation } from './navigation';
 import { site } from '../../data/site';
 import { localeFromAstro, useTranslations } from '../../i18n';
 
+interface Props {
+    /** Leaves room under the last line for the booking bar on phones. */
+    clearBookingBar?: boolean;
+}
+
+const { clearBookingBar = true } = Astro.props;
+
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
 const navLinks = menuNavigation(t, locale);
@@ -29,9 +36,9 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
 
 <footer class="rule-top mt-8">
     <div
-        class="mx-auto grid max-w-(--container-content) gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-8"
+        class="mx-auto grid max-w-(--container-content) gap-6 px-5 py-8 sm:px-8 md:grid-cols-2 md:gap-10 md:py-14 lg:grid-cols-4 lg:gap-8"
     >
-        <div class="flex flex-col gap-4 lg:col-span-1">
+        <div class="flex flex-col gap-3 md:gap-4 lg:col-span-1">
             <div class="flex items-center gap-3">
                 <Logo size={44} />
                 <Wordmark title="" class="h-8 w-auto text-cream" />
@@ -63,8 +70,7 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
             <address class="text-md leading-snug-2 text-cream/75 not-italic">
                 {site.venue.name}<br />
                 {site.venue.street}<br />
-                {site.venue.postalCode}
-                {site.venue.city}
+                {site.venue.postalCode} {site.venue.city}
             </address>
             <a href={`mailto:${site.email}`} class="text-md text-cream/75 hover:text-gold-light">
                 {site.email}
@@ -131,7 +137,10 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
         last line needs room to clear it. */}
     <div class="rule-top">
         <p
-            class="mx-auto max-w-(--container-content) px-5 pt-6 pb-28 text-sm text-cream/45 sm:px-8 lg:pb-6"
+            class:list={[
+                'mx-auto max-w-(--container-content) px-5 pt-6 text-sm text-cream/45 sm:px-8 lg:pb-6',
+                clearBookingBar ? 'pb-28' : 'pb-6',
+            ]}
         >
             © {year} {t.footer.copyright}
         </p>

@@ -7,6 +7,7 @@ import Icon from '../ui/Icon.astro';
 import ClassFinder from '../classes/ClassFinder.astro';
 import { classes } from '../../data/classes';
 import { bookingUrlFor, nextEventWithClasses } from '../../lib/events';
+import { classPrices } from '../../lib/prices';
 import { site } from '../../data/site';
 import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
 
@@ -27,6 +28,15 @@ const { headingLevel = 'h2' } = Astro.props;
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
 const next = nextEventWithClasses();
+
+// Each part of the price line stays whole, so a line never breaks inside one.
+const priceParts = [
+    ...classPrices.map(
+        (tier) =>
+            `${t.event.priceTiers[tier.id]} ${tier.standard} € (${t.event.priceReducedShort} ${tier.reduced} €)`,
+    ),
+    t.event.cloakroomIncluded,
+];
 ---
 
 <Section id={sectionIds.classes} divider labelledBy="classes-heading">
@@ -40,9 +50,23 @@ const next = nextEventWithClasses();
         {t.classes.intro}
     </SectionHeading>
 
-    <p class="mt-6 font-display text-md tracking-label text-gold uppercase">
-        {t.classes.priceNote}
-    </p>
+    {/* Stacked on a phone; one row with dots between the parts from sm up. */}
+    <ul
+        class="mt-6 flex flex-col gap-1 font-display text-md tracking-label text-gold uppercase sm:flex-row sm:flex-wrap sm:gap-x-3"
+    >
+        {
+            priceParts.map((part, index) => (
+                <li class="whitespace-nowrap">
+                    {index > 0 && (
+                        <span class="mr-3 hidden text-gold/40 sm:inline" aria-hidden="true">
+                            ·
+                        </span>
+                    )}
+                    {part}
+                </li>
+            ))
+        }
+    </ul>
 
     {/* The chooser sits beside the cards once there is room, and above them on
         a phone, which is where someone who does not know the four classes yet

@@ -58,6 +58,8 @@ const MAPPING = [
     ['Location/5.jpg', 'venue-floor-busy.jpg'],
     ['Location/6.jpg', 'venue-from-water.jpg'],
     ['Location/7.jpg', 'venue-spree-view.jpg'],
+    ['Location/8.jpeg', 'venue-hall-amber.jpg'],
+    ['Location/9.jpeg', 'venue-bar.jpg'],
 
     // Teachers. The team cards look these up by name.
     ['Punto Cubano/helen.jpg', 'teacher-helen.jpg'],

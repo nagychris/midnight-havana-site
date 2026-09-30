@@ -1,16 +1,20 @@
 ---
 import Button from '../ui/Button.astro';
-import { bookingUrlFor, nextEvent } from '../../lib/events';
+import { nextEvent } from '../../lib/events';
 import { formatDateParts, todayInBerlin } from '../../lib/datetime';
-import { localeFromAstro, useTranslations } from '../../i18n';
+import {
+    eventTimetableHref,
+    localeFromAstro,
+    useTranslations,
+} from '../../i18n';
 
 /**
  * The booking bar that sits at the foot of the screen on phones.
  *
- * It stays out of the way over the hero, which already carries the same call to
- * action, and slides up once the hero is behind you. From there the next date
- * and a way to book it are always one tap away, however far down the page you
- * are. Above 1024px the header carries this instead.
+ * It stays out of the way over the hero and over the dates section, which
+ * both already offer booking, and slides up everywhere else. Event pages and
+ * legal pages leave it out altogether (see `bookingBar` in the Base layout).
+ * Above 1024px the header carries this instead.
  *
  * Whether the date is tonight is decided in the browser, not at build time: the
  * site is generated ahead of time and a page can sit in a cache past midnight.
@@ -71,8 +75,7 @@ const isToday = event?.date === todayInBerlin();
             </div>
 
             <Button
-                href={bookingUrlFor(event, 'salsa-basics')}
-                external
+                href={eventTimetableHref(event.slug, locale)}
                 class="ml-auto shrink-0"
                 data-analytics="book:action-bar"
             >
@@ -84,29 +87,44 @@ const isToday = event?.date === todayInBerlin();
 
 <script>
     /**
-     * Reveals the bar once the hero is behind you.
+     * Shows the bar only where it adds something.
      *
      * Over the hero it would repeat the call to action that is already on
-     * screen, so it waits. On a page with no hero there is nothing to scroll
-     * past and the bar is there from the start.
+     * screen, and over the dates section every card already has its own
+     * booking links, so it waits while either is in view. On a page with
+     * neither, the bar is there from the start.
      *
      * The date itself is kept current by `refreshEventBadges`, called from the
      * layout, which also removes this bar if its date has passed.
      */
+    import { sectionIds } from '../../i18n';
+
     const bar = document.querySelector<HTMLElement>('[data-action-bar]');
-    const hero = document.querySelector<HTMLElement>('#top');
+    const coveringSections = [sectionIds.top, sectionIds.dates]
+        .map((id) => document.getElementById(id))
+        .filter((section): section is HTMLElement => section !== null);
 
     if (bar) {
         const show = (shown: boolean) => {
             bar.dataset.shown = String(shown);
         };
 
-        if (hero && 'IntersectionObserver' in window) {
+        if (coveringSections.length > 0 && 'IntersectionObserver' in window) {
+            const visibleSections = new Set<Element>();
             const observer = new IntersectionObserver(
-                ([entry]) => show(!entry.isIntersecting),
+                (entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting) {
+                            visibleSections.add(entry.target);
+                        } else {
+                            visibleSections.delete(entry.target);
+                        }
+                    }
+                    show(visibleSections.size === 0);
+                },
                 { threshold: 0 },
             );
-            observer.observe(hero);
+            coveringSections.forEach((section) => observer.observe(section));
         } else {
             show(true);
         }

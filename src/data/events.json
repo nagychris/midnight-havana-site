@@ -51,7 +51,7 @@
           "en": "DJ Helen"
         }
       ],
-      "image": "social-pair-smiling.jpg",
+      "image": "venue-hall-amber.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
@@ -108,7 +108,7 @@
           "en": "DJ Tamboly"
         }
       ],
-      "image": "social-couple-hat.jpg",
+      "image": "venue-bar.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
@@ -147,7 +147,7 @@
           "en": "DJ: TBA"
         }
       ],
-      "image": "social-pair-smiling.jpg",
+      "image": "venue-hall-amber.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
@@ -188,7 +188,7 @@
           "en": "DJ Reza"
         }
       ],
-      "image": "social-couple-hat.jpg",
+      "image": "venue-bar.jpg",
       "flyer": null,
       "priceNote": {
         "de": "An diesem Abend gibt es nur das Early Bird Ticket für den Workshop über Eversports.",
@@ -241,7 +241,7 @@
           "en": "Matanzas"
         }
       ],
-      "image": "social-pair-smiling.jpg",
+      "image": "venue-hall-amber.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
@@ -275,7 +275,7 @@
         "Sassan"
       ],
       "badges": [],
-      "image": "social-couple-hat.jpg",
+      "image": "venue-bar.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,
@@ -289,18 +289,18 @@
     },
     {
       "date": "2026-12-18",
-      "slug": "noche-navidena",
+      "slug": "fiesta-navidena",
       "title": {
-        "de": "Noche Navideña",
-        "en": "Noche Navideña"
+        "de": "Fiesta Navideña",
+        "en": "Fiesta Navideña"
       },
       "summary": {
         "de": "EC Kuba kommt als Weihnachtsmann und bringt Geschenke in Form von Songs. Socken sind hoffentlich nicht dabei.",
         "en": "EC Kuba arrives as Santa and brings gifts in the form of songs. Hopefully no socks included."
       },
       "description": {
-        "de": "Unsere Christmas Salsa Party heißt Noche Navideña, weil selbst der Weihnachtsmann bei uns mehr Clave als Glocke hat. EC Kuba DJ bringt Geschenke in Form von Songs, und Berlin bekommt eine letzte warme Salsa Friday Nacht vor den Feiertagen.",
-        "en": "Our Christmas Salsa Party is called Noche Navideña, because even Santa has more clave than bells at Midnight Havana. EC Kuba DJ brings gifts in the form of songs, and Berlin gets one last warm Salsa Friday night before the holidays."
+        "de": "Unsere Christmas Salsa Party heißt Fiesta Navideña, weil selbst der Weihnachtsmann bei uns mehr Clave als Glocke hat. EC Kuba DJ bringt Geschenke in Form von Songs, und Berlin bekommt eine letzte warme Salsa Friday Nacht vor den Feiertagen.",
+        "en": "Our Christmas Salsa Party is called Fiesta Navideña, because even Santa has more clave than bells at Midnight Havana. EC Kuba DJ brings gifts in the form of songs, and Berlin gets one last warm Salsa Friday night before the holidays."
       },
       "dj": "DJ EC Kuba",
       "teachers": [
@@ -318,7 +318,7 @@
           "en": "EC Kuba DJ"
         }
       ],
-      "image": "social-pair-smiling.jpg",
+      "image": "venue-hall-amber.jpg",
       "flyer": null,
       "priceNote": null,
       "cancelled": false,

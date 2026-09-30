@@ -72,6 +72,18 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# Event pages whose slug changed after they went live. The old links are
+# already shared, so they must keep working.
+[[redirects]]
+  from = "/termine/noche-navidena/"
+  to = "/termine/fiesta-navidena/"
+  status = 301
+
+[[redirects]]
+  from = "/en/events/noche-navidena/"
+  to = "/en/events/fiesta-navidena/"
+  status = 301
+
 # Keep a preview deploy out of the index entirely.
 [context.deploy-preview]
   [context.deploy-preview.build.environment]

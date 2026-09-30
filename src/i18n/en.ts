@@ -98,7 +98,7 @@ export const en: Translation = {
         eyebrowDisplay: 'Salsa Friday · Tangoloft, Kreuzberg',
         eyebrowNext: 'Next Salsa Friday',
         metaTimes: 'Classes 19:00 & 20:00 · Social from 21:00',
-        metaPrices: 'Regular 10 € · students 8 € · cloakroom included',
+        metaPrices: 'Social 10 € · with a class from 12 € · cloakroom included',
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
         headline: 'Cuban Salsa & Rueda de Casino in Berlin',
         tagline: 'Learn salsa. Meet people. Dance your way into the weekend.',
@@ -150,7 +150,21 @@ export const en: Translation = {
         priceStandard: 'Standard',
         priceReduced: 'Students & people on a low income',
         priceReducedShort: 'reduced',
-        priceIncluded: 'Class, social dance and cloakroom are always included.',
+        priceReducedHeading: 'Reduced',
+        priceReducedNote:
+            'The reduced price is for students and people on a low income.',
+        priceTiers: {
+            social: 'Social only',
+            oneClass: '1 class + social',
+            twoClasses: '2 classes + social',
+        },
+        priceTiersShort: {
+            social: 'Social',
+            oneClass: '+1 class',
+            twoClasses: '+2 classes',
+        },
+        cloakroomIncluded: 'cloakroom included',
+        priceIncluded: 'The cloakroom is always included.',
         pricePayment:
             'Cash or card at the door, or in advance through Eversports or Urban Sports Club.',
         crewHeading: 'Who is there',
@@ -205,8 +219,6 @@ export const en: Translation = {
         headline: 'Salsa Classes in Berlin',
         intro: 'Our classes are designed for different experience levels, from complete beginners to dancers who already feel at home on the dance floor. You do not need to bring a partner.',
         bookNote: 'Book in advance or pay at the door',
-        priceNote:
-            'Class and party: 10 € standard · 8 € for students and people on a low income · cloakroom included',
         levelLabel: 'Level',
         timeLabel: 'Time',
         prerequisitesLabel: 'Prerequisites',

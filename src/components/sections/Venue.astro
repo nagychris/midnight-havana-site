@@ -105,15 +105,21 @@ const venuePhotos = photoSet(photoGroups.venue);
 
             {
                 venuePhotos.length > 0 && (
-                    <ul class="grid gap-4 sm:grid-cols-2" data-lightbox-gallery>
-                        {venuePhotos.map((photo) => (
-                            <li>
+                    // Two columns even on a phone, with the first photo full
+                    // width on top, so five photos take the height of two.
+                    <ul class="grid grid-cols-2 gap-2 sm:gap-4" data-lightbox-gallery>
+                        {venuePhotos.map((photo, index) => (
+                            <li class:list={[index === 0 && 'col-span-2']}>
                                 <Zoomable photo={photo}>
                                     <Image
                                         src={photo.image}
                                         alt={photo.alt[locale]}
                                         widths={[320, 480, 720, 960]}
-                                        sizes="(min-width: 1024px) 23vw, (min-width: 640px) 46vw, 92vw"
+                                        sizes={
+                                            index === 0
+                                                ? '(min-width: 1024px) 46vw, 92vw'
+                                                : '(min-width: 1024px) 23vw, 46vw'
+                                        }
                                         format="webp"
                                         quality={76}
                                         loading="lazy"

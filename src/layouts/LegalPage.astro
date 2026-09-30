@@ -34,7 +34,13 @@ const t = useTranslations(locale);
 const paths = pagePaths(page);
 ---
 
-<Base paths={paths} title={title} description={description} noindex>
+<Base
+    paths={paths}
+    title={title}
+    description={description}
+    noindex
+    bookingBar={false}
+>
     <Fragment slot="head">
         <JsonLd
             data={breadcrumbSchema(

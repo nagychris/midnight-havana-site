@@ -5,15 +5,13 @@ import Icon from '../ui/Icon.astro';
 import EventDate from './EventDate.astro';
 import EventSchedule from './EventSchedule.astro';
 import { site } from '../../data/site';
-import {
-    bookingUrlFor,
-    hasSpecificBookingLinks,
-    type SiteEvent,
-} from '../../lib/events';
+import { hasSpecificBookingLinks, type SiteEvent } from '../../lib/events';
 import { formatLongDate } from '../../lib/datetime';
 import { badgesBesideTitle } from '../../lib/event-badges';
+import { classPrices, formatPricePair, socialPrice } from '../../lib/prices';
 import {
     eventPathFor,
+    eventTimetableHref,
     localeFromAstro,
     useTranslations,
 } from '../../i18n';
@@ -138,11 +136,32 @@ const headingId = `event-${event.date}`;
                     <Icon name="clock" size={17} />
                 </span>
                 <span>
-                    {t.event.priceStandard} {site.prices.standard} €
-                    <span class="text-cream/40"> · </span>
-                    <span class="sm:hidden">{t.event.priceReducedShort}</span>
-                    <span class="hidden sm:inline">{t.event.priceReduced}</span>{' '}
-                    {site.prices.reduced} €
+                    <span class="block">
+                        {t.event.priceTiersShort.social} {socialPrice.standard} €
+                        <span class="text-cream/40"> · </span>
+                        <span class="sm:hidden">{t.event.priceReducedShort}</span>
+                        <span class="hidden sm:inline">{t.event.priceReduced}</span>{' '}
+                        {socialPrice.reduced} €
+                    </span>
+                    {/* Class prices in the same standard / reduced order as
+                        the line above, kept to one short line on a phone. */}
+                    {
+                        event.regularClasses && (
+                            <span class="mt-0.5 block text-sm text-cream/55">
+                                {classPrices.map((tier, index) => (
+                                    <>
+                                        {index > 0 && <span class="text-cream/30"> · </span>}
+                                        {t.event.priceTiersShort[tier.id]}{' '}
+                                        {formatPricePair(tier)}
+                                    </>
+                                ))}
+                                <span class="hidden sm:inline">
+                                    <span class="text-cream/30"> · </span>
+                                    {t.event.cloakroomIncluded}
+                                </span>
+                            </span>
+                        )
+                    }
                 </span>
             </p>
             <p class="text-sm text-cream/55">{t.nextEvent.arriveNote}</p>
@@ -161,13 +180,11 @@ const headingId = `event-${event.date}`;
                     // On a phone the class rows above and the sticky bar
                     // already book, so a third booking button only adds height.
                     <Button
-                        href={bookingUrlFor(event, 'salsa-basics')}
-                        external
+                        href={eventTimetableHref(event.slug, locale)}
                         size="lg"
                         class="max-sm:hidden"
                     >
                         {t.nextEvent.ctaClasses}
-                        <Icon name="external" size={16} />
                     </Button>
                 )
             }

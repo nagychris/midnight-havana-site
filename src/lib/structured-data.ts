@@ -4,6 +4,7 @@ import type { SiteEvent } from './events';
 import { bookingUrlFor } from './events';
 import { toIsoDateTime, toIsoEndOfNight } from './datetime';
 import { classNameOn, classesOn } from './event-classes';
+import { priceRange, priceTiersFor, type PriceTierId } from './prices';
 import {
     absoluteUrl,
     eventPathFor,
@@ -132,7 +133,7 @@ export function localBusinessSchema(locale: Locale): JsonObject {
         address: PLACE.address,
         geo: PLACE.geo,
         sameAs: [site.social.instagram, site.school.url],
-        priceRange: `${site.prices.reduced}–${site.prices.standard} €`,
+        priceRange: `${priceRange().lowest}–${priceRange().highest} €`,
         currenciesAccepted: site.prices.currency,
         paymentAccepted: 'Cash, Credit Card',
         openingHoursSpecification: [
@@ -190,6 +191,13 @@ function performersFor(event: SiteEvent): JsonObject[] {
     return performers;
 }
 
+/** English offer names; Google reads them, visitors never see them. */
+const OFFER_NAMES: Record<PriceTierId, string> = {
+    social: 'Social dance',
+    oneClass: 'One class and social dance',
+    twoClasses: 'Two classes and social dance',
+};
+
 function offersFor(event: SiteEvent): JsonObject[] {
     const shared = {
         '@type': 'Offer',
@@ -198,22 +206,21 @@ function offersFor(event: SiteEvent): JsonObject[] {
             ? 'https://schema.org/SoldOut'
             : 'https://schema.org/InStock',
         validFrom: `${event.date.slice(0, 8)}01`,
+        url: bookingUrlFor(event, 'salsa-basics'),
     };
 
-    return [
+    return priceTiersFor(event.regularClasses).flatMap((tier) => [
         {
             ...shared,
-            name: 'Standard',
-            price: String(site.prices.standard),
-            url: bookingUrlFor(event, 'salsa-basics'),
+            name: `${OFFER_NAMES[tier.id]}, standard`,
+            price: String(tier.standard),
         },
         {
             ...shared,
-            name: 'Reduced',
-            price: String(site.prices.reduced),
-            url: bookingUrlFor(event, 'salsa-basics'),
+            name: `${OFFER_NAMES[tier.id]}, reduced`,
+            price: String(tier.reduced),
         },
-    ];
+    ]);
 }
 
 /** Each class of the night as its own sub event, with its own booking link. */

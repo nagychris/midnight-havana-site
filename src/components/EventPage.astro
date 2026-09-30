@@ -11,12 +11,14 @@ import MapEmbed from './MapEmbed.astro';
 import { site } from '../data/site';
 import { photoByName } from '../data/photos';
 import { badgesBesideTitle } from '../lib/event-badges';
-import { bookingUrlFor, otherUpcomingEvents, type SiteEvent } from '../lib/events';
+import { priceTiersFor } from '../lib/prices';
+import { otherUpcomingEvents, type SiteEvent } from '../lib/events';
 import { formatLongDate } from '../lib/datetime';
 import { breadcrumbSchema, danceEventSchema } from '../lib/structured-data';
 import {
     eventPathFor,
     eventPaths,
+    eventTimetableId,
     localeFromAstro,
     pagePaths,
     sectionHref,
@@ -45,6 +47,7 @@ const title = event.title?.[locale] ?? longDate;
 const summary = event.summary?.[locale] ?? t.meta.home.description;
 const heroPhoto = event.image ? photoByName(event.image) : undefined;
 const otherDates = otherUpcomingEvents(event.slug).slice(0, 3);
+const visiblePriceTiers = priceTiersFor(event.regularClasses);
 
 const pageTitle = `${title} — ${longDate} | ${site.name}`;
 ---
@@ -54,6 +57,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
     title={pageTitle}
     description={summary}
     ogType="article"
+    bookingBar={false}
 >
     <Fragment slot="head">
         <JsonLd data={danceEventSchema(event, locale)} />
@@ -91,7 +95,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
             </div>
 
             <div
-                class="relative mx-auto w-full max-w-(--container-content) px-5 pt-8 pb-14 sm:px-8 sm:pt-10 sm:pb-20"
+                class="relative mx-auto w-full max-w-(--container-content) px-5 pt-4 pb-8 sm:px-8 sm:pt-10 sm:pb-20"
             >
                 <a
                     href={sectionHref(sectionIds.dates, locale)}
@@ -101,7 +105,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     {t.event.backToDates}
                 </a>
 
-                <div class="mt-10 flex flex-wrap items-center gap-2">
+                <div class="mt-6 flex flex-wrap items-center gap-2 sm:mt-10">
                     {badgesBesideTitle(event, locale).map((badge) => (
                         <Badge tone={badge.tone}>{badge[locale]}</Badge>
                     ))}
@@ -128,7 +132,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
 
                 {
                     event.summary && (
-                        <p class="mt-5 text-lead leading-relaxed-2 text-cream/80">
+                        <p class="mt-4 text-lead leading-relaxed-2 text-cream/80 sm:mt-5">
                             {event.summary[locale]}
                         </p>
                     )
@@ -142,16 +146,12 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     )
                 }
 
-                <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div class="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
                     {
                         event.regularClasses && (
-                            <Button
-                                href={bookingUrlFor(event, 'salsa-basics')}
-                                external
-                                size="lg"
-                            >
+                            <Button href={`#${eventTimetableId}`} size="lg">
                                 {t.nextEvent.ctaClasses}
-                                <Icon name="external" size={16} />
+                                <Icon name="chevron-down" size={16} />
                             </Button>
                         )
                     }
@@ -168,7 +168,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
         </header>
 
         <div
-            class="mx-auto grid w-full max-w-(--container-content) gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-16"
+            class="mx-auto grid w-full max-w-(--container-content) gap-8 px-5 py-8 sm:gap-12 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-16"
         >
             <div>
                 {
@@ -180,43 +180,59 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                 }
 
                 <h2
-                    class="mt-12 font-display text-h2 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
+                    id={eventTimetableId}
+                    class="mt-8 font-display text-h2 sm:mt-12 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
                 >
                     {t.event.timetableHeading}
                 </h2>
-                <Timetable event={event} class="mt-6" />
+                <Timetable event={event} class="mt-4 sm:mt-6" />
 
                 {
                     event.regularClasses && (
-                        <p class="mt-6 text-sm text-cream/50">{t.event.bookIntro}</p>
+                        <p class="mt-2 text-sm text-cream/50 sm:mt-6">{t.event.bookIntro}</p>
                     )
                 }
             </div>
 
-            <aside class="flex flex-col gap-8">
-                <section class="border border-gold/25 bg-surface p-6">
+            <aside class="flex flex-col gap-4 sm:gap-8">
+                <section class="border border-gold/25 bg-surface p-5 sm:p-6">
                     <h2
                         class="font-display text-xl font-medium tracking-label text-cream uppercase"
                     >
                         {t.event.priceHeading}
                     </h2>
-                    <dl class="mt-5 flex flex-col">
-                        <div
-                            class="flex items-baseline justify-between gap-4 border-b border-gold/15 py-3"
-                        >
-                            <dt class="text-md text-cream/80">{t.event.priceStandard}</dt>
-                            <dd class="font-display text-2xl font-medium text-cream">
-                                {site.prices.standard} €
-                            </dd>
-                        </div>
-                        <div class="flex items-baseline justify-between gap-4 py-3">
-                            <dt class="text-md text-cream/80">{t.event.priceReduced}</dt>
-                            <dd class="font-display text-2xl font-medium text-cream">
-                                {site.prices.reduced} €
-                            </dd>
-                        </div>
-                    </dl>
-                    <p class="mt-3 text-sm leading-snug-2 text-gold-light">
+                    <table class="mt-3 w-full text-left sm:mt-5">
+                        <thead>
+                            <tr class="font-display text-xs tracking-eyebrow text-gold uppercase">
+                                <td class="pb-2"></td>
+                                <th scope="col" class="pb-2 text-right font-normal">
+                                    {t.event.priceStandard}
+                                </th>
+                                <th scope="col" class="pb-2 pl-4 text-right font-normal">
+                                    {t.event.priceReducedHeading}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {visiblePriceTiers.map((tier) => (
+                                <tr class="border-t border-gold/15">
+                                    <th scope="row" class="py-2 text-md font-normal text-cream/80">
+                                        {t.event.priceTiers[tier.id]}
+                                    </th>
+                                    <td class="py-2 text-right font-display text-xl font-medium text-cream">
+                                        {tier.standard} €
+                                    </td>
+                                    <td class="py-2 pl-4 text-right font-display text-xl font-medium text-cream">
+                                        {tier.reduced} €
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <p class="mt-3 text-sm leading-snug-2 text-cream/55">
+                        {t.event.priceReducedNote}
+                    </p>
+                    <p class="mt-2 text-sm leading-snug-2 text-gold-light">
                         {event.priceNote?.[locale] ?? t.event.priceIncluded}
                     </p>
                     <p class="mt-2 text-sm leading-snug-2 text-cream/45">
@@ -224,13 +240,13 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     </p>
                 </section>
 
-                <section class="border border-gold/25 bg-surface p-6">
+                <section class="border border-gold/25 bg-surface p-5 sm:p-6">
                     <h2
                         class="font-display text-xl font-medium tracking-label text-cream uppercase"
                     >
                         {t.event.crewHeading}
                     </h2>
-                    <dl class="mt-5 flex flex-col gap-4">
+                    <dl class="mt-3 flex flex-col gap-3 sm:mt-5 sm:gap-4">
                         {
                             event.teachers.length > 0 && (
                                 <div>
@@ -256,13 +272,13 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     </dl>
                 </section>
 
-                <section class="border border-gold/25 bg-surface p-6">
+                <section class="border border-gold/25 bg-surface p-5 sm:p-6">
                     <h2
                         class="font-display text-xl font-medium tracking-label text-cream uppercase"
                     >
                         {t.event.whereHeading}
                     </h2>
-                    <address class="mt-4 text-md leading-snug-2 text-cream/85 not-italic">
+                    <address class="mt-3 text-md leading-snug-2 text-cream/85 not-italic">
                         <strong class="font-semibold text-cream">{site.venue.name}</strong><br
                         />
                         {site.venue.street}<br />
@@ -271,7 +287,7 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                     <p class="mt-3 text-sm leading-snug-2 text-cream/55">
                         {t.venue.accessNote}
                     </p>
-                    <div class="mt-5">
+                    <div class="mt-4">
                         <MapEmbed />
                     </div>
                 </section>
@@ -281,8 +297,8 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
         {
             otherDates.length > 0 && (
                 <section class="rule-top">
-                    <div class="mx-auto w-full max-w-(--container-content) px-5 py-14 sm:px-8 sm:py-16">
-                        <div class="flex flex-wrap items-end justify-between gap-6">
+                    <div class="mx-auto w-full max-w-(--container-content) px-5 py-8 sm:px-8 sm:py-16">
+                        <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-1">
                             <h2 class="font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
                                 {t.event.otherDatesHeading}
                             </h2>
@@ -295,12 +311,12 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
                             </a>
                         </div>
 
-                        <ul class="hairline-grid mt-8 grid sm:grid-cols-2 lg:grid-cols-3">
+                        <ul class="hairline-grid mt-4 grid sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
                             {otherDates.map((other) => (
                                 <li>
                                     <a
                                         href={eventPathFor(other.slug, locale)}
-                                        class="flex h-full items-center gap-5 p-5 text-inherit hover:bg-gold/6"
+                                        class="flex h-full items-center gap-5 px-5 py-3 text-inherit sm:p-5 hover:bg-gold/6"
                                     >
                                         <EventDate
                                             date={other.date}
