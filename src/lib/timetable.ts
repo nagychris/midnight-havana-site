@@ -32,6 +32,8 @@ export interface TimetableEntry {
     level: string | null;
     /** Where the booking link points, or null when there is nothing to book. */
     bookingUrl: string | null;
+    /** Names the booking link in analytics, as `book:<key>`. */
+    analyticsKey: string;
     tone: TimetableTone;
 }
 
@@ -89,6 +91,7 @@ function doorsRow(t: Translation): Row {
         description: t.event.doorsNote,
         level: null,
         bookingUrl: null,
+        analyticsKey: 'doors',
         tone: 'doors',
     };
 }
@@ -101,6 +104,7 @@ function extraRows(event: SiteEvent, locale: Locale): Row[] {
         description: extra.description?.[locale] ?? null,
         level: extra.level,
         bookingUrl: extra.booking,
+        analyticsKey: 'extra',
         tone: 'extra' as const,
     }));
 }
@@ -113,6 +117,7 @@ function classRows(event: SiteEvent, locale: Locale, t: Translation): Row[] {
         description: null,
         level: danceClass.level,
         bookingUrl: bookingUrlFor(event, danceClass.id),
+        analyticsKey: danceClass.id,
         tone: danceClass.track === 'rueda' ? ('rueda' as const) : ('salsa' as const),
     }));
 }
@@ -127,6 +132,7 @@ function socialRow(event: SiteEvent, t: Translation): Row {
             : t.event.socialNote,
         level: null,
         bookingUrl: event.bookingLinks.party ?? null,
+        analyticsKey: 'party',
         tone: 'social',
     };
 }

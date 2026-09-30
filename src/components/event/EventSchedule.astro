@@ -1,5 +1,7 @@
 ---
 import Badge from '../ui/Badge.astro';
+import BookingRow from './BookingRow.astro';
+import UscLink from './UscLink.astro';
 import Icon from '../ui/Icon.astro';
 import { site } from '../../data/site';
 import { bookingUrlFor } from '../../lib/booking';
@@ -10,10 +12,10 @@ import { localeFromAstro, useTranslations } from '../../i18n';
 /**
  * The timetable for one date, with a booking link per class.
  *
- * Each class is one tappable row rather than a labelled button. Four buttons
- * stacked on a phone read as a wall of equal-weight choices and push the card's
- * real primary action off the screen; a row that is entirely a link is just as
- * easy to hit, and leaves one obvious button at the bottom of the card.
+ * Each class is one tappable `BookingRow` rather than a labelled button. Four
+ * buttons stacked on a phone read as a wall of equal-weight choices and push
+ * the card's real primary action off the screen. The event page's timetable
+ * uses the same row, so booking looks the same in both places.
  *
  * Extras such as a guest workshop get a row of their own above the classes.
  */
@@ -39,7 +41,7 @@ const extras = [...event.extras].sort((a, b) =>
 <div class="flex flex-col">
     {
         extras.map((extra) => (
-            <div class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
+            <div class="rule-top grid gap-2 py-3 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
                 <p class="font-display text-xl leading-flat font-medium text-gold-light sm:text-h4">
                     {extra.startTime}
                     {extra.endTime && (
@@ -75,8 +77,8 @@ const extras = [...event.extras].sort((a, b) =>
     }
 
     {
-        startTimes.map((startTime) => (
-            <div class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
+        startTimes.map((startTime, index) => (
+            <div class="rule-top grid gap-2 py-3 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5">
                 <p class="font-display text-xl leading-flat font-medium text-orange sm:text-h4">
                     {startTime}
                     {t.nextEvent.classesAt && (
@@ -86,51 +88,34 @@ const extras = [...event.extras].sort((a, b) =>
                     )}
                 </p>
 
+                <div class="min-w-0">
                 <ul class="grid gap-2 sm:grid-cols-2 sm:gap-3">
                     {classesStartingAt(startTime).map((danceClass) => {
                         const name = classNameOn(event, danceClass.id, locale, t);
                         return (
                             <li>
-                                <a
+                                <BookingRow
                                     href={bookingUrlFor(event, danceClass.id)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    data-analytics={`book:${danceClass.id}`}
-                                    class="group/row flex min-h-11 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
-                                >
-                                    <span class="min-w-0 flex-1 font-display text-base font-medium tracking-tiny text-cream uppercase">
-                                        {name}
-                                        <span class="sr-only">
-                                            {' — '}
-                                            {t.nextEvent.bookNow}
-                                        </span>
-                                    </span>
-                                    <Badge
-                                        tone={
-                                            danceClass.track === 'rueda'
-                                                ? 'green'
-                                                : 'gold'
-                                        }
-                                    >
-                                        {danceClass.level}
-                                    </Badge>
-                                    <span
-                                        class="text-gold/60 transition-colors group-hover/row:text-gold-light"
-                                        aria-hidden="true"
-                                    >
-                                        <Icon name="external" size={15} />
-                                    </span>
-                                </a>
+                                    name={name}
+                                    level={danceClass.level}
+                                    levelTone={danceClass.track === 'rueda' ? 'green' : 'gold'}
+                                    analyticsKey={danceClass.id}
+                                />
                             </li>
                         );
                     })}
                 </ul>
+                {/* Right after the rows it is an alternative to. */}
+                {index === startTimes.length - 1 && (
+                    <UscLink event={event} class="mt-2 sm:mt-3" />
+                )}
+                </div>
             </div>
         ))
     }
 
     <div
-        class="rule-top grid gap-2 py-4 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5"
+        class="rule-top grid gap-2 py-3 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-6 sm:py-5"
     >
         <p class="font-display text-xl leading-flat font-medium text-orange sm:text-h4">
             {site.schedule.socialDance}

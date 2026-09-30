@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { site } from '../data/site';
-import { bookingUrlFor, isSpecificBooking, resolveBooking } from './booking';
+import {
+    bookingUrlFor,
+    isSpecificBooking,
+    resolveBooking,
+    uscUrlFor,
+} from './booking';
 import type { BookingTarget, SiteEvent } from './event-types';
 
 const SALSA_BASICS_URL = 'https://www.eversports.de/e/11111111-1111-1111-1111-111111111111';
@@ -80,5 +85,14 @@ describe('isSpecificBooking', () => {
         const event = eventWithBookingLinks({});
 
         expect(isSpecificBooking(event, 'salsa-basics')).toBe(false);
+    });
+});
+
+describe('uscUrlFor', () => {
+    it('links to the studio page on Urban Sports Club for the date', () => {
+        const event = eventWithBookingLinks({});
+        expect(uscUrlFor(event)).toBe(
+            'https://urbansportsclub.com/de/venues/salsa-im-tangoloft-berlin?view=new&date=2026-10-02',
+        );
     });
 });

@@ -49,3 +49,16 @@ export function isSpecificBooking(
 ): boolean {
     return resolveBooking(event, target).source !== 'general';
 }
+
+/**
+ * The Urban Sports Club page for the night of an event.
+ *
+ * USC lists all classes of a day on the studio's page, so one link per date is
+ * enough. It is built from the date instead of being entered by hand.
+ */
+export function uscUrlFor(event: SiteEvent): string {
+    const url = new URL(site.booking.uscVenueUrl);
+    url.searchParams.set('view', 'new');
+    url.searchParams.set('date', event.date);
+    return url.toString();
+}

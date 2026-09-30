@@ -1,0 +1,49 @@
+---
+import Icon from '../ui/Icon.astro';
+import { uscUrlFor } from '../../lib/booking';
+import type { SiteEvent } from '../../lib/events';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * The second way to book, for Urban Sports Club members.
+ *
+ * Sits directly under the class rows, as a quiet panel with one secondary
+ * button: clearly an alternative to the rows above it, not a footnote, and
+ * still weaker than the class rows, which stay the main action. One link to
+ * the night on USC instead of a second link per class keeps every class row a
+ * single action.
+ */
+interface Props {
+    event: SiteEvent;
+    class?: string;
+}
+
+const { event, class: className } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<div
+    class:list={[
+        'flex items-center justify-between gap-3 rounded-sharp bg-gold/6 py-1 pr-1 pl-3.5 sm:gap-4 sm:py-2.5 sm:pr-3.5',
+        className,
+    ]}
+>
+    {/* One line on a phone: a shorter question, and the link without its
+        border, so the panel costs no more height than a class row. */}
+    <p class="min-w-0 text-sm leading-snug-2 text-cream/75">
+        <span class="sm:hidden">{t.nextEvent.uscPromptShort}</span>
+        <span class="hidden sm:inline">{t.nextEvent.uscPrompt}</span>
+    </p>
+    <a
+        href={uscUrlFor(event)}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-analytics="book:usc"
+        class="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-sharp px-2.5 font-display text-sm tracking-label whitespace-nowrap text-gold uppercase transition-colors hover:text-gold-light sm:border sm:border-gold/40 sm:px-3.5 sm:hover:border-gold"
+    >
+        {t.nextEvent.uscLink}
+        <Icon name="external" size={14} />
+    </a>
+</div>

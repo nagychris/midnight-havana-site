@@ -31,6 +31,12 @@ export const site = {
         platform: 'Eversports',
         /** Shown when an event has no specific link for a class yet. */
         fallbackUrl: 'https://www.eversports.de/scl/salsa-im-tangoloft-berlin',
+        /**
+         * The studio's page on Urban Sports Club. USC members book there; the
+         * date of the night is added to the link, so no per-date entry is
+         * needed.
+         */
+        uscVenueUrl: 'https://urbansportsclub.com/de/venues/salsa-im-tangoloft-berlin',
     },
 
     venue: {

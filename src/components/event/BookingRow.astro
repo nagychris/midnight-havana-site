@@ -1,0 +1,54 @@
+---
+import Badge from '../ui/Badge.astro';
+import Icon from '../ui/Icon.astro';
+import { localeFromAstro, useTranslations } from '../../i18n';
+
+/**
+ * One bookable class or extra, as a single tappable row: name, level, and the
+ * external link icon.
+ *
+ * Used by the event card and by the timetable on the event page, so booking
+ * looks and works the same in both places. A row that is entirely a link is as
+ * easy to hit as a button, and a stack of them does not read as a wall of
+ * equal-weight buttons.
+ */
+interface Props {
+    href: string;
+    name: string;
+    /** Level shorthand such as A1, or null where there is no level. */
+    level: string | null;
+    levelTone?: 'gold' | 'green';
+    /** Goes into `data-analytics` as `book:<key>`. */
+    analyticsKey: string;
+}
+
+const { href, name, level, levelTone = 'gold', analyticsKey } = Astro.props;
+
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-analytics={`book:${analyticsKey}`}
+    class="group/row flex min-h-11 items-center gap-3 rounded-sharp border border-gold/20 px-3.5 py-2 text-inherit transition-colors hover:border-gold/50 hover:bg-gold/8"
+>
+    <span
+        class="min-w-0 flex-1 font-display text-base font-medium tracking-tiny text-cream uppercase"
+    >
+        {name}
+        <span class="sr-only">
+            {' — '}
+            {t.nextEvent.bookNow}
+        </span>
+    </span>
+    {level && <Badge tone={levelTone}>{level}</Badge>}
+    <span
+        class="text-gold/60 transition-colors group-hover/row:text-gold-light"
+        aria-hidden="true"
+    >
+        <Icon name="external" size={15} />
+    </span>
+</a>
