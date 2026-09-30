@@ -77,6 +77,21 @@ export function refreshEventBadges(): void {
     }
 }
 
+/**
+ * Opens the card of the next date, if someone has closed it.
+ *
+ * Called when a visitor is sent to the dates section, so the date every
+ * "next event" link promises is always open when they arrive.
+ */
+export function openNextEventCard(): void {
+    const card = document.querySelector<HTMLElement>(
+        '[data-event-card][data-next="true"]:not([hidden])',
+    );
+    if (card instanceof HTMLDetailsElement) {
+        card.open = true;
+    }
+}
+
 export function refreshEventDates(): void {
     const today = todayInBerlin();
 

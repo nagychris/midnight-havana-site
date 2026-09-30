@@ -62,9 +62,29 @@ const events = upcomingEvents(today);
 </Section>
 
 <script>
-    import { refreshEventDates } from '../../scripts/event-freshness';
+    import {
+        openNextEventCard,
+        refreshEventDates,
+    } from '../../scripts/event-freshness';
+    import { sectionIds } from '../../i18n/routes';
 
     refreshEventDates();
+
+    // Every link to the dates section should land on the next date opened.
+    // A click is watched as well as the hash, because clicking a link to the
+    // hash the page already has does not fire `hashchange`.
+    const datesHash = `#${sectionIds.dates}`;
+    const openIfOnDates = () => {
+        if (window.location.hash === datesHash) openNextEventCard();
+    };
+    openIfOnDates();
+    window.addEventListener('hashchange', openIfOnDates);
+    document.addEventListener('click', (event) => {
+        const link = (event.target as Element | null)?.closest('a');
+        if (link?.hash === datesHash && link.pathname === window.location.pathname) {
+            openNextEventCard();
+        }
+    });
 
     // A page restored from the back/forward cache, or left open overnight, gets
     // checked again when it becomes visible.
