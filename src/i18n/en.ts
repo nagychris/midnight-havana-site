@@ -1,5 +1,6 @@
 import type { ClassId } from '../data/classes';
 import type { ClassCopy, Translation } from './de';
+import { keepTogether } from './typography';
 
 const classCopy: Record<ClassId, ClassCopy> = {
     'salsa-basics': {
@@ -100,7 +101,7 @@ export const en: Translation = {
         metaTimes: 'Classes 19:00 & 20:00 · Social from 21:00',
         metaPrices: 'Social 10 € · with a class from 12 € · cloakroom included',
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
-        headline: 'Cuban Salsa & Rueda de Casino in Berlin',
+        headline: `${keepTogether('Cuban Salsa')} & ${keepTogether('Rueda de Casino')} ${keepTogether('in Berlin')}`,
         tagline: 'Learn salsa. Meet people. Dance your way into the weekend.',
         badges: ['No partner needed', 'Beginners welcome'],
         ctaPrimary: 'See upcoming dates',
@@ -410,7 +411,14 @@ export const en: Translation = {
     },
 
     footer: {
-        tagline: 'Cuban Salsa · Rueda de Casino · Social Dance · Berlin',
+        tagline: [
+            'Cuban Salsa',
+            'Rueda de Casino',
+            'Social Dance',
+            'Berlin',
+        ]
+            .map(keepTogether)
+            .join('\u00A0· '),
         navHeading: 'Navigation',
         contactHeading: 'Contact',
         legalHeading: 'Legal',

@@ -1,4 +1,5 @@
 import type { ClassId } from '../data/classes';
+import { keepTogether } from './typography';
 
 /** Copy for one class card. Shared by every language. */
 export interface ClassCopy {
@@ -130,7 +131,7 @@ export const de = {
         metaTimes: 'Kurse 19:00 & 20:00 · Party ab 21:00',
         metaPrices: 'Social 10 € · mit Kurs ab 12 € · Garderobe inklusive',
         metaVenue: 'Tangoloft · Pfuelstraße 5, Kreuzberg',
-        headline: 'Salsa Cubana & Rueda de Casino in Berlin',
+        headline: `${keepTogether('Salsa Cubana')} & ${keepTogether('Rueda de Casino')} ${keepTogether('in Berlin')}`,
         tagline: 'Lerne Salsa. Triff Menschen. Tanz durch den Freitagabend.',
         badges: ['Kein Tanzpartner nötig', 'Anfänger willkommen'],
         ctaPrimary: 'Nächsten Termin ansehen',
@@ -443,7 +444,14 @@ export const de = {
     },
 
     footer: {
-        tagline: 'Salsa Cubana · Rueda de Casino · Social Dance · Berlin',
+        tagline: [
+            'Salsa Cubana',
+            'Rueda de Casino',
+            'Social Dance',
+            'Berlin',
+        ]
+            .map(keepTogether)
+            .join('\u00A0· '),
         navHeading: 'Navigation',
         contactHeading: 'Kontakt',
         legalHeading: 'Rechtliches',
