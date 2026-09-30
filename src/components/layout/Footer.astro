@@ -61,6 +61,14 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
                         </a>
                     ))
                 }
+                <a
+                    href={site.school.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class={linkClass}
+                >
+                    {site.school.name}
+                </a>
             </div>
         </nav>
 
@@ -75,14 +83,6 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
             </address>
             <a href={`mailto:${site.email}`} class="text-md text-cream/75 hover:text-gold-light">
                 {site.email}
-            </a>
-            <a
-                href={site.school.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-md text-cream/75 hover:text-gold-light"
-            >
-                {site.school.name}
             </a>
             <div class="mt-1 flex gap-2.5">
                 <a

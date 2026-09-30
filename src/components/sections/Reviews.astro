@@ -34,7 +34,7 @@ const strip = photoSetOrAll(photoGroups.community);
 
         {
             reviews.length > 0 && (
-                <ul class="hairline-grid mt-6 grid sm:mt-12 md:grid-cols-2 lg:grid-cols-3">
+                <ul class="hairline-grid mt-heading grid md:grid-cols-2 lg:grid-cols-3">
                     {reviews.map((review) => (
                         <li class="flex flex-col gap-4 p-6 sm:p-8">
                             <blockquote class="text-lead leading-snug-2 text-cream/85">
@@ -51,7 +51,7 @@ const strip = photoSetOrAll(photoGroups.community);
         {/* The strip below is the rest of the answer to "what is this like?",
             so it gets a heading of its own rather than drifting loose under
             the quotes. */}
-        <div class="mt-10 sm:mt-16">
+        <div class="mt-block">
             <p class="font-display text-2xs tracking-eyebrow text-gold uppercase sm:text-xs">
                 {t.reviews.community.eyebrow}
             </p>

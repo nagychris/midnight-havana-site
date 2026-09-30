@@ -85,6 +85,15 @@
 
     /* ---- Layout -------------------------------------------------------- */
     --spacing-gutter: 1.25rem;
+
+    /* Vertical rhythm between and inside sections, as utilities such as
+       `py-section`, `mt-heading`, `mt-block` and `gap-stack`. These are the
+       phone values; they grow at sm and lg in the base layer below. Change a
+       value here and every section follows. */
+    --spacing-section: 2rem; /* above and below a section */
+    --spacing-heading: 1.5rem; /* heading to its content, and before a closing button */
+    --spacing-block: 2.5rem; /* between larger blocks inside a section */
+    --spacing-stack: 2rem; /* between columns that stack on a phone */
     --container-content: 72.5rem;
 
     /* Tailwind's smallest default breakpoint is 40rem, which leaves nothing
@@ -93,6 +102,27 @@
 }
 
 @layer base {
+    /* Larger screens get more air. Overriding the variables here, rather
+       than writing sm: and lg: pairs in every component, keeps the steps in
+       one place. */
+    @media (width >= theme(--breakpoint-sm)) {
+        :root {
+            --spacing-section: 4rem;
+            --spacing-heading: 2.5rem;
+            --spacing-block: 4rem;
+            --spacing-stack: 2.5rem;
+        }
+    }
+
+    @media (width >= theme(--breakpoint-lg)) {
+        :root {
+            --spacing-section: 6rem;
+            --spacing-heading: 3rem;
+            --spacing-block: 5rem;
+            --spacing-stack: 4rem;
+        }
+    }
+
     :root {
         /* Overwritten with the measured height by the header script. The
            fallback keeps anchor offsets sane before the script runs. */
