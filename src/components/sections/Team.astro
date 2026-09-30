@@ -4,7 +4,6 @@ import Section from '../ui/Section.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
-import Zoomable from '../ui/Zoomable.astro';
 import { site } from '../../data/site';
 import { photoByName } from '../../data/photos';
 import { localeFromAstro, sectionIds, useTranslations } from '../../i18n';
@@ -36,38 +35,48 @@ const members = t.team.members.map((member) => ({
         <span class="mt-3 block">{t.team.intro2}</span>
     </SectionHeading>
 
-    <ul class="mt-12 grid gap-4 md:grid-cols-3" data-lightbox-gallery>
+    <ul class="mt-6 grid gap-4 sm:mt-12 md:grid-cols-3">
         {
             members.map((member) => (
                 <li class="flex flex-col border border-gold/25 bg-surface">
-                    {member.photo && (
-                        <Zoomable photo={member.photo}>
-                            <Image
-                                src={member.photo.image}
-                                alt={`${member.name} — ${member.role}`}
-                                widths={[320, 480, 720]}
-                                sizes="(min-width: 768px) 30vw, 100vw"
-                                format="webp"
-                                quality={80}
-                                loading="lazy"
-                                decoding="async"
-                                class:list={[
-                                    'aspect-4/5 w-full object-cover',
-                                    member.photo.focus,
-                                ]}
-                            />
-                        </Zoomable>
-                    )}
+                    {/* On a phone the portrait is a small thumbnail beside the
+                        name, so three teachers do not fill three screens.
+                        From md up it spans the card. */}
+                    <div class="flex items-center gap-4 p-4 md:block md:p-0">
+                        {member.photo && (
+                            <div class="w-24 shrink-0 md:w-full">
+                                <Image
+                                    src={member.photo.image}
+                                    alt={`${member.name} — ${member.role}`}
+                                    widths={[240, 480, 720]}
+                                    sizes="(min-width: 768px) 30vw, 6rem"
+                                    format="webp"
+                                    quality={80}
+                                    loading="lazy"
+                                    decoding="async"
+                                    class:list={[
+                                        'aspect-4/5 w-full object-cover',
+                                        member.photo.focus,
+                                    ]}
+                                />
+                            </div>
+                        )}
 
-                    <div class="flex flex-1 flex-col p-5 sm:p-6">
-                        <h3 class="font-display text-h3 leading-tight-2 font-semibold tracking-tiny text-cream uppercase">
-                            {member.name}
-                        </h3>
-                        <p class="mt-1.5 font-display text-sm tracking-label text-gold uppercase">
-                            {member.role}
-                        </p>
+                        <div class="min-w-0 md:px-6 md:pt-6">
+                            <h3 class="font-display text-h3 leading-tight-2 font-semibold tracking-tiny text-cream uppercase">
+                                {member.name}
+                            </h3>
+                            <p class="mt-1.5 font-display text-sm tracking-label text-gold uppercase">
+                                {member.role}
+                            </p>
+                        </div>
+                    </div>
 
-                        <div class="mt-4 flex flex-col gap-3 text-md leading-snug-2 text-cream/70">
+                    <div class="flex flex-1 flex-col px-5 pb-5 md:px-6 md:pt-4 md:pb-6">
+                        {/* The bottom padding keeps the motto rule off the
+                            text in the longest card, where mt-auto adds no
+                            space of its own. */}
+                        <div class="flex flex-col gap-3 pb-5 text-md leading-snug-2 text-cream/70">
                             {member.body.map((paragraph) => (
                                 <p>{paragraph}</p>
                             ))}
@@ -88,7 +97,7 @@ const members = t.team.members.map((member) => ({
         external
         variant="secondary"
         size="lg"
-        class="mt-12"
+        class="mt-6 sm:mt-12"
     >
         {t.team.cta}
         <Icon name="external" size={16} />

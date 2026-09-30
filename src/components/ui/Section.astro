@@ -2,8 +2,13 @@
 /**
  * A page section: the anchor target, the width limit and the vertical rhythm.
  *
- * Padding grows with the viewport rather than jumping at a breakpoint, so the
- * spacing feels the same on a phone and on a wide screen.
+ * Padding grows with the viewport. On a phone it is kept tight, because the
+ * space between sections costs the most there.
+ *
+ * Spacing on phones, used across all sections: 24px from a heading to its
+ * content, 40px between larger blocks inside a section, 32px between columns
+ * that stack, 24px before a closing button. From sm up the larger desktop
+ * values apply.
  */
 interface Props {
     id?: string;
@@ -40,9 +45,9 @@ const {
 >
     <div
         class:list={[
-            'mx-auto w-full max-w-(--container-content)',
+            'mx-auto w-full max-w-content',
             bleed ? '' : 'px-5 sm:px-8',
-            'py-12 sm:py-16 lg:py-24',
+            'py-8 sm:py-16 lg:py-24',
         ]}
     >
         <slot />

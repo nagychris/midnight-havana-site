@@ -16,7 +16,7 @@ const venuePhotos = photoSet(photoGroups.venue);
 ---
 
 <Section id={sectionIds.venue} divider labelledBy="venue-heading">
-    <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+    <div class="grid gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
             <SectionHeading
                 eyebrow={t.venue.eyebrow}
@@ -29,7 +29,7 @@ const venuePhotos = photoSet(photoGroups.venue);
                 <p>{t.venue.body2}</p>
             </div>
 
-            <div class="mt-8">
+            <div class="mt-6 sm:mt-8">
                 <h3 class="font-display text-xs tracking-eyebrow text-gold uppercase">
                     {t.venue.addressLabel}
                 </h3>
@@ -40,7 +40,7 @@ const venuePhotos = photoSet(photoGroups.venue);
                 </address>
             </div>
 
-            <div class="mt-8 border-t border-gold/20 pt-6">
+            <div class="mt-6 border-t border-gold/20 pt-6 sm:mt-8">
                 <h3 class="font-display text-xs tracking-eyebrow text-gold uppercase">
                     {t.venue.directionsLabel}
                 </h3>

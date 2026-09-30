@@ -19,11 +19,12 @@ const navLinks = menuNavigation(t, locale);
 const legalLinks = legalNavigation(t, locale);
 
 /* On a phone the artboard drops the column headings and lets the links wrap
-   into one block, each tall enough to hit with a thumb. The columns come back
-   as soon as there is width for them. */
+   into one block to save height. Each link is 36px tall, well above the 24px
+   minimum target size, and the gap between links keeps mis-taps unlikely.
+   The columns come back as soon as there is width for them. */
 const linkListClass = 'flex flex-row flex-wrap gap-x-5 md:flex-col md:gap-3';
 const linkClass =
-    'inline-flex min-h-11 items-center text-md text-cream/75 hover:text-gold-light md:min-h-0';
+    'inline-flex min-h-9 items-center text-md text-cream/75 hover:text-gold-light md:min-h-0';
 const headingClass =
     'hidden font-display text-xs tracking-eyebrow text-cream/45 uppercase md:block';
 
@@ -75,6 +76,14 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
             <a href={`mailto:${site.email}`} class="text-md text-cream/75 hover:text-gold-light">
                 {site.email}
             </a>
+            <a
+                href={site.school.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-md text-cream/75 hover:text-gold-light"
+            >
+                {site.school.name}
+            </a>
             <div class="mt-1 flex gap-2.5">
                 <a
                     href={site.social.instagram}
@@ -121,14 +130,6 @@ const hasConsentSettings = Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID);
                         </button>
                     )
                 }
-                <a
-                    href={site.school.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class={linkClass}
-                >
-                    {site.school.name}
-                </a>
             </div>
         </nav>
     </div>

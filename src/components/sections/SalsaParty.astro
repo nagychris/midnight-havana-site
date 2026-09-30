@@ -32,7 +32,7 @@ const [photo] = photoSet(photoGroups.party);
 ---
 
 <Section id={sectionIds.party} divider labelledBy="party-heading">
-    <div class="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
+    <div class="grid gap-8 sm:gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
         <div>
             <SectionHeading
                 eyebrow={t.party.eyebrow}
@@ -56,7 +56,7 @@ const [photo] = photoSet(photoGroups.party);
                 href={sectionHref(sectionIds.dates, locale)}
                 variant="secondary"
                 size="lg"
-                class="mt-8"
+                class="mt-6 sm:mt-8"
             >
                 {t.party.cta}
                 <Icon name="arrow-right" size={16} />
@@ -84,7 +84,7 @@ const [photo] = photoSet(photoGroups.party);
         }
     </div>
 
-    <div class="mt-16 lg:mt-20">
+    <div class="mt-10 sm:mt-16 lg:mt-20">
         <h3
             class="font-display text-h3 leading-tight-2 font-medium tracking-tiny text-cream uppercase"
         >
@@ -101,7 +101,7 @@ const [photo] = photoSet(photoGroups.party);
             The panels are separated by a one-pixel gap that lets the page
             through, plus a rule on top of each cell. No frame around the
             cells, so a last row that does not fill its columns simply ends. */}
-        <ol class="mt-10 grid gap-px sm:grid-cols-2 lg:grid-cols-3">
+        <ol class="mt-6 grid gap-px sm:mt-10 sm:grid-cols-2 lg:grid-cols-3">
             {
                 t.party.more.points.map((point, index) => (
                     <li class="flex flex-col border-t border-gold/20 bg-surface p-5 sm:p-6">

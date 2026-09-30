@@ -30,7 +30,7 @@ const events = upcomingEvents(today);
         {t.nextEvent.intro}
     </SectionHeading>
 
-    <div class="mt-10 flex flex-col gap-4" data-events-list hidden={events.length === 0}>
+    <div class="mt-6 flex flex-col gap-4 sm:mt-10" data-events-list hidden={events.length === 0}>
         {
             events.map((event, index) => (
                 <EventCard
@@ -43,7 +43,7 @@ const events = upcomingEvents(today);
     </div>
 
     <p
-        class="mt-10 text-lead text-cream/65"
+        class="mt-6 text-lead text-cream/65 sm:mt-10"
         data-events-empty
         hidden={events.length > 0}
     >
