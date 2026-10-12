@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://midnight-havana.de/schemas/event.schema.json",
+  "title": "Midnight Havana event",
+  "description": "One event date on the website, stored as one YAML file in src/data/events/. Editors change these files by hand; a future admin interface would write the same shape.",
+  "type": "object",
+  "required": [
+    "date",
+    "slug"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Calendar date in YYYY-MM-DD, Berlin local time, in quotes. Must be a real date and must not repeat across event files."
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 80,
+      "description": "The last part of the detail page URL, for example al-son-de-cuba. Lower case letters, digits and hyphens. Do not change it after the page is published, or existing links break."
+    },
+    "title": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/localisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Name of this edition. Without one, the page shows the date instead."
+    },
+    "summary": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/localisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "One sentence. Used on the date card and as the meta description of the detail page, so keep it under about 155 characters."
+    },
+    "description": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/longLocalisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Text for the detail page. Write it as a |- block and separate paragraphs with a blank line."
+    },
+    "seoTitle": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/localisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Title for the browser tab and Google, used exactly as written. Keep it under about 60 characters. Without one, the page uses the event title, the date and the site name."
+    },
+    "seoDescription": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/localisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Snippet for Google, about 120 to 155 characters. Without one, the summary is used."
+    },
+    "dj": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120,
+      "description": "Who is playing the social dance."
+    },
+    "teachers": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
+      },
+      "description": "Who is teaching that night. Shown on the detail page and listed as performers in the structured data."
+    },
+    "badges": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/badge"
+      },
+      "description": "Short labels on the date card, for example a special or a guest DJ. Their colour follows their position: the first is gold, the second green, the third muted. A label that repeats the title is not shown."
+    },
+    "image": {
+      "$ref": "#/$defs/imageFileName",
+      "description": "File name inside src/assets/photos/ for the large image on the detail page."
+    },
+    "flyer": {
+      "$ref": "#/$defs/imageFileName",
+      "description": "File name inside src/assets/flyers/ for the poster."
+    },
+    "priceNote": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/localisedText"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Only fill this in when prices differ from the usual ones that night."
+    },
+    "cancelled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Keeps the date visible but marks it as cancelled."
+    },
+    "regularClasses": {
+      "type": "boolean",
+      "default": true,
+      "description": "Set to false when the four standard classes do not run that night, for example when a guest workshop replaces them. The date then shows only its extras and the social dance."
+    },
+    "courseLabels": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional class names for this date, used only when they differ from the standard names. The keys are the same class ids as in bookingLinks.",
+      "properties": {
+        "salsa-basics": {
+          "$ref": "#/$defs/localisedText"
+        },
+        "rueda-beginner": {
+          "$ref": "#/$defs/localisedText"
+        },
+        "salsa-beginner": {
+          "$ref": "#/$defs/localisedText"
+        },
+        "rueda-advanced": {
+          "$ref": "#/$defs/localisedText"
+        }
+      }
+    },
+    "bookingLinks": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The Eversports booking links for this date, one per class. Eversports gives every date its own URLs, so they are entered here by hand for each date. Add \"party\" only when the night itself is bookable. A class with no link falls back to the studio's general Eversports page, and the build names it in the log.",
+      "properties": {
+        "salsa-basics": {
+          "$ref": "#/$defs/bookingUrl"
+        },
+        "rueda-beginner": {
+          "$ref": "#/$defs/bookingUrl"
+        },
+        "salsa-beginner": {
+          "$ref": "#/$defs/bookingUrl"
+        },
+        "rueda-advanced": {
+          "$ref": "#/$defs/bookingUrl"
+        },
+        "party": {
+          "$ref": "#/$defs/bookingUrl"
+        }
+      }
+    },
+    "extras": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/extra"
+      },
+      "description": "Anything on top of the usual four classes, for example a workshop before them."
+    }
+  },
+  "$defs": {
+    "extra": {
+      "type": "object",
+      "required": [
+        "startTime",
+        "title"
+      ],
+      "additionalProperties": false,
+      "description": "A one-off item in the timetable for a single date.",
+      "properties": {
+        "startTime": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "Start time on a 24 hour clock, for example 17:00."
+        },
+        "endTime": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "End time on a 24 hour clock. Optional."
+        },
+        "title": {
+          "$ref": "#/$defs/localisedText"
+        },
+        "description": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/localisedText"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "level": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20,
+          "description": "Level shorthand shown as a badge, for example A2 or B1."
+        },
+        "booking": {
+          "$ref": "#/$defs/bookingUrl"
+        }
+      }
+    },
+    "badge": {
+      "type": "object",
+      "required": [
+        "de",
+        "en"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "de": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        }
+      }
+    },
+    "localisedText": {
+      "type": "object",
+      "required": [
+        "de",
+        "en"
+      ],
+      "additionalProperties": false,
+      "description": "The same text in both site languages. Both are required so no page falls back to the wrong language.",
+      "properties": {
+        "de": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        }
+      }
+    },
+    "longLocalisedText": {
+      "type": "object",
+      "required": [
+        "de",
+        "en"
+      ],
+      "additionalProperties": false,
+      "description": "Like localisedText, but long enough for several paragraphs.",
+      "properties": {
+        "de": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2500
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2500
+        }
+      }
+    },
+    "imageFileName": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Za-z0-9._-]+\\.(png|jpg|jpeg|webp|avif)$",
+      "description": "An image file name with its extension, no folders."
+    },
+    "bookingUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "pattern": "^https://([a-z0-9-]+\\.)*(eversports\\.(de|com|at)|urbansportsclub\\.com)/",
+      "description": "An https link on a booking platform we work with. Other hosts are rejected at build time, so a wrong entry can never send visitors somewhere unexpected."
+    }
+  }
+}

@@ -1,27 +1,26 @@
-import rawEventData from '../data/events.json';
 import { CLASS_IDS } from '../data/classes';
 import { isSpecificBooking } from './booking';
 import { todayInBerlin } from './datetime';
-import { assertUniqueDatesAndSlugs, parseEvent } from './event-parsing';
+import { eventsFromFiles } from './event-files';
 import type { SiteEvent } from './event-types';
 
 /**
- * Reading side of `src/data/events.json`.
+ * Reading side of `src/data/events/`, one YAML file per date.
  *
- * Validation lives in `event-parsing.ts`; this module is the small API the
- * pages use.
+ * Reading and validation live in `event-files.ts` and `event-parsing.ts`; this
+ * module is the small API the pages use.
  */
 
-/** Every event in the file, validated and sorted by date, soonest first. */
-export function allEvents(): SiteEvent[] {
-    const entries = (rawEventData as { events?: unknown }).events;
-    if (!Array.isArray(entries)) {
-        throw new Error('events.json must contain an "events" array.');
-    }
+/** The text of every event file, read by Vite at build time. */
+const eventFiles = import.meta.glob<string>('/src/data/events/*.yaml', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+});
 
-    const events = entries.map(parseEvent);
-    assertUniqueDatesAndSlugs(events);
-    return events.sort((a, b) => a.date.localeCompare(b.date));
+/** Every event, validated and sorted by date, soonest first. */
+export function allEvents(): SiteEvent[] {
+    return eventsFromFiles(eventFiles);
 }
 
 /**

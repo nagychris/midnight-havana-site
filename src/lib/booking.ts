@@ -5,9 +5,10 @@ import type { BookingTarget, SiteEvent } from './event-types';
  * Works out where a booking button should point.
  *
  * Eversports gives each occurrence of a class its own URL, so the links change
- * from date to date. They are entered by hand in `events.json`, one block per
- * date. A date with no link yet still gets a working button, because the
- * studio's general page is always there to fall back on.
+ * from date to date. They are entered by hand in the event files in
+ * `src/data/events/`, one set per date. A date with no link yet still gets a
+ * working button, because the studio's general page is always there to fall
+ * back on.
  */
 
 /** Where a booking link came from. Useful when explaining a fallback. */
@@ -21,7 +22,7 @@ export interface BookingLink {
 /**
  * The booking link for one class on one date, and where it came from.
  *
- * Two levels: the link entered for that date in `events.json`, and otherwise
+ * Two levels: the link entered in that date's event file, and otherwise
  * the studio's general Eversports page, which always works.
  */
 export function resolveBooking(

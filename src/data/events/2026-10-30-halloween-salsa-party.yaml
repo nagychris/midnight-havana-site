@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-10-30"
+slug: halloween-salsa-party
+title:
+  de: Halloween Salsa Party
+  en: Halloween Salsa Party
+summary:
+  de: Am 30.10. wird es bei Midnight Havana etwas dunkler als sonst.
+  en: On 30 October, Midnight Havana gets a little darker than usual.
+description:
+  de: |-
+    Unsere Halloween Salsa Party in Berlin verbindet Cuban Salsa, Timba und Son mit der warmen Atmosphäre, für die unsere Freitage im Tangoloft stehen.
+
+    Freut euch auf einen besonderen Salsa Friday mit Kursen am frühen Abend, Social Dance ab 21:00 Uhr und einer Halloween Atmosphäre zwischen Havanna, Berlin und ein bisschen Mystery.
+
+    Ob ihr euch verkleidet, elegant kommt oder einfach so, wie ihr euch wohlfühlt, bleibt euch überlassen. Der Fokus liegt wie immer auf guter Musik, echtem Social Dance und einer offenen Community.
+
+    Eine Halloween Party für alle, die lieber Salsa tanzen als zwischen Plastikspinnen und Kürbissen zu verschwinden.
+
+    Social Dance. Warm Nights. Real Connection.
+  en: |-
+    Our Halloween Salsa Party in Berlin brings together Cuban salsa, timba and son with the warm atmosphere our Fridays at Tangoloft are known for.
+
+    Look forward to a special Salsa Friday with classes in the early evening, social dance from 21:00 and a Halloween mood somewhere between Havana, Berlin and a little mystery.
+
+    Whether you come in costume, dressed up or just as you feel comfortable is up to you. As always, the focus is on good music, real social dance and an open community.
+
+    A Halloween party for everyone who would rather dance salsa than disappear between plastic spiders and pumpkins.
+
+    Social Dance. Warm Nights. Real Connection.
+seoTitle:
+  de: Halloween Salsa Party Berlin | Midnight Havana
+  en: Halloween Salsa Party Berlin | Midnight Havana
+seoDescription:
+  de: Halloween Salsa Party in Berlin mit Salsa Cubana, Rueda de Casino und Social Dance ab 21:00 im Tangoloft Berlin. DJ Pedro.
+  en: Halloween Salsa Party in Berlin with Cuban salsa, Rueda de Casino and social dance from 21:00 at Tangoloft Berlin. DJ Pedro.
+dj: DJ Pedro
+teachers:
+  - Helen
+  - Yago
+  - Sassan
+badges:
+  - de: DJ Pedro
+    en: DJ Pedro
+image: venue-hall-amber.jpg
+flyer: null
+priceNote: null
+cancelled: false
+bookingLinks:
+  salsa-basics: https://www.eversports.de/org/activity/408b093b-7972-4195-be33-0b2719e961a3
+  salsa-beginner: https://www.eversports.de/activity/d5ea0c47-d02f-4377-b1de-8656104f286a
+  rueda-beginner: https://www.eversports.de/org/activity/3bc6b0c9-c91c-41ca-ae21-1bcce4bd156e
+  rueda-advanced: https://www.eversports.de/org/activity/08198cf5-ae10-407b-adff-860dc111ed56
+extras: []

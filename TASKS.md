@@ -25,13 +25,15 @@ If a session is interrupted, the next one starts at the first unticked box.
 
 - [x] `src/data/site.ts` — venue, prices, times, social links, legal entity
 - [x] `src/data/classes.ts` — the four classes, their times and levels
-- [x] `src/data/events.json` — one block per date
-- [x] `src/data/events.schema.json` — JSON Schema for editors and a future UI
+- [x] `src/data/events/` — one YAML file per date
+- [x] `src/data/event.schema.json` — JSON Schema for editors and a future UI
+- [x] `pnpm check-events` and a pre-push hook stop a broken event file before
+      it reaches Netlify
 - [x] `src/lib/events.ts` — load, validate, sort, drop past dates
 - [x] Booking links checked against a host allowlist
 - [x] Build fails loudly, naming the date and field, on invalid data
-- [x] Booking links entered per date in `bookingLinks`, so `events.json` is the
-      only file that needs touching each month. A class with no link falls back
+- [x] Booking links entered per date in `bookingLinks`, so the event files are the
+      only files that need touching each month. A class with no link falls back
       to the studio's general Eversports page.
 - [x] The build names upcoming dates whose links are still missing, so a
       forgotten month shows up in the deploy log instead of going unnoticed
@@ -156,7 +158,6 @@ is off the table.
 ## 8 · Handover
 
 - [x] `README.md`: adding an event, adding photos, deploying
-- [ ] Netlify build hook plus a daily trigger, so the next date never goes stale
 - [x] Point `midnight-havana.de` at the Netlify site
 
 ---
@@ -172,22 +173,17 @@ In order. The first four are blockers.
        host changed from manitu to Netlify and an analytics section was added.
        This is the item with actual legal exposure.
 4. [x] **Confirm the prices.** 10 € standard, 8 € reduced, party included.
-5. [ ] **Daily build hook**, so a date that has passed drops off without anyone
-       touching the repo. The workflow is written
-       (`.github/workflows/daily-rebuild.yml`); it needs the build hook created
-       in Netlify and its URL stored as the `NETLIFY_BUILD_HOOK_URL` secret in
-       GitHub.
-6. [ ] **Run `pnpm install`** once, to pull in vitest, then `pnpm test`. The
+5. [ ] **Run `pnpm install`** once, to pull in vitest, then `pnpm test`. The
        tests are written but have never been executed: the session that added
        them could not install packages.
-7. [ ] **Check the Google Analytics property** is set up for this domain.
-8. [ ] **Lighthouse** against the deployed site.
-9. [x] **Submit the sitemap** in Google Search Console. The domain is
+6. [ ] **Check the Google Analytics property** is set up for this domain.
+7. [ ] **Lighthouse** against the deployed site.
+8. [x] **Submit the sitemap** in Google Search Console. The domain is
        verified through a TXT record in the manitu zone.
 
 ## Needs input from you
 
-- [ ] **Paste the month's booking links into `events.json`.** This is now the
+- [ ] **Paste the month's booking links into the event files.** This is now the
       monthly routine: open each upcoming date, copy its four Eversports URLs
       into `bookingLinks`, commit. The three dates in the file currently carry
       the generic activity links, which land on the right class but not on the

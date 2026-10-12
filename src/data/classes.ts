@@ -6,7 +6,7 @@
  * means adding one entry here and one translation block per language.
  *
  * Booking links are not here. Eversports gives each date its own URL, so they
- * are entered per date in `src/data/events.json`.
+ * are entered per date in the event files in `src/data/events/`.
  */
 
 export const CLASS_IDS = [

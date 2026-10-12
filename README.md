@@ -9,55 +9,89 @@ Astro 7, Tailwind v4, no client framework. German at the root, English under
 
 ## Adding an event
 
-Open `src/data/events.json`, copy a block inside `events`, change the date, the
-slug and the texts, then commit. That is the whole job.
+Every date has its own YAML file in `src/data/events/`, named
+`<date>-<slug>.yaml`. To add one, copy `src/data/events/_template.yaml`, give it
+the new name, change the date, the slug and the texts, then commit. That is the
+whole job. The template explains every field in a comment.
 
-```json
-{
-  "date": "2026-10-16",
-  "slug": "noche-de-timba",
-  "title": { "de": "Noche de Timba", "en": "Noche de Timba" },
-  "summary": { "de": "Ein Satz für die Karte.", "en": "One sentence for the card." },
-  "description": { "de": "Zwei bis vier Sätze.", "en": "Two to four sentences." },
-  "dj": "DJ EC Kuba",
-  "teachers": ["Helen", "Yago"],
-  "badges": [{ "de": "Live-Percussion", "en": "Live percussion", "tone": "green" }],
-  "image": "dj-night.jpg",
-  "bookingLinks": {}
-}
+```yaml
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-10-16"
+slug: noche-de-timba
+title:
+  de: Noche de Timba
+  en: Noche de Timba
+summary:
+  de: Ein Satz für die Karte.
+  en: One sentence for the card.
+description:
+  de: |-
+    Erster Absatz.
+
+    Zweiter Absatz.
+  en: |-
+    First paragraph.
+
+    Second paragraph.
+dj: DJ EC Kuba
+teachers:
+  - Helen
+  - Yago
+badges:
+  - de: Live-Percussion
+    en: Live percussion
+image: dj-night.jpg
+bookingLinks: {}
 ```
 
 Only `date` and `slug` are required. Everything else can be left out or set to
-`null`.
+`null`. The file name is only for sorting in the editor; the site reads the
+date and the slug from inside the file. Files starting with `_` are ignored.
+
+Four YAML rules matter here:
+
+- **Put the date in quotes:** `date: "2026-10-16"`. The same goes for times in
+  `extras`: `startTime: "19:00"`.
+- **Write long texts as `|-` blocks.** Start the text on the next line, indented
+  by two more spaces, and separate paragraphs with a blank line. Use `|-`, not
+  `|`: a plain `|` adds a line break at the end of the text.
+- **Quote any short text that contains `#`:** `de: "Salsa #1"`. Without quotes,
+  YAML reads everything from ` #` on as a comment and drops it without an
+  error. Texts in `|-` blocks are safe.
+- **Indent with two spaces, never tabs.** `de:` and `en:` must start in the same
+  column.
 
 A few things worth knowing:
 
 - **Past dates disappear on their own.** They are filtered out when the site is
   built and again in the browser, so a date that has passed is never shown even
-  if the site has not been rebuilt.
-- **The slug is the URL.** `"slug": "noche-de-timba"` gives
+  if the site has not been rebuilt. The old files can stay or be deleted.
+- **The slug is the URL.** `slug: noche-de-timba` gives
   `/termine/noche-de-timba/` and `/en/events/noche-de-timba/`. Changing it after
   publishing breaks any link people have already shared.
 - **Booking links go in `bookingLinks`, per date.** See below.
-- **The file must stay valid JSON.** `src/data/events.schema.json` describes
-  every field; most editors will use it for autocomplete and warnings. If a
-  value is wrong, the build stops and says which date and which field.
+- **Check before you push.** `pnpm check-events` checks every event file in
+  about a second and lists every problem with its file name and line. It also
+  runs before each `git push`, so a broken file never reaches Netlify. (Netlify
+  would refuse to build it anyway, but then the old site stays live and the
+  mistake is easy to miss.) `src/data/event.schema.json` describes every field; VS Code
+  with the YAML extension uses it for autocomplete and warnings.
 
 ### Booking links
 
 Eversports gives every date its own URLs, so the four links are entered by hand,
 one set per date, in that date's `bookingLinks` block:
 
-```json
-"bookingLinks": {
-  "salsa-basics": "https://www.eversports.de/e/…",
-  "rueda-beginner": "https://www.eversports.de/e/…",
-  "salsa-beginner": "https://www.eversports.de/e/…",
-  "rueda-advanced": "https://www.eversports.de/e/…"
-}
+```yaml
+bookingLinks:
+  salsa-basics: https://www.eversports.de/e/…
+  rueda-beginner: https://www.eversports.de/e/…
+  salsa-beginner: https://www.eversports.de/e/…
+  rueda-advanced: https://www.eversports.de/e/…
 ```
 
-Add `"party"` only when the night itself is bookable. Normally it is paid for at
+Add `party` only when the night itself is bookable. Normally it is paid for at
 the door.
 
 A class with no link still gets a working button, because it falls back to the
@@ -160,7 +194,7 @@ Names the layout looks for:
 | anything in `photoGroups` | Hero slideshow, community strip, venue, closing panel |
 
 Event flyers go in `src/assets/flyers/` and are referenced by file name from
-`events.json`.
+the event files in `src/data/events/`.
 
 After changing the logo or the hero photo, regenerate the icons and the social
 card:
@@ -191,17 +225,12 @@ Netlify builds from this repository. `netlify.toml` holds the build command and
 the response headers; there is nothing to configure in the Netlify UI beyond
 connecting the repo and pointing the domain at it.
 
-### Keep the dates fresh
+### Past dates
 
-The site is generated ahead of time, so its idea of "today" is the build date.
-Set up a **scheduled build** in Netlify so it rebuilds once a day:
-
-1. Site configuration, Build & deploy, Build hooks: create a hook.
-2. Point a daily scheduler at it (Netlify's scheduled functions, GitHub Actions
-   on a cron, or any uptime service that can make a POST request).
-
-If a rebuild is missed, the browser still hides dates that have passed, so the
-page is never wrong. It just will not show a date that was added since.
+The site is generated ahead of time, so its idea of "today" is the date of the
+last build. Netlify rebuilds on every commit to `main`. Between builds, the
+browser hides dates that have passed, so the page never shows an old date as
+upcoming.
 
 ### Environment variables
 
@@ -266,7 +295,8 @@ than picked per component.
 
 ### What a future admin interface would need
 
-`src/data/events.json` is the only file that changes week to week, it has a JSON
-Schema next to it, and everything that reads it goes through `src/lib/events.ts`.
-An editor with a login would write the same file shape and trigger a Netlify
-build hook. Nothing else would have to change.
+The event files in `src/data/events/` are the only files that change week to
+week, they have a JSON Schema next to them (`src/data/event.schema.json`), and
+everything that reads them goes through `src/lib/events.ts`. An editor with a
+login would write the same file shape and trigger a Netlify build hook. Nothing
+else would have to change.

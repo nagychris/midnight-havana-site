@@ -1,0 +1,85 @@
+# yaml-language-server: $schema=../event.schema.json
+
+# Vorlage für einen Termin der Website. Neuen Termin anlegen: diese
+# Datei kopieren, als JJJJ-MM-TT-slug.yaml speichern, Datum, Slug und
+# Texte anpassen, committen. Dateien, die mit _ beginnen, liest die
+# Website nicht.
+
+# Pflichtfelder sind nur date und slug. Vergangene Termine verschwinden
+# automatisch. Die Buchungslinks der vier Kurse stehen bei jedem Termin
+# in bookingLinks, weil Eversports für jeden Termin eigene Links vergibt.
+
+# Datum und Uhrzeiten immer in Anführungszeichen schreiben:
+# "2026-12-31", "19:00". Einrückung immer mit zwei Leerzeichen.
+# Texte mit # darin in Anführungszeichen setzen oder als |- Block schreiben,
+# sonst fehlt alles ab dem #.
+# Prüfen vor dem Push: pnpm check-events
+
+# JJJJ-MM-TT. Bestimmt die Reihenfolge und wann der Termin verschwindet.
+date: "2026-12-31"
+# Teil der URL der Detailseite, z. B. /termine/al-son-de-cuba/. Nur
+# Kleinbuchstaben, Zahlen und Bindestriche. Darf sich nach der
+# Veröffentlichung nicht mehr ändern, sonst brechen Links.
+slug: neuer-termin
+# Name des Abends. Ohne Titel zeigt die Seite nur das Datum.
+title:
+  de: Titel des Abends
+  en: Title of the night
+# Ein Satz. Steht auf der Terminkarte und wird zur Meta-Description der
+# Detailseite.
+summary:
+  de: Ein Satz für die Terminkarte.
+  en: One sentence for the date card.
+# Text für die Detailseite. Mehrzeilige Texte beginnen mit |- und sind
+# eingerückt. Absätze mit einer Leerzeile trennen.
+description:
+  de: |-
+    Erster Absatz.
+
+    Zweiter Absatz.
+  en: |-
+    First paragraph.
+
+    Second paragraph.
+# Optional: Titel für Browser-Tab und Google, wird genau so übernommen.
+# Höchstens etwa 60 Zeichen. Ohne ihn: Titel, Datum und Midnight Havana.
+seoTitle: null
+# Optional: Text für das Google-Suchergebnis, etwa 120 bis 155 Zeichen. Ohne
+# ihn wird die summary verwendet.
+seoDescription: null
+# Wer an dem Abend auflegt.
+dj: null
+# Wer an dem Abend unterrichtet, z. B. ["Helen", "Yago"].
+teachers: []
+# Kleine Labels auf der Karte. Die Farbe ergibt sich aus der Reihenfolge: das
+# erste gold, das zweite grün, das dritte gedämpft. Labels, die nur den Titel
+# wiederholen, werden nicht angezeigt.
+badges: []
+# Dateiname aus src/assets/photos/ für das große Bild der Detailseite.
+image: null
+# Dateiname aus src/assets/flyers/ für das Plakat.
+flyer: null
+# Nur ausfüllen, wenn an dem Abend andere Preise gelten.
+priceNote: null
+# true blendet den Termin nicht aus, sondern markiert ihn als abgesagt.
+cancelled: false
+# false, wenn die vier normalen Kurse an dem Abend nicht stattfinden, z. B.
+# bei einem Gast-Workshop. Dann zeigt die Seite nur die Extras und den Social
+# Dance.
+regularClasses: true
+# Optional: Nur nutzen, wenn die Kursnamen an einem Termin vom Standard
+# abweichen. Keys entsprechen bookingLinks.
+courseLabels: {}
+# Die Eversports-Links der Kurse an diesem Termin. 'party' nur eintragen, wenn
+# der Abend selbst buchbar ist. Fehlt ein Link, führt der Button zur
+# allgemeinen Eversports-Seite des Studios, und der Build schreibt eine
+# Warnung ins Log. Erlaubt sind nur https-Adressen bei eversports.de oder
+# urbansportsclub.com.
+bookingLinks:
+  salsa-basics: null
+  rueda-beginner: null
+  salsa-beginner: null
+  rueda-advanced: null
+# Zusatzangebote an dem Abend, z. B. ein Workshop vor den Kursen. Felder:
+# startTime, endTime, title, description, level, booking.
+extras: []

@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-11-06"
+slug: eloy-rojas-workshop-shownight
+title:
+  de: Eloy Rojas Workshop & Shownight
+  en: Eloy Rojas Workshop & Shownight
+summary:
+  de: "Am 06.11. begrüßen wir bei Midnight Havana einen besonderen Gast: Eloy Rojas."
+  en: "On 6 November, we welcome a special guest to Midnight Havana: Eloy Rojas."
+description:
+  de: |-
+    Der gebürtige Venezolaner begann seine professionelle Tanzausbildung in Caracas und trainierte über die Jahre Salsa Cubana, Afro Latin und karibische Rhythmen ebenso wie Mambo, Ballett, Contemporary und Ballroom.
+
+    Nach Stationen in Caracas und Mexico City lebt Eloy seit 2016 in Berlin. Heute leitet er das EJR Studio Berlin und ist international für Workshops und Shows unterwegs. Seine Arbeit verbindet kubanische Bewegungskultur mit Musikalität, Technik und individueller Ausdruckskraft.
+
+    Bei Midnight Havana unterrichtet Eloy einen 90 minütigen Salsa Cubana Fusion Workshop von 19:00 bis 20:30 Uhr. Im Mittelpunkt stehen Rhythmus, Movement, Flow und individuelle Expression. Der Workshop richtet sich an Tänzerinnen und Tänzer, die ihre Salsa Cubana nicht nur technisch verbessern, sondern musikalischer und ausdrucksstärker tanzen möchten.
+
+    Ab 21:00 Uhr beginnt die Party. Ein weiteres Highlight des Abends ist eine Show mit Eloy Rojas und seinem EJR Studio Team, gefolgt von Animation und Social Dance mit DJ Reza.
+
+    An diesem Abend finden keine regulären Kurse statt. Der Fokus liegt ganz auf dem Workshop, der Show und der gemeinsamen Salsa Nacht.
+  en: |-
+    Born in Venezuela, Eloy began his professional dance training in Caracas. Over the years he trained in Cuban salsa, Afro Latin and Caribbean rhythms as well as mambo, ballet, contemporary and ballroom.
+
+    After Caracas and Mexico City, Eloy has lived in Berlin since 2016. Today he runs EJR Studio Berlin and travels internationally for workshops and shows. His work combines Cuban movement culture with musicality, technique and individual expression.
+
+    At Midnight Havana, Eloy teaches a 90-minute Salsa Cubana Fusion workshop from 19:00 to 20:30. It focuses on rhythm, movement, flow and individual expression, for dancers who want to improve their Cuban salsa technically and also dance it with more musicality and expression.
+
+    The party starts at 21:00. Another highlight of the night is a show by Eloy Rojas and his EJR Studio team, followed by animation and social dance with DJ Reza.
+
+    There are no regular classes that night. The focus is entirely on the workshop, the show and the salsa night together.
+seoTitle:
+  de: Salsa Workshop Berlin mit Eloy Rojas | Midnight Havana
+  en: Salsa Workshop Berlin with Eloy Rojas | Midnight Havana
+seoDescription:
+  de: 90 Min Salsa Cubana Fusion Workshop mit Eloy Rojas in Berlin. Dazu Show mit dem EJR Studio Team, DJ Reza und Social Dance im Tangoloft.
+  en: 90-minute Salsa Cubana Fusion workshop with Eloy Rojas in Berlin, plus a show by the EJR Studio team, DJ Reza and social dance at Tangoloft.
+dj: DJ Reza
+teachers:
+  - Eloy Rojas
+badges:
+  - de: Salsa Cubana Fusion Workshop
+    en: Salsa Cubana Fusion workshop
+  - de: DJ Reza
+    en: DJ Reza
+image: venue-bar.jpg
+flyer: null
+priceNote:
+  de: An diesem Abend gibt es nur das Early Bird Ticket für den Workshop über Eversports.
+  en: This night only the Early Bird workshop ticket is bookable via Eversports.
+cancelled: false
+regularClasses: false
+bookingLinks: {}
+extras:
+  - startTime: "19:00"
+    endTime: "20:30"
+    title:
+      de: Eloy Rojas Workshop
+      en: Eloy Rojas Workshop
+    description:
+      de: |-
+        90 Minuten Workshop mit Eloy Rojas. Jetzt Early Bird Ticket bei Eversports sichern.
+      en: |-
+        90-minute workshop with Eloy Rojas. Get your Early Bird ticket on Eversports now.
+    level: null
+    booking: https://www.eversports.de/e/workshop/hDZ0Xf2

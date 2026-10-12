@@ -53,10 +53,10 @@ export interface SiteEvent {
     extras: EventExtra[];
 }
 
-/** Thrown when `events.json` holds something the site cannot render. */
+/** Thrown when an event file holds something the site cannot render. */
 export class EventDataError extends Error {
     constructor(where: string, message: string) {
-        super(`events.json — ${where}: ${message}`);
+        super(`Event on ${where}: ${message}`);
         this.name = 'EventDataError';
     }
 }

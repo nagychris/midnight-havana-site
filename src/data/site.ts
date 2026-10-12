@@ -26,7 +26,7 @@ export const site = {
         url: 'https://puntocubanoberlin.com/',
     },
 
-    /** Booking platform. Individual class links live in `events.json`. */
+    /** Booking platform. Class links per date live in `src/data/events/`. */
     booking: {
         platform: 'Eversports',
         /** Shown when an event has no specific link for a class yet. */

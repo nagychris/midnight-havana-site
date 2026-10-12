@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-10-16"
+slug: tambolys-timba-night
+title:
+  de: Tamboly's Timba Night
+  en: Tamboly's Timba Night
+summary:
+  de: "Tamboly sorgt für den Sound der Nacht: kubanischer Puls, griechische Seele und genug Timba für beide Hüften."
+  en: "Tamboly brings the sound of the night: Cuban pulse, Greek soul and enough timba for both hips."
+description:
+  de: |-
+    Salsa Friday in Berlin mit Tamboly an den Decks. Er bringt griechische Seele, kubanischen Vibe und die Art von Musik, bei der aus „nur kurz tanzen“ sehr schnell „okay, noch ein Song“ wird.
+  en: |-
+    Salsa Friday in Berlin with Tamboly on the decks. He brings Greek soul, Cuban drive and the kind of music that turns “just one dance” into “okay, one more song” very quickly.
+dj: DJ Tamboly
+teachers:
+  - Helen
+  - Yago
+  - Sassan
+badges:
+  - de: DJ Tamboly
+    en: DJ Tamboly
+image: venue-bar.jpg
+flyer: null
+priceNote: null
+cancelled: false
+bookingLinks:
+  salsa-basics: https://www.eversports.de/org/activity/764480be-b7ff-4777-9f88-000bcc8b71c5
+  rueda-beginner: https://www.eversports.de/org/activity/83d90e58-c5ad-424a-97fb-871462ab5657
+  salsa-beginner: https://www.eversports.de/org/activity/cfff5700-b72d-4856-abe6-b902d52ca230
+  rueda-advanced: https://www.eversports.de/org/activity/dce18144-c035-43f3-8acc-e4527218a11d
+extras: []

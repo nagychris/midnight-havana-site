@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-12-18"
+slug: fiesta-navidena
+title:
+  de: Fiesta Navideña
+  en: Fiesta Navideña
+summary:
+  de: Zum Jahresabschluss wird es bei Midnight Havana noch einmal besonders warm.
+  en: To close the year, Midnight Havana gets especially warm one more time.
+description:
+  de: |-
+    Am 18.12. feiern wir unsere Fiesta Navideña, die Christmas Salsa Party von Midnight Havana. Statt klassischer Weihnachtsmusik gibt es Cuban Salsa, Timba und Son mit EC Kuba DJ aus Matanzas.
+
+    Freut euch auf einen festlichen Abend mit Kursen, Social Dance, unserer Community und ganz viel kubanischer Lebensfreude.
+
+    Ob elegant, festlich, rot, gold oder einfach so, wie ihr euch wohlfühlt, kommt vorbei und tanzt mit uns ein letztes Mal vor Weihnachten.
+
+    All I want for Christmas is una salsita.
+
+    Social Dance. Warm Nights. Real Connection.
+  en: |-
+    On 18 December we celebrate our Fiesta Navideña, the Midnight Havana Christmas Salsa Party. Instead of classic Christmas songs, EC Kuba DJ from Matanzas plays Cuban salsa, timba and son.
+
+    Look forward to a festive evening with classes, social dance, our community and plenty of Cuban joy.
+
+    Elegant, festive, red, gold or simply the way you feel comfortable: come by and dance with us one last time before Christmas.
+
+    All I want for Christmas is una salsita.
+
+    Social Dance. Warm Nights. Real Connection.
+seoTitle:
+  de: Christmas Salsa Party Berlin | Fiesta Navideña
+  en: Christmas Salsa Party Berlin | Fiesta Navideña
+seoDescription:
+  de: Fiesta Navideña bei Midnight Havana. Christmas Salsa Party in Berlin mit EC Kuba DJ, Salsa Cubana, Rueda de Casino und Social Dance.
+  en: Fiesta Navideña at Midnight Havana. Christmas Salsa Party in Berlin with EC Kuba DJ, Cuban salsa, Rueda de Casino and social dance.
+dj: EC Kuba DJ
+teachers:
+  - Helen
+  - Yago
+  - Sassan
+badges:
+  - de: Christmas Salsa Party
+    en: Christmas Salsa Party
+  - de: EC Kuba DJ
+    en: EC Kuba DJ
+image: venue-hall-amber.jpg
+flyer: null
+priceNote: null
+cancelled: false
+bookingLinks:
+  salsa-basics: https://www.eversports.de/org/activity/6e4f81a2-b7c5-4236-96bf-76514e53b100
+  rueda-beginner: https://www.eversports.de/org/activity/dc9bc090-887b-4d73-83c8-7cd5b019da75
+  salsa-beginner: https://www.eversports.de/org/activity/c18caff1-bdc5-4766-8fe2-9a53e9bde796
+  rueda-advanced: https://www.eversports.de/org/activity/1d4f6c74-3c07-4592-b1ec-5f4bbb4681c9
+extras: []

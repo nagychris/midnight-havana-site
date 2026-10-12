@@ -26,7 +26,7 @@ const MAX_EDGE_PORTRAIT = 1600;
 /**
  * Source file to published name.
  *
- * Keep the published names stable: `events.json` and `photos.ts` refer to them,
+ * Keep the published names stable: event files and `photos.ts` refer to them,
  * and renaming one silently drops the picture from the page.
  */
 const MAPPING = [

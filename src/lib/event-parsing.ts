@@ -10,8 +10,8 @@ import {
 } from './event-types';
 
 /**
- * Turns raw JSON into typed events, or fails the build saying exactly what is
- * wrong and which date it is on.
+ * Turns the content of one event file into a typed event, or fails the
+ * build saying exactly what is wrong and which date it is on.
  *
  * Nothing here trusts the input. The file is edited by hand today and may be
  * written by an admin interface later, and a page that silently renders a
@@ -69,14 +69,14 @@ const EXTRA_KEYS = [
 
 export function parseEvent(entry: unknown): SiteEvent {
     if (typeof entry !== 'object' || entry === null) {
-        throw new Error('events.json contains an entry that is not an object.');
+        throw new Error('The file does not contain an event. Start from _template.yaml.');
     }
 
     const raw = entry as Record<string, unknown>;
     const date = raw.date;
     if (!isValidDateKey(date)) {
         throw new Error(
-            `events.json contains an invalid date: ${JSON.stringify(date)}. Use YYYY-MM-DD.`,
+            `"date" is invalid: ${JSON.stringify(date)}. Use "YYYY-MM-DD" in quotes.`,
         );
     }
     assertKnownKeys(date, 'the event', raw, EVENT_KEYS);
@@ -110,25 +110,6 @@ export function parseEvent(entry: unknown): SiteEvent {
         bookingLinks: parseBookingLinks(date, raw.bookingLinks),
         extras: parseExtras(date, raw.extras),
     };
-}
-
-export function assertUniqueDatesAndSlugs(events: SiteEvent[]): void {
-    const dates = new Set<string>();
-    const slugs = new Set<string>();
-
-    for (const event of events) {
-        if (dates.has(event.date)) {
-            throw new EventDataError(event.date, 'this date appears more than once.');
-        }
-        if (slugs.has(event.slug)) {
-            throw new EventDataError(
-                event.date,
-                `the slug "${event.slug}" is already used by another date.`,
-            );
-        }
-        dates.add(event.date);
-        slugs.add(event.slug);
-    }
 }
 
 function assertKnownKeys(

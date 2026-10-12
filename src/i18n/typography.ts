@@ -13,7 +13,7 @@ export function keepTogether(phrase: string): string {
 
 /**
  * Splits a text into paragraphs at blank lines, for event texts that are
- * stored as one string in `events.json`.
+ * stored as one `|-` block in an event file in `src/data/events/`.
  */
 export function toParagraphs(text: string): string[] {
     return text

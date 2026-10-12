@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-11-13"
+slug: salsa-friday-ec-kuba-dj-night
+title:
+  de: Salsa Friday
+  en: Salsa Friday
+summary:
+  de: Am 13.11. wird Midnight Havana wieder ganz kubanisch.
+  en: On 13 November, Midnight Havana goes fully Cuban again.
+description:
+  de: |-
+    EC Kuba DJ aus Matanzas, Kuba übernimmt den Sound des Abends und bringt Cuban Salsa, Timba und Son auf die Tanzfläche.
+
+    Vor dem Social Dance starten unsere Salsa Cubana und Rueda de Casino Kurse. Egal ob ihr gerade eure ersten Schritte macht oder schon länger tanzt, unsere Freitage verbinden Lernen, Musik und Community.
+
+    Midnight Havana ist mehr als nur eine Salsa Party in Berlin. Es ist ein Ort zum Lernen, Tanzen, Leute kennenlernen und den Freitag gemeinsam ausklingen lassen.
+  en: |-
+    EC Kuba DJ from Matanzas, Cuba, takes over the sound of the night and brings Cuban salsa, timba and son to the dance floor.
+
+    Before the social dance, our Cuban salsa and Rueda de Casino classes begin. Whether you are taking your first steps or have been dancing for a while, our Fridays bring together learning, music and community.
+
+    Midnight Havana is more than just a salsa party in Berlin. It is a place to learn, dance, meet people and end the week together.
+seoTitle:
+  de: Cuban Salsa Berlin mit EC Kuba DJ | Midnight Havana
+  en: Cuban Salsa Berlin with EC Kuba DJ | Midnight Havana
+seoDescription:
+  de: Salsa Cubana, Rueda de Casino und Social Dance mit EC Kuba DJ aus Matanzas. Jeden Freitag bei Midnight Havana im Tangoloft Berlin.
+  en: Cuban salsa, Rueda de Casino and social dance with EC Kuba DJ from Matanzas. Every Friday at Midnight Havana, Tangoloft Berlin.
+dj: EC Kuba DJ
+teachers:
+  - Helen
+  - Yago
+  - Sassan
+badges:
+  - de: EC Kuba DJ
+    en: EC Kuba DJ
+image: venue-hall-amber.jpg
+flyer: null
+priceNote: null
+cancelled: false
+bookingLinks:
+  salsa-basics: https://www.eversports.de/org/activity/2e7fe9d6-0c62-407d-868e-c1f7eec432ec
+  rueda-beginner: https://www.eversports.de/org/activity/15bcd0aa-56fa-4236-8a38-404c93371736
+  salsa-beginner: https://www.eversports.de/org/activity/b3fca75e-53d0-4e39-8625-125305e03f1b
+  rueda-advanced: https://www.eversports.de/org/activity/ec057941-b2da-4866-b357-a866dbc5b4a9
+extras: []

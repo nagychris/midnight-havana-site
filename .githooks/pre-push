@@ -1,0 +1,12 @@
+#!/bin/sh
+# Stops a push when an event file in src/data/events/ is broken, so Netlify
+# never receives a commit it cannot build. Turned on by `pnpm install` (see the
+# "prepare" script in package.json). Skip it once with `git push --no-verify`.
+
+# Some git apps run hooks without the shell's PATH. Then skip the check rather
+# than block every push; Netlify's build still catches a broken file.
+if ! command -v pnpm >/dev/null 2>&1; then
+    echo "pre-push: pnpm not found, event files not checked." >&2
+    exit 0
+fi
+exec pnpm --silent check-events

@@ -26,7 +26,7 @@ Urban Sports Club (USC). This will become more important over time.
 - A booking button either leads to one specific class or to a place where the
   visitor picks a class (the event timetable, `eventTimetableHref`, or the
   Eversports overview).
-- Booking links are entered per date in `src/data/events.json`. Only https
+- Booking links are entered per date in `src/data/events/`. Only https
   links to `eversports.de` and `urbansportsclub.com` are allowed.
 - Keep booking rows consistent: use `src/components/event/BookingRow.astro` for
   anything bookable.
@@ -36,11 +36,13 @@ Urban Sports Club (USC). This will become more important over time.
 The owner sends change requests in German and is not a developer. Things they
 edit or ask for most:
 
-- Event dates, titles and texts in `src/data/events.json`. The first sentence
-  of the owner's text goes into `summary` (event card), the rest into
-  `description` (event page, paragraphs separated by `\n\n`). Emoji lists are
-  left out because the timetable, crew and venue boxes show the same facts.
-  Per-event SEO goes into `seoTitle` and `seoDescription`.
+- Event dates, titles and texts, one YAML file per date in `src/data/events/`
+  (`<date>-<slug>.yaml`, new ones copied from `_template.yaml`). The first
+  sentence of the owner's text goes into `summary` (event card), the rest into
+  `description` (event page), written as a `|-` block with a blank line between
+  paragraphs. Quote dates and times. Emoji lists are left out because the
+  timetable, crew and venue boxes show the same facts. Per-event SEO goes into
+  `seoTitle` and `seoDescription`. Run `pnpm check-events` after editing.
 - Prices in `site.prices.tiers` in `src/data/site.ts` (social only, 1 class +
   social, 2 classes + social; standard and reduced). All price displays and the
   schema.org data read from there.
@@ -67,11 +69,12 @@ edit or ask for most:
 ## Checking a change
 
 ```sh
-pnpm test    # vitest, for src/lib and src/i18n
-pnpm check   # astro check, types
-pnpm build   # full static build
+pnpm test          # vitest, for src/lib and src/i18n
+pnpm check         # astro check, types
+pnpm build         # full static build
+pnpm check-events  # event files only, about a second
 ```
 
-Run all three before calling a change done. The preview server may be blocked
+Run the first three before calling a change done. The preview server may be blocked
 in the sandbox; then check the built HTML in `dist/` and say that the change
 was not seen in a browser.
