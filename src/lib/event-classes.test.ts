@@ -13,6 +13,8 @@ function event(overrides: Partial<SiteEvent> = {}): SiteEvent {
         title: null,
         summary: null,
         description: null,
+        seoTitle: null,
+        seoDescription: null,
         dj: null,
         teachers: [],
         badges: [],

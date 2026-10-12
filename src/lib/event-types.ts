@@ -28,7 +28,12 @@ export interface SiteEvent {
     slug: string;
     title: LocalisedText | null;
     summary: LocalisedText | null;
+    /** Detail page text. Paragraphs are separated by a blank line. */
     description: LocalisedText | null;
+    /** Browser tab and search result title. Falls back to title and date. */
+    seoTitle: LocalisedText | null;
+    /** Search result snippet. Falls back to the summary. */
+    seoDescription: LocalisedText | null;
     dj: string | null;
     teachers: string[];
     badges: EventBadge[];

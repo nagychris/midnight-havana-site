@@ -64,6 +64,7 @@ export function danceEventSchema(event: SiteEvent, locale: Locale): JsonObject {
     const t = useTranslations(locale);
     const name = event.title?.[locale] ?? t.hero.eyebrow;
     const description =
+        event.seoDescription?.[locale] ??
         event.summary?.[locale] ??
         event.description?.[locale] ??
         t.meta.home.description;

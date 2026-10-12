@@ -79,3 +79,43 @@ describe('parseEvent unknown fields', () => {
         );
     });
 });
+
+describe('parseEvent SEO fields', () => {
+    it('defaults to null when missing', () => {
+        const event = parseEvent(rawEvent());
+
+        expect(event.seoTitle).toBeNull();
+        expect(event.seoDescription).toBeNull();
+    });
+
+    it('keeps an SEO title in both languages', () => {
+        const seoTitle = { de: 'Salsa Berlin', en: 'Salsa Berlin' };
+
+        expect(parseEvent(rawEvent({ seoTitle })).seoTitle).toEqual(seoTitle);
+    });
+
+    it('rejects an SEO description without both languages', () => {
+        expect(() =>
+            parseEvent(rawEvent({ seoDescription: { de: 'Nur Deutsch' } })),
+        ).toThrow(/seoDescription/);
+    });
+});
+
+describe('parseEvent description length', () => {
+    it('accepts a description of several paragraphs', () => {
+        const long = 'Ein Satz. '.repeat(150);
+        const description = { de: long, en: long };
+
+        expect(parseEvent(rawEvent({ description })).description).toEqual(
+            description,
+        );
+    });
+
+    it('keeps the shorter limit for the summary', () => {
+        const long = 'Ein Satz. '.repeat(150);
+
+        expect(() =>
+            parseEvent(rawEvent({ summary: { de: long, en: long } })),
+        ).toThrow(/summary/);
+    });
+});

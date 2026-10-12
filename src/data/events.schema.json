@@ -51,8 +51,16 @@
           "description": "One sentence. Used on the date card and as the meta description of the detail page, so keep it under about 155 characters."
         },
         "description": {
+          "oneOf": [{ "$ref": "#/$defs/longLocalisedText" }, { "type": "null" }],
+          "description": "Text for the detail page. Separate paragraphs with a blank line, written as \\n\\n inside the JSON string."
+        },
+        "seoTitle": {
           "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
-          "description": "Two to four sentences for the detail page."
+          "description": "Title for the browser tab and Google, used exactly as written. Keep it under about 60 characters. Without one, the page uses the event title, the date and the site name."
+        },
+        "seoDescription": {
+          "oneOf": [{ "$ref": "#/$defs/localisedText" }, { "type": "null" }],
+          "description": "Snippet for Google, about 120 to 155 characters. Without one, the summary is used."
         },
         "dj": {
           "type": ["string", "null"],
@@ -169,6 +177,16 @@
       "properties": {
         "de": { "type": "string", "minLength": 1, "maxLength": 600 },
         "en": { "type": "string", "minLength": 1, "maxLength": 600 }
+      }
+    },
+    "longLocalisedText": {
+      "type": "object",
+      "required": ["de", "en"],
+      "additionalProperties": false,
+      "description": "Like localisedText, but long enough for several paragraphs.",
+      "properties": {
+        "de": { "type": "string", "minLength": 1, "maxLength": 2500 },
+        "en": { "type": "string", "minLength": 1, "maxLength": 2500 }
       }
     },
     "imageFileName": {

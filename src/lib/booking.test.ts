@@ -21,6 +21,8 @@ function eventWithBookingLinks(
         title: null,
         summary: null,
         description: null,
+        seoTitle: null,
+        seoDescription: null,
         dj: null,
         teachers: [],
         badges: [],

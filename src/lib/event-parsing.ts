@@ -28,6 +28,8 @@ const ALLOWED_BOOKING_HOSTS = [
 
 const BOOKING_TARGETS: BookingTarget[] = [...CLASS_IDS, 'party'];
 const MAX_TEXT_LENGTH = 600;
+/** The detail page text runs to several paragraphs. */
+const MAX_DESCRIPTION_LENGTH = 2500;
 const IMAGE_FILE = /^[A-Za-z0-9._-]+\.(png|jpg|jpeg|webp|avif)$/;
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const TIME_OF_DAY = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -42,6 +44,8 @@ const EVENT_KEYS = [
     'title',
     'summary',
     'description',
+    'seoTitle',
+    'seoDescription',
     'dj',
     'teachers',
     'badges',
@@ -82,7 +86,18 @@ export function parseEvent(entry: unknown): SiteEvent {
         slug: parseSlug(date, raw.slug),
         title: parseLocalisedText(date, 'title', raw.title),
         summary: parseLocalisedText(date, 'summary', raw.summary),
-        description: parseLocalisedText(date, 'description', raw.description),
+        description: parseLocalisedText(
+            date,
+            'description',
+            raw.description,
+            MAX_DESCRIPTION_LENGTH,
+        ),
+        seoTitle: parseLocalisedText(date, 'seoTitle', raw.seoTitle),
+        seoDescription: parseLocalisedText(
+            date,
+            'seoDescription',
+            raw.seoDescription,
+        ),
         dj: parseOptionalString(date, 'dj', raw.dj),
         teachers: parseStringList(date, 'teachers', raw.teachers),
         badges: parseBadges(date, raw.badges),
@@ -145,6 +160,7 @@ function parseLocalisedText(
     date: string,
     field: string,
     value: unknown,
+    maxLength: number = MAX_TEXT_LENGTH,
 ): LocalisedText | null {
     if (value === null || value === undefined) return null;
 
@@ -164,10 +180,10 @@ function parseLocalisedText(
             `"${field}" needs a non-empty "de" and "en" value, or null.`,
         );
     }
-    if (de.length > MAX_TEXT_LENGTH || en.length > MAX_TEXT_LENGTH) {
+    if (de.length > maxLength || en.length > maxLength) {
         throw new EventDataError(
             date,
-            `"${field}" is longer than ${MAX_TEXT_LENGTH} characters.`,
+            `"${field}" is longer than ${maxLength} characters.`,
         );
     }
     return { de, en };

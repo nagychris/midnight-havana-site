@@ -6,7 +6,9 @@
     "slug": "Teil der URL der Detailseite, z. B. /termine/al-son-de-cuba/. Nur Kleinbuchstaben, Zahlen und Bindestriche. Darf sich nach der Veröffentlichung nicht mehr ändern, sonst brechen Links.",
     "title": "Name des Abends. Ohne Titel zeigt die Seite nur das Datum.",
     "summary": "Ein Satz. Steht auf der Terminkarte und wird zur Meta-Description der Detailseite.",
-    "description": "Zwei bis vier Sätze für die Detailseite.",
+    "description": "Text für die Detailseite. Absätze mit einer Leerzeile trennen, im JSON als \\n\\n geschrieben.",
+    "seoTitle": "Optional: Titel für Browser-Tab und Google, wird genau so übernommen. Höchstens etwa 60 Zeichen. Ohne ihn: Titel, Datum und Midnight Havana.",
+    "seoDescription": "Optional: Text für das Google-Suchergebnis, etwa 120 bis 155 Zeichen. Ohne ihn wird die summary verwendet.",
     "dj": "Wer an dem Abend auflegt.",
     "teachers": "Wer an dem Abend unterrichtet, z. B. [\"Helen\", \"Yago\"].",
     "badges": "Kleine Labels auf der Karte. Die Farbe ergibt sich aus der Reihenfolge: das erste gold, das zweite grün, das dritte gedämpft. Labels, die nur den Titel wiederholen, werden nicht angezeigt.",
@@ -122,20 +124,28 @@
     },
     {
       "date": "2026-10-30",
-      "slug": "salsa-friday",
+      "slug": "halloween-salsa-party",
       "title": {
-        "de": "Salsa Friday",
-        "en": "Salsa Friday"
+        "de": "Halloween Salsa Party",
+        "en": "Halloween Salsa Party"
       },
       "summary": {
-        "de": "Der DJ ist noch geheim. Die Tanzfläche tut trotzdem schon so, als wüsste sie mehr.",
-        "en": "The DJ is still a secret. The dance floor is already acting like it knows more."
+        "de": "Am 30.10. wird es bei Midnight Havana etwas dunkler als sonst.",
+        "en": "On 30 October, Midnight Havana gets a little darker than usual."
       },
       "description": {
-        "de": "Midnight Havana bleibt Berlins Salsa Friday: Kurse ab 19 Uhr, Social Dance ab 21 Uhr und ein Line-up, das wir noch ankündigen. Manchmal ist Vorfreude auch nur Rueda mit Geduld.",
-        "en": "Midnight Havana remains Berlin’s Salsa Friday: classes from 19:00, social dance from 21:00 and a line-up we will announce soon. Sometimes anticipation is just rueda with patience."
+        "de": "Unsere Halloween Salsa Party in Berlin verbindet Cuban Salsa, Timba und Son mit der warmen Atmosphäre, für die unsere Freitage im Tangoloft stehen.\n\nFreut euch auf einen besonderen Salsa Friday mit Kursen am frühen Abend, Social Dance ab 21:00 Uhr und einer Halloween Atmosphäre zwischen Havanna, Berlin und ein bisschen Mystery.\n\nOb ihr euch verkleidet, elegant kommt oder einfach so, wie ihr euch wohlfühlt, bleibt euch überlassen. Der Fokus liegt wie immer auf guter Musik, echtem Social Dance und einer offenen Community.\n\nEine Halloween Party für alle, die lieber Salsa tanzen als zwischen Plastikspinnen und Kürbissen zu verschwinden.\n\nSocial Dance. Warm Nights. Real Connection.",
+        "en": "Our Halloween Salsa Party in Berlin brings together Cuban salsa, timba and son with the warm atmosphere our Fridays at Tangoloft are known for.\n\nLook forward to a special Salsa Friday with classes in the early evening, social dance from 21:00 and a Halloween mood somewhere between Havana, Berlin and a little mystery.\n\nWhether you come in costume, dressed up or just as you feel comfortable is up to you. As always, the focus is on good music, real social dance and an open community.\n\nA Halloween party for everyone who would rather dance salsa than disappear between plastic spiders and pumpkins.\n\nSocial Dance. Warm Nights. Real Connection."
       },
-      "dj": null,
+      "seoTitle": {
+        "de": "Halloween Salsa Party Berlin | Midnight Havana",
+        "en": "Halloween Salsa Party Berlin | Midnight Havana"
+      },
+      "seoDescription": {
+        "de": "Halloween Salsa Party in Berlin mit Salsa Cubana, Rueda de Casino und Social Dance ab 21:00 im Tangoloft Berlin. DJ Pedro.",
+        "en": "Halloween Salsa Party in Berlin with Cuban salsa, Rueda de Casino and social dance from 21:00 at Tangoloft Berlin. DJ Pedro."
+      },
+      "dj": "DJ Pedro",
       "teachers": [
         "Helen",
         "Yago",
@@ -143,8 +153,8 @@
       ],
       "badges": [
         {
-          "de": "DJ: TBA",
-          "en": "DJ: TBA"
+          "de": "DJ Pedro",
+          "en": "DJ Pedro"
         }
       ],
       "image": "venue-hall-amber.jpg",
@@ -167,12 +177,20 @@
         "en": "Eloy Rojas Workshop & Shownight"
       },
       "summary": {
-        "de": "Eloy Rojas ist presente: 90 Minuten Workshop, Show mit seinen Ladys und danach Social Dance mit DJ Reza.",
-        "en": "Eloy Rojas is presente: a 90-minute workshop, a show with his ladies and social dance with DJ Reza afterwards."
+        "de": "Am 06.11. begrüßen wir bei Midnight Havana einen besonderen Gast: Eloy Rojas.",
+        "en": "On 6 November, we welcome a special guest to Midnight Havana: Eloy Rojas."
       },
       "description": {
-        "de": "Nach seinen Auftritten beim Salsa Congress Berlin und Berlin Salsa Festival 2026 bringt Eloy Rojas das Spektakel zu Midnight Havana. Von 19:00 bis 20:30 gibt es den Workshop, ab 21:00 Social Dance mit DJ Reza. Diese Nacht ist er presente mit seinen Ladys.",
-        "en": "After his performances at Salsa Congress Berlin and Berlin Salsa Festival 2026, Eloy Rojas brings the spectacle to Midnight Havana. The workshop runs from 19:00 to 20:30, followed by social dance from 21:00 with DJ Reza. This night he is presente with his ladies."
+        "de": "Der gebürtige Venezolaner begann seine professionelle Tanzausbildung in Caracas und trainierte über die Jahre Salsa Cubana, Afro Latin und karibische Rhythmen ebenso wie Mambo, Ballett, Contemporary und Ballroom.\n\nNach Stationen in Caracas und Mexico City lebt Eloy seit 2016 in Berlin. Heute leitet er das EJR Studio Berlin und ist international für Workshops und Shows unterwegs. Seine Arbeit verbindet kubanische Bewegungskultur mit Musikalität, Technik und individueller Ausdruckskraft.\n\nBei Midnight Havana unterrichtet Eloy einen 90 minütigen Salsa Cubana Fusion Workshop von 19:00 bis 20:30 Uhr. Im Mittelpunkt stehen Rhythmus, Movement, Flow und individuelle Expression. Der Workshop richtet sich an Tänzerinnen und Tänzer, die ihre Salsa Cubana nicht nur technisch verbessern, sondern musikalischer und ausdrucksstärker tanzen möchten.\n\nAb 21:00 Uhr beginnt die Party. Ein weiteres Highlight des Abends ist eine Show mit Eloy Rojas und seinem EJR Studio Team, gefolgt von Animation und Social Dance mit DJ Reza.\n\nAn diesem Abend finden keine regulären Kurse statt. Der Fokus liegt ganz auf dem Workshop, der Show und der gemeinsamen Salsa Nacht.",
+        "en": "Born in Venezuela, Eloy began his professional dance training in Caracas. Over the years he trained in Cuban salsa, Afro Latin and Caribbean rhythms as well as mambo, ballet, contemporary and ballroom.\n\nAfter Caracas and Mexico City, Eloy has lived in Berlin since 2016. Today he runs EJR Studio Berlin and travels internationally for workshops and shows. His work combines Cuban movement culture with musicality, technique and individual expression.\n\nAt Midnight Havana, Eloy teaches a 90-minute Salsa Cubana Fusion workshop from 19:00 to 20:30. It focuses on rhythm, movement, flow and individual expression, for dancers who want to improve their Cuban salsa technically and also dance it with more musicality and expression.\n\nThe party starts at 21:00. Another highlight of the night is a show by Eloy Rojas and his EJR Studio team, followed by animation and social dance with DJ Reza.\n\nThere are no regular classes that night. The focus is entirely on the workshop, the show and the salsa night together."
+      },
+      "seoTitle": {
+        "de": "Salsa Workshop Berlin mit Eloy Rojas | Midnight Havana",
+        "en": "Salsa Workshop Berlin with Eloy Rojas | Midnight Havana"
+      },
+      "seoDescription": {
+        "de": "90 Min Salsa Cubana Fusion Workshop mit Eloy Rojas in Berlin. Dazu Show mit dem EJR Studio Team, DJ Reza und Social Dance im Tangoloft.",
+        "en": "90-minute Salsa Cubana Fusion workshop with Eloy Rojas in Berlin, plus a show by the EJR Studio team, DJ Reza and social dance at Tangoloft."
       },
       "dj": "DJ Reza",
       "teachers": [
@@ -180,8 +198,8 @@
       ],
       "badges": [
         {
-          "de": "Star Workshop",
-          "en": "Star workshop"
+          "de": "Salsa Cubana Fusion Workshop",
+          "en": "Salsa Cubana Fusion workshop"
         },
         {
           "de": "DJ Reza",
@@ -210,7 +228,7 @@
             "en": "90-minute workshop with Eloy Rojas. Get your Early Bird ticket on Eversports now."
           },
           "level": null,
-          "booking": "https://www.eversports.de/scl/salsa-im-tangoloft-berlin"
+          "booking": "https://www.eversports.de/e/workshop/hDZ0Xf2"
         }
       ]
     },
@@ -218,18 +236,26 @@
       "date": "2026-11-13",
       "slug": "salsa-friday-ec-kuba-dj-night",
       "title": {
-        "de": "Salsa Friday: EC Kuba DJ Night",
-        "en": "Salsa Friday: EC Kuba DJ Night"
+        "de": "Salsa Friday",
+        "en": "Salsa Friday"
       },
       "summary": {
-        "de": "EC Kuba DJ aus Matanzas wärmt kühle Herbstnächte mit der richtigen Auswahl an Musik auf.",
-        "en": "EC Kuba DJ from Matanzas warms up chilly autumn nights with exactly the right selection of music."
+        "de": "Am 13.11. wird Midnight Havana wieder ganz kubanisch.",
+        "en": "On 13 November, Midnight Havana goes fully Cuban again."
       },
       "description": {
-        "de": "Wenn Berlin langsam Richtung Winter schielt, kommt EC Kuba DJ aus Matanzas mit der passenden Medizin: Cuban Salsa, Timba, Son und genug Wärme für die Tanzfläche. Salsa Friday in Berlin, wie er sein soll.",
-        "en": "When Berlin starts looking suspiciously like winter, EC Kuba DJ from Matanzas brings the right medicine: Cuban salsa, timba, son and enough warmth for the dance floor. Salsa Friday in Berlin, the way it should be."
+        "de": "EC Kuba DJ aus Matanzas, Kuba übernimmt den Sound des Abends und bringt Cuban Salsa, Timba und Son auf die Tanzfläche.\n\nVor dem Social Dance starten unsere Salsa Cubana und Rueda de Casino Kurse. Egal ob ihr gerade eure ersten Schritte macht oder schon länger tanzt, unsere Freitage verbinden Lernen, Musik und Community.\n\nMidnight Havana ist mehr als nur eine Salsa Party in Berlin. Es ist ein Ort zum Lernen, Tanzen, Leute kennenlernen und den Freitag gemeinsam ausklingen lassen.",
+        "en": "EC Kuba DJ from Matanzas, Cuba, takes over the sound of the night and brings Cuban salsa, timba and son to the dance floor.\n\nBefore the social dance, our Cuban salsa and Rueda de Casino classes begin. Whether you are taking your first steps or have been dancing for a while, our Fridays bring together learning, music and community.\n\nMidnight Havana is more than just a salsa party in Berlin. It is a place to learn, dance, meet people and end the week together."
       },
-      "dj": "DJ EC Kuba",
+      "seoTitle": {
+        "de": "Cuban Salsa Berlin mit EC Kuba DJ | Midnight Havana",
+        "en": "Cuban Salsa Berlin with EC Kuba DJ | Midnight Havana"
+      },
+      "seoDescription": {
+        "de": "Salsa Cubana, Rueda de Casino und Social Dance mit EC Kuba DJ aus Matanzas. Jeden Freitag bei Midnight Havana im Tangoloft Berlin.",
+        "en": "Cuban salsa, Rueda de Casino and social dance with EC Kuba DJ from Matanzas. Every Friday at Midnight Havana, Tangoloft Berlin."
+      },
+      "dj": "EC Kuba DJ",
       "teachers": [
         "Helen",
         "Yago",
@@ -237,8 +263,8 @@
       ],
       "badges": [
         {
-          "de": "Matanzas",
-          "en": "Matanzas"
+          "de": "EC Kuba DJ",
+          "en": "EC Kuba DJ"
         }
       ],
       "image": "venue-hall-amber.jpg",
@@ -257,16 +283,24 @@
       "date": "2026-11-27",
       "slug": "salsa-friday-dj-helen",
       "title": {
-        "de": "Salsa Friday: DJ Helen",
-        "en": "Salsa Friday: DJ Helen"
+        "de": "Salsa Friday",
+        "en": "Salsa Friday"
       },
       "summary": {
-        "de": "DJ Helen legt wieder auf: eine der ersten weiblichen DJs der Berliner Salsa Szene mit feiner Musikauswahl.",
-        "en": "DJ Helen is back: one of the first female DJs in Berlin’s salsa scene, known for her fine music selection."
+        "de": "Am 27.11. übernimmt DJ Helen die Musik bei Midnight Havana.",
+        "en": "On 27 November, DJ Helen takes over the music at Midnight Havana."
       },
       "description": {
-        "de": "DJ Helen gehört zu den ersten weiblichen DJs der Berliner Salsa Szene und zeigt, dass gute Musik keine laute Ansage braucht. Sie überzeugt durch Auswahl, Gefühl und Songs, bei denen man kurz vergisst, dass morgen vielleicht wieder Alltag ist.",
-        "en": "DJ Helen is one of the first female DJs in Berlin’s salsa scene and proves that good music does not need a loud announcement. Her selection brings feeling, flow and songs that make everyday life wait outside for a while."
+        "de": "Freut euch auf einen Abend mit Cuban Salsa, Timba, Son und viel Gefühl für Musikalität.\n\nBevor die Party startet, gibt es wie gewohnt unsere Salsa Cubana und Rueda de Casino Kurse in verschiedenen Levels. Danach öffnet sich ab 21:00 Uhr die Tanzfläche für den Social Dance.\n\nEin Freitag für alle, die Salsa lernen, ihre Skills verbessern oder einfach einen warmen Abend mit unserer Community verbringen möchten.\n\nCome to learn. Stay to dance.",
+        "en": "Look forward to a night of Cuban salsa, timba, son and a real feel for musicality.\n\nBefore the party starts, our Cuban salsa and Rueda de Casino classes run as usual, at different levels. From 21:00 the dance floor opens for the social dance.\n\nA Friday for everyone who wants to learn salsa, improve their skills or simply spend a warm evening with our community.\n\nCome to learn. Stay to dance."
+      },
+      "seoTitle": {
+        "de": "Salsa Friday Berlin mit DJ Helen | Midnight Havana",
+        "en": "Salsa Friday Berlin with DJ Helen | Midnight Havana"
+      },
+      "seoDescription": {
+        "de": "Salsa Friday in Berlin mit Salsa Cubana, Rueda de Casino und DJ Helen. Social Dance ab 21:00 im Tangoloft Berlin.",
+        "en": "Salsa Friday in Berlin with Cuban salsa, Rueda de Casino and DJ Helen. Social dance from 21:00 at Tangoloft Berlin."
       },
       "dj": "DJ Helen",
       "teachers": [
@@ -274,7 +308,12 @@
         "Yago",
         "Sassan"
       ],
-      "badges": [],
+      "badges": [
+        {
+          "de": "DJ Helen",
+          "en": "DJ Helen"
+        }
+      ],
       "image": "venue-bar.jpg",
       "flyer": null,
       "priceNote": null,
@@ -295,14 +334,22 @@
         "en": "Fiesta Navideña"
       },
       "summary": {
-        "de": "EC Kuba kommt als Weihnachtsmann und bringt Geschenke in Form von Songs. Socken sind hoffentlich nicht dabei.",
-        "en": "EC Kuba arrives as Santa and brings gifts in the form of songs. Hopefully no socks included."
+        "de": "Zum Jahresabschluss wird es bei Midnight Havana noch einmal besonders warm.",
+        "en": "To close the year, Midnight Havana gets especially warm one more time."
       },
       "description": {
-        "de": "Unsere Christmas Salsa Party heißt Fiesta Navideña, weil selbst der Weihnachtsmann bei uns mehr Clave als Glocke hat. EC Kuba DJ bringt Geschenke in Form von Songs, und Berlin bekommt eine letzte warme Salsa Friday Nacht vor den Feiertagen.",
-        "en": "Our Christmas Salsa Party is called Fiesta Navideña, because even Santa has more clave than bells at Midnight Havana. EC Kuba DJ brings gifts in the form of songs, and Berlin gets one last warm Salsa Friday night before the holidays."
+        "de": "Am 18.12. feiern wir unsere Fiesta Navideña, die Christmas Salsa Party von Midnight Havana. Statt klassischer Weihnachtsmusik gibt es Cuban Salsa, Timba und Son mit EC Kuba DJ aus Matanzas.\n\nFreut euch auf einen festlichen Abend mit Kursen, Social Dance, unserer Community und ganz viel kubanischer Lebensfreude.\n\nOb elegant, festlich, rot, gold oder einfach so, wie ihr euch wohlfühlt, kommt vorbei und tanzt mit uns ein letztes Mal vor Weihnachten.\n\nAll I want for Christmas is una salsita.\n\nSocial Dance. Warm Nights. Real Connection.",
+        "en": "On 18 December we celebrate our Fiesta Navideña, the Midnight Havana Christmas Salsa Party. Instead of classic Christmas songs, EC Kuba DJ from Matanzas plays Cuban salsa, timba and son.\n\nLook forward to a festive evening with classes, social dance, our community and plenty of Cuban joy.\n\nElegant, festive, red, gold or simply the way you feel comfortable: come by and dance with us one last time before Christmas.\n\nAll I want for Christmas is una salsita.\n\nSocial Dance. Warm Nights. Real Connection."
       },
-      "dj": "DJ EC Kuba",
+      "seoTitle": {
+        "de": "Christmas Salsa Party Berlin | Fiesta Navideña",
+        "en": "Christmas Salsa Party Berlin | Fiesta Navideña"
+      },
+      "seoDescription": {
+        "de": "Fiesta Navideña bei Midnight Havana. Christmas Salsa Party in Berlin mit EC Kuba DJ, Salsa Cubana, Rueda de Casino und Social Dance.",
+        "en": "Fiesta Navideña at Midnight Havana. Christmas Salsa Party in Berlin with EC Kuba DJ, Cuban salsa, Rueda de Casino and social dance."
+      },
+      "dj": "EC Kuba DJ",
       "teachers": [
         "Helen",
         "Yago",
@@ -310,8 +357,8 @@
       ],
       "badges": [
         {
-          "de": "Christmas Party",
-          "en": "Christmas party"
+          "de": "Christmas Salsa Party",
+          "en": "Christmas Salsa Party"
         },
         {
           "de": "EC Kuba DJ",

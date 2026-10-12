@@ -25,6 +25,7 @@ import {
     sectionIds,
     useTranslations,
 } from '../i18n';
+import { toParagraphs } from '../i18n/typography';
 
 /**
  * One event's own page.
@@ -49,13 +50,15 @@ const heroPhoto = event.image ? photoByName(event.image) : undefined;
 const otherDates = otherUpcomingEvents(event.slug).slice(0, 3);
 const visiblePriceTiers = priceTiersFor(event.regularClasses);
 
-const pageTitle = `${title} — ${longDate} | ${site.name}`;
+const pageTitle =
+    event.seoTitle?.[locale] ?? `${title} — ${longDate} | ${site.name}`;
+const metaDescription = event.seoDescription?.[locale] ?? summary;
 ---
 
 <Base
     paths={eventPaths(event.slug)}
     title={pageTitle}
-    description={summary}
+    description={metaDescription}
     ogType="article"
     bookingBar={false}
 >
@@ -201,9 +204,11 @@ const pageTitle = `${title} — ${longDate} | ${site.name}`;
             <div>
                 {
                     event.description && (
-                        <p class="text-lead leading-relaxed-2 text-cream/80">
-                            {event.description[locale]}
-                        </p>
+                        <div class="flex flex-col gap-4 text-lead leading-relaxed-2 text-cream/80">
+                            {toParagraphs(event.description[locale]).map((paragraph) => (
+                                <p>{paragraph}</p>
+                            ))}
+                        </div>
                     )
                 }
 

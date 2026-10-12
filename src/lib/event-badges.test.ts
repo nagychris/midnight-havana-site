@@ -14,6 +14,8 @@ function event(title: string | null, badges: EventBadge[]): SiteEvent {
         title: title ? { de: title, en: title } : null,
         summary: null,
         description: null,
+        seoTitle: null,
+        seoDescription: null,
         dj: null,
         teachers: [],
         badges,

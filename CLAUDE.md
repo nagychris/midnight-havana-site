@@ -36,7 +36,11 @@ Urban Sports Club (USC). This will become more important over time.
 The owner sends change requests in German and is not a developer. Things they
 edit or ask for most:
 
-- Event dates, titles and texts in `src/data/events.json`.
+- Event dates, titles and texts in `src/data/events.json`. The first sentence
+  of the owner's text goes into `summary` (event card), the rest into
+  `description` (event page, paragraphs separated by `\n\n`). Emoji lists are
+  left out because the timetable, crew and venue boxes show the same facts.
+  Per-event SEO goes into `seoTitle` and `seoDescription`.
 - Prices in `site.prices.tiers` in `src/data/site.ts` (social only, 1 class +
   social, 2 classes + social; standard and reduced). All price displays and the
   schema.org data read from there.
