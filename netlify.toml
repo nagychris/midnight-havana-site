@@ -85,13 +85,13 @@
   status = 301
 
 [[redirects]]
-  from = "/termine/salsa-friday/"
-  to = "/termine/halloween-salsa-party/"
+  from = "/termine/salsa-friday-dj-helen/"
+  to = "/termine/salsa-friday-dj-ren/"
   status = 301
 
 [[redirects]]
-  from = "/en/events/salsa-friday/"
-  to = "/en/events/halloween-salsa-party/"
+  from = "/en/events/salsa-friday-dj-helen/"
+  to = "/en/events/salsa-friday-dj-ren/"
   status = 301
 
 # Keep a preview deploy out of the index entirely.
