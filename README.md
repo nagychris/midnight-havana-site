@@ -193,9 +193,6 @@ Names the layout looks for:
 | `teacher-helen.jpg`, `teacher-yago.jpg`, `teacher-sassan.jpg` | Team section. Without one, that card shows the initial instead. |
 | anything in `photoGroups` | Hero slideshow, community strip, venue, closing panel |
 
-Event flyers go in `src/assets/flyers/` and are referenced by file name from
-the event files in `src/data/events/`.
-
 After changing the logo or the hero photo, regenerate the icons and the social
 card:
 

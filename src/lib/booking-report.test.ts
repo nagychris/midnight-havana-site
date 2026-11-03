@@ -31,7 +31,6 @@ function event(overrides: Partial<SiteEvent> = {}): SiteEvent {
         teachers: [],
         badges: [],
         image: null,
-        flyer: null,
         priceNote: null,
         cancelled: false,
         regularClasses: true,

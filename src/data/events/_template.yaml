@@ -57,8 +57,6 @@ teachers: []
 badges: []
 # Dateiname aus src/assets/photos/ für das große Bild der Detailseite.
 image: null
-# Dateiname aus src/assets/flyers/ für das Plakat.
-flyer: null
 # Nur ausfüllen, wenn an dem Abend andere Preise gelten.
 priceNote: null
 # true blendet den Termin nicht aus, sondern markiert ihn als abgesagt.

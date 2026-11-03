@@ -106,10 +106,6 @@
       "$ref": "#/$defs/imageFileName",
       "description": "File name inside src/assets/photos/ for the large image on the detail page."
     },
-    "flyer": {
-      "$ref": "#/$defs/imageFileName",
-      "description": "File name inside src/assets/flyers/ for the poster."
-    },
     "priceNote": {
       "oneOf": [
         {

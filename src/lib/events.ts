@@ -11,7 +11,14 @@ import type { SiteEvent } from './event-types';
  * module is the small API the pages use.
  */
 
-/** The text of every event file, read by Vite at build time. */
+/**
+ * The text of every event file, read by Vite at build time.
+ *
+ * Astro content collections are not used on purpose: `getCollection()` is
+ * async and only works inside Astro, but `allEvents()` must stay synchronous
+ * because `astro.config.mjs` (booking report) and the vitest tests call it
+ * outside Astro.
+ */
 const eventFiles = import.meta.glob<string>('/src/data/events/*.yaml', {
     query: '?raw',
     import: 'default',

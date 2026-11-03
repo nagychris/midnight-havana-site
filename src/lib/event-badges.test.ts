@@ -20,7 +20,6 @@ function event(title: string | null, badges: EventBadge[]): SiteEvent {
         teachers: [],
         badges,
         image: null,
-        flyer: null,
         priceNote: null,
         cancelled: false,
         regularClasses: true,

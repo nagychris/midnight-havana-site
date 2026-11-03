@@ -27,7 +27,6 @@ function eventWithBookingLinks(
         teachers: [],
         badges: [],
         image: null,
-        flyer: null,
         priceNote: null,
         cancelled: false,
         regularClasses: true,

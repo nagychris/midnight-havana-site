@@ -38,7 +38,6 @@ export interface SiteEvent {
     teachers: string[];
     badges: EventBadge[];
     image: string | null;
-    flyer: string | null;
     priceNote: LocalisedText | null;
     cancelled: boolean;
     /**
