@@ -94,6 +94,16 @@
   to = "/en/events/halloween-salsa-party/"
   status = 301
 
+[[redirects]]
+  from = "/termine/salsa-friday-dj-helen/"
+  to = "/termine/salsa-friday-dj-ren/"
+  status = 301
+
+[[redirects]]
+  from = "/en/events/salsa-friday-dj-helen/"
+  to = "/en/events/salsa-friday-dj-ren/"
+  status = 301
+
 # Keep a preview deploy out of the index entirely.
 [context.deploy-preview]
   [context.deploy-preview.build.environment]
