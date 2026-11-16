@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import EventCard from '../../components/event/EventCard.astro';
+import Section from '../../components/ui/Section.astro';
+import SectionHeading from '../../components/ui/SectionHeading.astro';
+import { eventPaths, localeFromAstro, sectionIds, useTranslations } from '../../i18n';
+import type { SiteEvent } from '../../lib/events';
+
+/**
+ * One event as it appears in the list of dates on the home page: the same
+ * section heading and the same card, open as the next date is.
+ *
+ * Shown inside the preview frame. The markup follows
+ * `src/components/sections/NextEvent.astro` and uses no classes of its own,
+ * because this page loads the public stylesheet.
+ */
+interface Props {
+    event: SiteEvent;
+}
+
+const { event } = Astro.props;
+const locale = localeFromAstro(Astro.currentLocale);
+const t = useTranslations(locale);
+---
+
+<Base
+    paths={eventPaths(event.slug)}
+    title={event.title?.[locale] ?? t.nextEvent.headline}
+    description={t.meta.home.description}
+    noindex
+    bookingBar={false}
+>
+    <Section id={sectionIds.dates} labelledBy="next-event-heading" reveal={false}>
+        <SectionHeading
+            eyebrow={t.nextEvent.eyebrow}
+            headline={t.nextEvent.headline}
+            id="next-event-heading"
+            split
+        >
+            {t.nextEvent.intro}
+        </SectionHeading>
+
+        <div class="mt-heading flex flex-col gap-4">
+            <EventCard event={event} isNext={true} />
+        </div>
+    </Section>
+</Base>

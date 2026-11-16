@@ -98,6 +98,17 @@
 [context.deploy-preview]
   [context.deploy-preview.build.environment]
     ROBOTS = "noindex"
+    # The back office prototype (src/backoffice/), as a demo: every change
+    # stays in the visitor's own session and never reaches the website.
+    # Production builds do not set BACKOFFICE, so they contain none of it.
+    BACKOFFICE = "demo"
+    # The demo login. Only the hash of the password is stored here; make a
+    # new one with `pnpm backoffice:password`. Setting the same two variables
+    # in the Netlify UI overrides these without a commit.
+    BACKOFFICE_USER = "demo@midnight-havana.de"
+    BACKOFFICE_PASSWORD_HASH = "scrypt:16384:8:1:A0YAqYk0hlARH_vDgbvlxw:F03x9iwVdLT46AeOjkqyyiB5fx9vGJb5Yms8aT-nVQg"
+    # A preview is not the website: no analytics, no consent banner.
+    PUBLIC_GA_MEASUREMENT_ID = ""
 
 [[context.deploy-preview.headers]]
   for = "/*"

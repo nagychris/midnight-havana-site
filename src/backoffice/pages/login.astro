@@ -1,0 +1,93 @@
+---
+import AdminLayout from '../components/AdminLayout.astro';
+import Wordmark from '../../components/brand/Wordmark.astro';
+import Button from '../../components/ui/Button.astro';
+import { sameUser, verifyPassword } from '../auth';
+import { backofficeConfig } from '../config';
+import { bo } from '../copy';
+import { sessionOf, takeFlash } from '../helpers';
+import { safeReturnPath } from '../routes';
+
+export const prerender = false;
+
+const session = sessionOf(Astro);
+const returnPath = safeReturnPath(Astro.url.searchParams.get('weiter'));
+const isConfigured = backofficeConfig.user !== '' && backofficeConfig.passwordHash !== '';
+
+if (Astro.locals.backofficeUser) return Astro.redirect(returnPath);
+
+let failed = false;
+let typedUser = '';
+
+if (Astro.request.method === 'POST' && isConfigured) {
+    const form = await Astro.request.formData();
+    typedUser = String(form.get('user') ?? '');
+    const password = String(form.get('password') ?? '');
+
+    // The password is always checked, so a wrong name takes as long as a
+    // wrong password and gives nothing away.
+    const passwordOk = verifyPassword(password, backofficeConfig.passwordHash);
+    if (sameUser(typedUser, backofficeConfig.user) && passwordOk) {
+        // A fresh session id, so one handed out before the login is worthless.
+        await session.regenerate();
+        session.set('user', { name: backofficeConfig.user });
+        return Astro.redirect(returnPath);
+    }
+
+    failed = true;
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    Astro.response.status = 401;
+}
+
+const flash = await takeFlash(session);
+---
+
+<AdminLayout title={bo.login.title} bare>
+    <div class="mx-auto flex min-h-[70dvh] max-w-sm flex-col justify-center">
+        <Wordmark title={bo.brand} class="mx-auto h-20 w-auto text-cream" />
+        <p class="mt-3 text-center font-display text-xs tracking-eyebrow text-gold uppercase">
+            {bo.name}
+        </p>
+
+        <div class="mt-8 border border-gold/25 bg-surface p-6 sm:p-8">
+            <h1 class="font-display text-h3 font-medium tracking-tiny text-cream uppercase">
+                {bo.login.title}
+            </h1>
+            <p class="mt-1 text-md text-cream/60">{bo.login.intro}</p>
+
+            {flash && <p role="status" class="mt-4 text-md text-green">{flash.text}</p>}
+            {failed && <p role="alert" class="bo-error mt-4">{bo.login.failed}</p>}
+            {!isConfigured && <p role="alert" class="bo-error mt-4">{bo.login.notConfigured}</p>}
+
+            <form method="post" class="mt-6 flex flex-col gap-4">
+                <div>
+                    <label class="bo-label" for="user">{bo.login.user}</label>
+                    <input
+                        class="bo-input mt-1.5"
+                        id="user"
+                        name="user"
+                        type="text"
+                        inputmode="email"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        required
+                        value={typedUser}
+                    />
+                </div>
+                <div>
+                    <label class="bo-label" for="password">{bo.login.password}</label>
+                    <input
+                        class="bo-input mt-1.5"
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    />
+                </div>
+                <Button type="submit" fullWidth class="mt-2">{bo.login.submit}</Button>
+            </form>
+        </div>
+    </div>
+</AdminLayout>

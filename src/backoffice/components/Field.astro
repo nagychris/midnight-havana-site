@@ -1,0 +1,103 @@
+---
+/**
+ * One labelled control of the event form: a single line, or a text area when
+ * `rows` is given. Shows its hint, a character count where a length is worth
+ * watching, and what is wrong with it when the form came back with problems.
+ */
+interface Props {
+    name: string;
+    label: string;
+    value: string;
+    type?: 'text' | 'date' | 'url';
+    /** Makes it a text area of this height. */
+    rows?: number;
+    hint?: string;
+    error?: string;
+    placeholder?: string;
+    /** Language of the text, so spell checking uses the right dictionary. */
+    lang?: 'de' | 'en';
+    /** Shows "n / count" under the field. A guide, not a limit. */
+    count?: number;
+    disabled?: boolean;
+    /** Hides the label visually where a group heading already names it. */
+    quietLabel?: boolean;
+}
+
+const {
+    name,
+    label,
+    value,
+    type = 'text',
+    rows,
+    hint,
+    error,
+    placeholder,
+    lang,
+    count,
+    disabled = false,
+    quietLabel = false,
+} = Astro.props;
+
+const describedBy =
+    [hint && `${name}-hint`, error && `${name}-error`].filter(Boolean).join(' ') || undefined;
+---
+
+<div class="flex min-w-0 flex-col">
+    <label
+        for={name}
+        class:list={[
+            quietLabel
+                ? 'font-display text-2xs tracking-label-wide text-gold/80 uppercase'
+                : 'bo-label',
+        ]}
+    >
+        {label}
+    </label>
+
+    {
+        rows ? (
+            <textarea
+                class="bo-input mt-1.5"
+                id={name}
+                name={name}
+                rows={rows}
+                lang={lang}
+                placeholder={placeholder}
+                disabled={disabled}
+                aria-invalid={error ? 'true' : undefined}
+                aria-describedby={describedBy}
+                data-count={count}
+                set:text={value}
+            />
+        ) : (
+            <input
+                class="bo-input mt-1.5"
+                id={name}
+                name={name}
+                type={type}
+                value={value}
+                lang={lang}
+                placeholder={placeholder}
+                disabled={disabled}
+                autocomplete="off"
+                aria-invalid={error ? 'true' : undefined}
+                aria-describedby={describedBy}
+                data-count={count}
+            />
+        )
+    }
+
+    <div class="mt-1 flex items-start justify-between gap-3">
+        <div class="min-w-0">
+            {error && <p id={`${name}-error`} class="bo-error">{error}</p>}
+            {hint && <p id={`${name}-hint`} class="bo-hint">{hint}</p>}
+        </div>
+        {
+            count && (
+                <p class="bo-hint shrink-0 tabular-nums" data-counter-for={name}>
+                    {value.length} / {count}
+                </p>
+            )
+        }
+    </div>
+</div>

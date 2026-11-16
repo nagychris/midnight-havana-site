@@ -1,0 +1,61 @@
+---
+import EventPage from '../../components/EventPage.astro';
+import CardPreview from '../components/CardPreview.astro';
+import { photos } from '../../data/photos';
+import { bo } from '../copy';
+import { formFromEvent, previewFromForm, NOTHING_PRESERVED } from '../event-form';
+import { readEventData } from '../event-yaml';
+import { sessionOf } from '../helpers';
+import { isEntryId } from '../routes';
+import { eventStore } from '../store';
+
+export const prerender = false;
+
+/**
+ * What the preview frame shows: the real event page, or the real event card,
+ * rendered from a draft.
+ *
+ * It exists under `/admin/vorschau/` and `/en/admin/vorschau/`, because the
+ * components take their language from the URL, as on the public site.
+ *
+ * With `?stand=live` it shows what is in the form at this moment, which the
+ * editor sends along as the owner types. Otherwise it shows what is saved.
+ */
+const { id, view } = Astro.params;
+if (!isEntryId(id)) return new Response(null, { status: 404 });
+
+const session = sessionOf(Astro);
+const entry = await eventStore(session).get(id);
+const saved = entry ? readEventData(entry.draft ?? entry.published ?? '') : null;
+
+const working = (await session.get('working')) ?? {};
+const wantsLive = Astro.url.searchParams.get('stand') === 'live';
+const values = wantsLive && working[id] ? working[id] : saved ? formFromEvent(saved) : null;
+
+const preserved = saved ?? NOTHING_PRESERVED;
+const photoNames = photos.map((photo) => photo.name);
+const { event } = values
+    ? previewFromForm(values, preserved, photoNames)
+    : { event: null };
+---
+
+{
+    event ? (
+        view === 'karte' ? (
+            <CardPreview event={event} />
+        ) : (
+            <EventPage event={event} />
+        )
+    ) : (
+        <html lang="de">
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <title>{bo.preview.title}</title>
+            </head>
+            <body>
+                <p>{bo.preview.unavailable}</p>
+            </body>
+        </html>
+    )
+}

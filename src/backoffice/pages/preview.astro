@@ -1,0 +1,140 @@
+---
+import AdminLayout from '../components/AdminLayout.astro';
+import { photos } from '../../data/photos';
+import type { Locale } from '../../i18n/locales';
+import { todayInBerlin } from '../../lib/datetime';
+import { bo } from '../copy';
+import { findWarnings, formFromEvent, previewFromForm } from '../event-form';
+import { readEventData } from '../event-yaml';
+import { sessionOf, setFlash, takeFlash } from '../helpers';
+import { adminPaths, isEntryId, type PreviewView } from '../routes';
+import { eventStore } from '../store';
+
+export const prerender = false;
+
+/**
+ * The large preview of a saved event: the real page or card, at phone width
+ * or as wide as the window, in either language.
+ *
+ * Every switch is a plain link, so this page needs no script to work.
+ */
+const { id } = Astro.params;
+if (!isEntryId(id)) return new Response(null, { status: 404 });
+
+const session = sessionOf(Astro);
+const entry = await eventStore(session).get(id);
+if (!entry) {
+    setFlash(session, bo.editor.notFound, 'warn');
+    return Astro.redirect(adminPaths.home);
+}
+
+const query = Astro.url.searchParams;
+const view: PreviewView = query.get('ansicht') === 'karte' ? 'karte' : 'seite';
+const locale: Locale = query.get('sprache') === 'en' ? 'en' : 'de';
+const isWide = query.get('breite') === 'voll';
+
+/** This page with one of its three switches set differently. */
+const withOption = (name: string, value: string) => {
+    const next = new URLSearchParams(query);
+    next.set(name, value);
+    return `${adminPaths.preview(id)}?${next}`;
+};
+
+const values = formFromEvent(readEventData(entry.draft ?? entry.published ?? ''));
+const { notes } = previewFromForm(
+    values,
+    { extras: [], courseLabels: {} },
+    photos.map((photo) => photo.name),
+);
+const warnings = findWarnings(values, { today: todayInBerlin() });
+const hasUnpublished = entry.draft !== null;
+const flash = await takeFlash(session);
+
+const option =
+    'px-3 py-1.5 font-display text-2xs tracking-label uppercase text-cream/60 hover:text-cream aria-[current=true]:bg-gold/15 aria-[current=true]:text-cream';
+---
+
+<AdminLayout title={bo.preview.title} flash={flash} wide>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+        <a href={adminPaths.event(id)} class="font-display text-xs tracking-label uppercase">
+            ← {bo.preview.back}
+        </a>
+        <h1 class="font-display text-2xl font-medium tracking-tiny text-cream uppercase">
+            {bo.preview.title}: {values.titleDe || bo.list.noTitle}
+        </h1>
+
+        <div class="flex border border-gold/25">
+            <a href={withOption('ansicht', 'seite')} class={option} aria-current={view === 'seite'}>
+                {bo.preview.views.page}
+            </a>
+            <a href={withOption('ansicht', 'karte')} class={option} aria-current={view === 'karte'}>
+                {bo.preview.views.card}
+            </a>
+        </div>
+        <div class="flex border border-gold/25">
+            <a href={withOption('sprache', 'de')} class={option} aria-current={locale === 'de'}>
+                {bo.preview.languages.de}
+            </a>
+            <a href={withOption('sprache', 'en')} class={option} aria-current={locale === 'en'}>
+                {bo.preview.languages.en}
+            </a>
+        </div>
+        <div class="hidden border border-gold/25 md:flex">
+            <a href={withOption('breite', 'handy')} class={option} aria-current={!isWide}>
+                {bo.preview.widths.phone}
+            </a>
+            <a href={withOption('breite', 'voll')} class={option} aria-current={isWide}>
+                {bo.preview.widths.full}
+            </a>
+        </div>
+
+        {
+            hasUnpublished && (
+                <form method="post" action={adminPaths.event(id)} class="ml-auto">
+                    <input type="hidden" name="quelle" value="gespeichert" />
+                    <button
+                        type="submit"
+                        name="aktion"
+                        value="veroeffentlichen"
+                        class="inline-flex min-h-11 cursor-pointer items-center rounded-sharp bg-orange px-5 py-2.5 font-display text-sm font-medium tracking-label text-ink uppercase hover:bg-orange-hover"
+                    >
+                        {bo.editor.actions.publish}
+                    </button>
+                </form>
+            )
+        }
+    </div>
+
+    {
+        (notes.length > 0 || warnings.length > 0) && (
+            <ul class="mt-4 flex flex-col gap-1 text-sm text-cream/60">
+                {[...notes, ...warnings].map((note) => (
+                    <li>{note}</li>
+                ))}
+            </ul>
+        )
+    }
+
+    <div
+        class:list={[
+            'mt-6',
+            isWide
+                ? 'h-[calc(100dvh-13rem)] min-h-96 border border-gold/25'
+                : 'bo-phone mx-auto h-[calc(100dvh-13rem)] max-h-[54rem] min-h-96 w-full max-w-[26.5rem]',
+        ]}
+    >
+        <iframe
+            src={adminPaths.frame(id, view, locale)}
+            title={bo.preview.frameTitle}
+            class="h-full w-full border-0"
+            data-preview-frame
+        ></iframe>
+    </div>
+</AdminLayout>
+
+<script>
+    import { guardFrameLinks } from '../scripts/preview-frame';
+
+    const frame = document.querySelector<HTMLIFrameElement>('[data-preview-frame]');
+    if (frame) guardFrameLinks(frame);
+</script>

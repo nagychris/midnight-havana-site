@@ -202,6 +202,50 @@ pnpm run brand-assets
 
 ---
 
+## Back office (prototype)
+
+A German back office for the owner, in `src/backoffice/`: log in, add or edit
+a date, see it beside the form as visitors will, publish. It is a prototype and
+**off by default**. A normal `pnpm build` contains none of it, and the live
+site is the same static site as before.
+
+```sh
+pnpm backoffice        # http://localhost:4321/admin/, writes real event files
+pnpm backoffice:demo   # the same, but every change stays in the session
+```
+
+`pnpm backoffice` prints a login for the run. Publishing writes
+`src/data/events/<date>-<slug>.yaml`, the same file you would have added by
+hand, and the local site shows it at once. Commit and push it as usual. A
+draft is `_draft-<date>-<slug>.yaml`; the site ignores files starting with `_`.
+
+How it fits together:
+
+- **One switch.** `BACKOFFICE=local` or `BACKOFFICE=demo` (see
+  `astro.config.mjs`) adds the Netlify adapter, the routes under `/admin/` and
+  a middleware that guards them. Without it nothing is added.
+- **The preview is the real thing.** It renders `EventPage.astro` and
+  `EventCard.astro` from the draft, in both languages, so there is no second
+  copy of the design to keep in step.
+- **One check.** Publishing runs the same `parseEvent` the build runs. The form
+  adds German messages per field, but it cannot let through what the build
+  would reject.
+- **Its own stylesheet.** Public pages load `src/styles/public.css`, which is
+  `global.css` with `src/backoffice/` left out of Tailwind's class scan.
+- **Demo mode** is what Netlify builds for a pull request (see the
+  `deploy-preview` block in `netlify.toml`). Changes live in the visitor's
+  session only. The demo login is `BACKOFFICE_USER` there; only a hash of the
+  password is stored. `pnpm backoffice:password "<new password>"` makes one.
+
+Not built yet, and needed before the owner can use it for real: saving to the
+repository through the GitHub API (the third `EventStore`, next to the two in
+`src/backoffice/store/`), so that publishing triggers a Netlify build; a login
+set in the Netlify UI rather than in `netlify.toml`; rate limiting on the
+login. Workshops and other `extras` are kept when an event is edited but
+cannot be changed in the form yet.
+
+---
+
 ## Local development
 
 ```sh
@@ -295,5 +339,5 @@ than picked per component.
 The event files in `src/data/events/` are the only files that change week to
 week, they have a JSON Schema next to them (`src/data/event.schema.json`), and
 everything that reads them goes through `src/lib/events.ts`. An editor with a
-login would write the same file shape and trigger a Netlify build hook. Nothing
-else would have to change.
+login writes the same file shape and triggers a Netlify build. A prototype of
+that editor exists; see "Back office (prototype)" above.

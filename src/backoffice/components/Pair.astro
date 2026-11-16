@@ -1,0 +1,54 @@
+---
+import Field from './Field.astro';
+import { bo } from '../copy';
+
+/**
+ * A text in both languages of the website: German first, English beside it
+ * where the form is wide enough, below it where it is not.
+ *
+ * The two fields are named `<name>De` and `<name>En`.
+ */
+interface Props {
+    name: string;
+    label: string;
+    de: string;
+    en: string;
+    rows?: number;
+    hint?: string;
+    hintEn?: string;
+    placeholderEn?: string;
+    count?: number;
+    problems: Partial<Record<string, string>>;
+}
+
+const { name, label, de, en, rows, hint, hintEn, placeholderEn, count, problems } = Astro.props;
+---
+
+<fieldset class="min-w-0">
+    <legend class="bo-label">{label}</legend>
+    {hint && <p class="bo-hint mt-0.5">{hint}</p>}
+    <div class="mt-2 grid gap-x-4 gap-y-3 @2xl:grid-cols-2">
+        <Field
+            name={`${name}De`}
+            label={bo.editor.languages.de}
+            value={de}
+            rows={rows}
+            lang="de"
+            count={count}
+            error={problems[`${name}De`]}
+            quietLabel
+        />
+        <Field
+            name={`${name}En`}
+            label={bo.editor.languages.en}
+            value={en}
+            rows={rows}
+            lang="en"
+            count={count}
+            hint={hintEn}
+            placeholder={placeholderEn}
+            error={problems[`${name}En`]}
+            quietLabel
+        />
+    </div>
+</fieldset>

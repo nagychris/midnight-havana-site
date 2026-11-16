@@ -1,0 +1,763 @@
+---
+import { Image } from 'astro:assets';
+import AdminLayout from '../components/AdminLayout.astro';
+import ActionButton from '../components/ActionButton.astro';
+import Field from '../components/Field.astro';
+import Pair from '../components/Pair.astro';
+import Badge from '../../components/ui/Badge.astro';
+import { classes } from '../../data/classes';
+import { photos } from '../../data/photos';
+import { de } from '../../i18n/de';
+import { formatLongDate, isValidDateKey, todayInBerlin } from '../../lib/datetime';
+import { parseEvent } from '../../lib/event-parsing';
+import { isDemo, backofficeConfig } from '../config';
+import { bo } from '../copy';
+import {
+    emptyForm,
+    eventFromForm,
+    findProblems,
+    findWarnings,
+    formFromEvent,
+    NOTHING_PRESERVED,
+    readForm,
+    withSlug,
+    type EventFormValues,
+    type FormProblems,
+    type PreservedFields,
+} from '../event-form';
+import { readEventData, serializeEvent } from '../event-yaml';
+import {
+    freeId,
+    nextFreeFriday,
+    othersPublished,
+    sessionOf,
+    setFlash,
+    statusOf,
+    takeFlash,
+} from '../helpers';
+import { classLinkCount, parsePastedMessage } from '../paste';
+import { adminPaths, isEntryId, NEW_EVENT_ID } from '../routes';
+import { SAMPLE_MESSAGE } from '../sample';
+import { suggestSlug } from '../slug';
+import { eventStore } from '../store';
+
+export const prerender = false;
+
+/**
+ * The event form, for a new date and for an existing one.
+ *
+ * One form, several buttons. Each button sends the field `aktion`:
+ * `einfuegen` reads a pasted message into the form, `entwurf` saves without
+ * publishing, `vorschau` saves and opens the large preview, `veroeffentlichen`
+ * checks everything and puts the date online, `verwerfen` drops the draft.
+ * `live` is sent by the page itself while someone types, so the preview
+ * beside the form can follow.
+ */
+const session = sessionOf(Astro);
+const store = eventStore(session);
+const today = todayInBerlin();
+
+const paramId = Astro.params.id;
+const isNew = paramId === undefined;
+if (!isNew && !isEntryId(paramId)) return new Response(null, { status: 404 });
+
+const entries = await store.list();
+const entry = isNew ? null : (entries.find((candidate) => candidate.id === paramId) ?? null);
+if (!isNew && !entry) {
+    setFlash(session, bo.editor.notFound, 'warn');
+    return Astro.redirect(adminPaths.home);
+}
+
+/** The key the live preview keeps this form under. */
+const formId = entry?.id ?? NEW_EVENT_ID;
+const publishedEvent = entry?.published ? readEventData(entry.published) : null;
+const savedEvent = entry ? readEventData(entry.draft ?? entry.published ?? '') : null;
+
+const eventPhotos = photos.filter((photo) => !photo.name.startsWith('teacher-'));
+const others = othersPublished(entries, entry?.id ?? null);
+const takenSlugs = others.map((other) => other.slug);
+const context = {
+    others,
+    photoNames: eventPhotos.map((photo) => photo.name),
+    today,
+    publishedSlug: publishedEvent?.slug ?? null,
+};
+
+const preserved: PreservedFields = savedEvent
+    ? { extras: savedEvent.extras, courseLabels: savedEvent.courseLabels }
+    : NOTHING_PRESERVED;
+
+async function forgetWorkingCopy() {
+    const working = (await session.get('working')) ?? {};
+    delete working[formId];
+    session.set('working', working);
+}
+
+let values: EventFormValues;
+let problems: FormProblems = {};
+let pasted = '';
+let pasteNote: string | null = null;
+let technical: string | null = null;
+
+if (Astro.request.method === 'POST') {
+    const form = await Astro.request.formData();
+    let action = String(form.get('aktion') ?? '');
+
+    // The large preview publishes what is saved; it has no form of its own.
+    const fromSaved = form.get('quelle') === 'gespeichert' && savedEvent !== null;
+    values = fromSaved ? formFromEvent(savedEvent) : readForm(form);
+    // The slug of a published date is fixed, so its field is not sent.
+    if (publishedEvent) values.slug = publishedEvent.slug;
+
+    if (action === 'beispiel') {
+        pasted = SAMPLE_MESSAGE;
+        action = 'einfuegen';
+    } else {
+        pasted = String(form.get('nachricht') ?? '');
+    }
+
+    if (action === 'live') {
+        const working = (await session.get('working')) ?? {};
+        working[formId] = values;
+        session.set('working', working);
+        return new Response(null, { status: 204 });
+    }
+
+    if (action === 'verwerfen') {
+        if (entry) await store.discardDraft(entry.id);
+        await forgetWorkingCopy();
+        setFlash(session, bo.editor.discarded);
+        return Astro.redirect(entry?.published ? adminPaths.event(entry.id) : adminPaths.home);
+    }
+
+    if (action === 'einfuegen') {
+        const found = parsePastedMessage(pasted, today);
+        const parts: string[] = [];
+
+        if (found.date) {
+            values.date = found.date;
+            parts.push(bo.editor.paste.parts.date);
+        }
+        if (found.title) {
+            values.titleDe = found.title;
+            parts.push(bo.editor.paste.parts.title);
+        }
+        const linkCount = classLinkCount(found);
+        for (const [target, link] of Object.entries(found.links)) {
+            values.links[target as keyof typeof values.links] = link;
+        }
+        if (linkCount > 0) parts.push(bo.editor.paste.parts.links(linkCount));
+        if (found.dj) {
+            values.dj = found.dj;
+            // The DJ is the label most Fridays carry on their card.
+            if (values.badges[0].de === '') values.badges[0] = { de: found.dj, en: '' };
+            parts.push(bo.editor.paste.parts.dj);
+        }
+        if (found.summary) {
+            values.summaryDe = found.summary;
+            values.descriptionDe = found.description ?? '';
+            parts.push(bo.editor.paste.parts.text);
+        }
+
+        pasteNote =
+            parts.length > 0
+                ? `${bo.editor.paste.found} ${parts.join(', ')}. ${bo.editor.paste.check}`
+                : bo.editor.paste.nothing;
+    } else if (['entwurf', 'vorschau', 'veroeffentlichen'].includes(action)) {
+        values = withSlug(
+            values,
+            suggestSlug(values.titleDe, values.dj, values.date, takenSlugs),
+        );
+
+        if (!isValidDateKey(values.date)) {
+            // Without a date there is no file name, so not even a draft.
+            problems = { date: bo.problems.dateMissing };
+        } else if (action === 'veroeffentlichen') {
+            problems = findProblems(values, context);
+            if (Object.keys(problems).length === 0) {
+                try {
+                    const event = parseEvent(eventFromForm(values, preserved));
+                    const publishedId = `${event.date}-${event.slug}`;
+                    await store.publish(entry?.id ?? publishedId, publishedId, serializeEvent(event));
+                    await forgetWorkingCopy();
+                    setFlash(
+                        session,
+                        isDemo
+                            ? bo.editor.published.demo
+                            : bo.editor.published.local(`src/data/events/${publishedId}.yaml`),
+                    );
+                    return Astro.redirect(adminPaths.home);
+                } catch (error) {
+                    technical = error instanceof Error ? error.message : String(error);
+                }
+            }
+        } else {
+            const id =
+                entry?.id ??
+                freeId(
+                    `${values.date}-${values.slug}`,
+                    entries.map((candidate) => candidate.id),
+                );
+            await store.saveDraft(id, serializeEvent(eventFromForm(values, preserved)));
+            await forgetWorkingCopy();
+            if (action === 'vorschau') return Astro.redirect(adminPaths.preview(id));
+            setFlash(session, bo.editor.saved);
+            return Astro.redirect(adminPaths.event(id));
+        }
+    }
+} else if (savedEvent) {
+    values = formFromEvent(savedEvent);
+} else {
+    // A new date starts from another one, or from what most Fridays share.
+    const publishedEvents = entries
+        .filter((candidate) => candidate.published !== null)
+        .map((candidate) => readEventData(candidate.published ?? ''))
+        .sort((a, b) => b.date.localeCompare(a.date));
+    const date = nextFreeFriday(
+        today,
+        publishedEvents.map((event) => event.date),
+    );
+
+    const templateId = Astro.url.searchParams.get('vorlage') ?? undefined;
+    const templateEntry = isEntryId(templateId)
+        ? entries.find((candidate) => candidate.id === templateId)
+        : undefined;
+
+    if (templateEntry) {
+        const template = formFromEvent(
+            readEventData(templateEntry.draft ?? templateEntry.published ?? ''),
+        );
+        // Everything carries over except what belongs to that one night.
+        values = {
+            ...template,
+            date,
+            slug: '',
+            cancelled: false,
+            links: emptyForm().links,
+        };
+    } else {
+        const usual = publishedEvents.find((event) => event.regularClasses);
+        values = emptyForm({
+            date,
+            teachers: usual?.teachers.join(', ') ?? '',
+            image: usual?.image ?? '',
+        });
+    }
+}
+
+// What the form shows is what the preview beside it shows.
+const working = (await session.get('working')) ?? {};
+working[formId] = values;
+session.set('working', working);
+
+const flash = await takeFlash(session);
+const warnings = findWarnings(values, { today });
+const problemList = Object.entries(problems);
+const status = entry ? statusOf(entry) : null;
+const statusTone = { live: 'green', draft: 'muted', changes: 'gold' } as const;
+const longDate = isValidDateKey(values.date) ? formatLongDate(values.date, 'de') : null;
+const slugPreview = values.slug || 'wird-aus-dem-titel-gebildet';
+const moreIsOpen = problemList.some(([name]) =>
+    /^(badge|priceNote|seo|slug|link-party)/.test(name),
+);
+
+const frames = {
+    seiteDe: adminPaths.frame(formId, 'seite', 'de', true),
+    seiteEn: adminPaths.frame(formId, 'seite', 'en', true),
+    karteDe: adminPaths.frame(formId, 'karte', 'de', true),
+    karteEn: adminPaths.frame(formId, 'karte', 'en', true),
+};
+
+const sectionHeading =
+    'font-display text-xs tracking-eyebrow text-gold uppercase border-b border-gold/20 pb-2';
+const toggle =
+    'cursor-pointer px-3 py-1.5 font-display text-2xs tracking-label uppercase text-cream/60 aria-pressed:bg-gold/15 aria-pressed:text-cream hover:text-cream';
+---
+
+<AdminLayout title={isNew ? bo.editor.newTitle : bo.editor.editTitle} flash={flash} wide>
+    {/* Title and actions stay in reach however far the form is scrolled. */}
+    <div
+        class="sticky top-14 z-30 -mx-5 -mt-8 border-b border-gold/15 bg-ink/95 px-5 py-3 backdrop-blur-md lg:-mx-8 lg:px-8"
+    >
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <a
+                href={adminPaths.home}
+                class="font-display text-xs tracking-label uppercase"
+            >
+                ← {bo.editor.back}
+            </a>
+            <h1 class="font-display text-2xl font-medium tracking-tiny text-cream uppercase">
+                {isNew ? bo.editor.newTitle : (values.titleDe || bo.editor.editTitle)}
+            </h1>
+            {status && <Badge tone={statusTone[status]}>{bo.list.status[status]}</Badge>}
+
+            <div class="ml-auto flex flex-wrap items-center gap-2">
+                {
+                    entry?.draft && (
+                        <ActionButton action="verwerfen" variant="text" form="event-form">
+                            {bo.editor.actions.discard}
+                        </ActionButton>
+                    )
+                }
+                <ActionButton action="entwurf" variant="quiet" form="event-form">
+                    {bo.editor.actions.draft}
+                </ActionButton>
+                <ActionButton action="vorschau" variant="secondary" form="event-form">
+                    {bo.editor.actions.preview}
+                </ActionButton>
+                <ActionButton action="veroeffentlichen" variant="primary" form="event-form">
+                    {bo.editor.actions.publish}
+                </ActionButton>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_26.5rem]">
+        <form method="post" id="event-form" class="@container flex min-w-0 flex-col gap-10" novalidate>
+            {
+                (problemList.length > 0 || technical) && (
+                    <div role="alert" class="border border-orange/50 bg-orange/8 px-5 py-4">
+                        <p class="font-display text-sm tracking-label text-orange-light uppercase">
+                            {bo.editor.problemsHeading}
+                        </p>
+                        <ul class="mt-2 flex flex-col gap-1 text-md text-cream/85">
+                            {problemList.map(([name, message]) => (
+                                <li>
+                                    <a href={`#${name}`} class="text-cream underline underline-offset-2">
+                                        {message}
+                                    </a>
+                                </li>
+                            ))}
+                            {technical && (
+                                <li>
+                                    {bo.editor.technical} {technical}
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                )
+            }
+
+            {
+                isNew && (
+                    <section class="border border-gold/25 bg-surface p-5">
+                        <h2 class="font-display text-xl font-medium tracking-tiny text-cream uppercase">
+                            {bo.editor.paste.heading}
+                        </h2>
+                        <p class="mt-1 text-md text-cream/60">{bo.editor.paste.intro}</p>
+                        <label for="nachricht" class="sr-only">
+                            {bo.editor.paste.label}
+                        </label>
+                        <textarea
+                            class="bo-input mt-3"
+                            id="nachricht"
+                            name="nachricht"
+                            rows={pasted ? 6 : 3}
+                            lang="de"
+                            placeholder="4.12. Salsa Friday …"
+                            set:text={pasted}
+                        />
+                        <div class="mt-3 flex flex-wrap items-center gap-3">
+                            <ActionButton action="einfuegen" variant="secondary">
+                                {bo.editor.paste.submit}
+                            </ActionButton>
+                            {isDemo && (
+                                <ActionButton action="beispiel" variant="text">
+                                    {bo.editor.paste.example}
+                                </ActionButton>
+                            )}
+                        </div>
+                        {pasteNote && (
+                            <p role="status" class="mt-3 text-md text-green">
+                                {pasteNote}
+                            </p>
+                        )}
+                    </section>
+                )
+            }
+
+            <section class="flex flex-col gap-5">
+                <h2 class={sectionHeading}>{bo.editor.sections.basics}</h2>
+                <div class="grid gap-x-4 gap-y-5 @2xl:grid-cols-2">
+                    <Field
+                        name="date"
+                        label={bo.editor.fields.date}
+                        type="date"
+                        value={values.date}
+                        hint={longDate ?? undefined}
+                        error={problems.date}
+                    />
+                    <Field
+                        name="dj"
+                        label={bo.editor.fields.dj}
+                        value={values.dj}
+                        placeholder="DJ Tamboly"
+                        error={problems.dj}
+                    />
+                </div>
+                <Pair
+                    name="title"
+                    label={bo.editor.fields.title}
+                    de={values.titleDe}
+                    en={values.titleEn}
+                    hintEn={bo.editor.hints.titleEn}
+                    placeholderEn={values.titleDe}
+                    problems={problems}
+                />
+                <Field
+                    name="teachers"
+                    label={bo.editor.fields.teachers}
+                    value={values.teachers}
+                    hint={bo.editor.hints.teachers}
+                    placeholder="Helen, Yago, Sassan"
+                    error={problems.teachers}
+                />
+            </section>
+
+            <section class="flex flex-col gap-5">
+                <h2 class={sectionHeading}>{bo.editor.sections.texts}</h2>
+                <Pair
+                    name="summary"
+                    label={bo.editor.fields.summary}
+                    de={values.summaryDe}
+                    en={values.summaryEn}
+                    rows={3}
+                    count={155}
+                    hint={bo.editor.hints.summary}
+                    problems={problems}
+                />
+                <Pair
+                    name="description"
+                    label={bo.editor.fields.description}
+                    de={values.descriptionDe}
+                    en={values.descriptionEn}
+                    rows={9}
+                    hint={bo.editor.hints.description}
+                    problems={problems}
+                />
+            </section>
+
+            <section class="flex flex-col gap-5">
+                <h2 class={sectionHeading}>{bo.editor.sections.booking}</h2>
+                <label class="flex items-start gap-3 text-md text-cream">
+                    <input
+                        class="bo-check"
+                        type="checkbox"
+                        name="regularClasses"
+                        checked={values.regularClasses}
+                    />
+                    {bo.editor.fields.regularClasses}
+                </label>
+                <div class="grid gap-x-4 gap-y-4 @2xl:grid-cols-2">
+                    {
+                        classes.map((danceClass) => (
+                            <Field
+                                name={`link-${danceClass.id}`}
+                                label={`${danceClass.startTime} · ${de.classes.items[danceClass.id].name}`}
+                                type="url"
+                                value={values.links[danceClass.id]}
+                                placeholder="https://www.eversports.de/…"
+                                error={problems[`link-${danceClass.id}`]}
+                            />
+                        ))
+                    }
+                </div>
+                <p class="bo-hint">{bo.editor.hints.links}</p>
+                {
+                    preserved.extras.length > 0 && (
+                        <p class="border border-gold/20 px-4 py-3 text-md text-cream/70">
+                            {bo.editor.hints.extras}{' '}
+                            <span class="text-cream">
+                                {preserved.extras
+                                    .map((extra) => `${extra.startTime} ${extra.title.de}`)
+                                    .join(' · ')}
+                            </span>
+                        </p>
+                    )
+                }
+            </section>
+
+            <section class="flex flex-col gap-4">
+                <h2 class={sectionHeading}>{bo.editor.sections.image}</h2>
+                {problems.image && <p class="bo-error">{problems.image}</p>}
+                <div class="grid grid-cols-3 gap-2 @xl:grid-cols-4 @3xl:grid-cols-6" id="image">
+                    <label class="relative block cursor-pointer">
+                        <input
+                            type="radio"
+                            name="image"
+                            value=""
+                            class="peer sr-only"
+                            checked={values.image === ''}
+                        />
+                        <span class="flex aspect-4/3 items-center justify-center border border-gold/25 bg-surface px-2 text-center text-sm text-cream/55 peer-checked:border-orange peer-checked:text-cream peer-focus-visible:border-gold-light">
+                            {bo.editor.fields.noImage}
+                        </span>
+                    </label>
+                    {
+                        eventPhotos.map((photo) => (
+                            <label class="relative block cursor-pointer" title={photo.alt.de}>
+                                <input
+                                    type="radio"
+                                    name="image"
+                                    value={photo.name}
+                                    class="peer sr-only"
+                                    checked={values.image === photo.name}
+                                />
+                                <Image
+                                    src={photo.image}
+                                    alt={photo.alt.de}
+                                    width={240}
+                                    loading="lazy"
+                                    class="aspect-4/3 w-full object-cover opacity-55 transition-opacity peer-checked:opacity-100 hover:opacity-90"
+                                />
+                                <span class="pointer-events-none absolute inset-0 border-2 border-transparent peer-checked:border-orange peer-focus-visible:border-gold-light" />
+                            </label>
+                        ))
+                    }
+                </div>
+            </section>
+
+            <details class="border-t border-gold/20 pt-4" open={moreIsOpen}>
+                <summary class="font-display text-xs tracking-eyebrow text-gold uppercase hover:text-gold-light">
+                    {bo.editor.sections.more}
+                </summary>
+
+                <div class="mt-6 flex flex-col gap-7">
+                    <fieldset class="min-w-0">
+                        <legend class="bo-label">{bo.editor.fields.badges}</legend>
+                        <p class="bo-hint mt-0.5">{bo.editor.hints.badges}</p>
+                        <div class="mt-2 flex flex-col gap-3">
+                            {
+                                values.badges.map((row, index) => (
+                                    <div class="grid gap-x-4 gap-y-2 @2xl:grid-cols-2">
+                                        <Field
+                                            name={`badge-${index}-de`}
+                                            label={`${index + 1}. ${bo.editor.languages.de}`}
+                                            value={row.de}
+                                            lang="de"
+                                            error={problems[`badge-${index}-de`]}
+                                            quietLabel
+                                        />
+                                        <Field
+                                            name={`badge-${index}-en`}
+                                            label={`${index + 1}. ${bo.editor.languages.en}`}
+                                            value={row.en}
+                                            lang="en"
+                                            placeholder={row.de}
+                                            error={problems[`badge-${index}-en`]}
+                                            quietLabel
+                                        />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </fieldset>
+
+                    <Pair
+                        name="priceNote"
+                        label={bo.editor.fields.priceNote}
+                        de={values.priceNoteDe}
+                        en={values.priceNoteEn}
+                        hint={bo.editor.hints.priceNote}
+                        problems={problems}
+                    />
+
+                    <Field
+                        name="link-party"
+                        label={bo.editor.fields.party}
+                        type="url"
+                        value={values.links.party}
+                        hint={bo.editor.hints.party}
+                        placeholder="https://www.eversports.de/…"
+                        error={problems['link-party']}
+                    />
+
+                    <label class="flex items-start gap-3 text-md text-cream">
+                        <input
+                            class="bo-check"
+                            type="checkbox"
+                            name="cancelled"
+                            checked={values.cancelled}
+                        />
+                        <span>
+                            {bo.editor.fields.cancelled}
+                            <span class="bo-hint block">{bo.editor.hints.cancelled}</span>
+                        </span>
+                    </label>
+
+                    <Pair
+                        name="seoTitle"
+                        label={bo.editor.fields.seoTitle}
+                        de={values.seoTitleDe}
+                        en={values.seoTitleEn}
+                        count={60}
+                        hint={bo.editor.hints.seo}
+                        problems={problems}
+                    />
+                    <Pair
+                        name="seoDescription"
+                        label={bo.editor.fields.seoDescription}
+                        de={values.seoDescriptionDe}
+                        en={values.seoDescriptionEn}
+                        rows={3}
+                        count={155}
+                        problems={problems}
+                    />
+
+                    <Field
+                        name="slug"
+                        label={bo.editor.fields.slug}
+                        value={values.slug}
+                        hint={`midnight-havana.de/termine/${slugPreview}/ · ${bo.editor.hints.slug}`}
+                        error={problems.slug}
+                        disabled={publishedEvent !== null}
+                    />
+                </div>
+            </details>
+        </form>
+
+        {/* Beside the form on a laptop. On a phone the Vorschau button opens
+            the same preview full size instead. */}
+        <aside
+            class="hidden lg:block"
+            data-preview-pane
+            data-seite-de={frames.seiteDe}
+            data-seite-en={frames.seiteEn}
+            data-karte-de={frames.karteDe}
+            data-karte-en={frames.karteEn}
+        >
+            <div class="sticky top-36">
+                <div class="flex items-center gap-3">
+                    <p class="font-display text-xs tracking-eyebrow text-gold uppercase">
+                        Live-{bo.preview.title}
+                    </p>
+                    <div class="ml-auto flex border border-gold/25">
+                        <button type="button" class={toggle} data-view="seite" aria-pressed="true">
+                            {bo.preview.views.page}
+                        </button>
+                        <button type="button" class={toggle} data-view="karte" aria-pressed="false">
+                            {bo.preview.views.card}
+                        </button>
+                    </div>
+                    <div class="flex border border-gold/25">
+                        <button type="button" class={toggle} data-language="De" aria-pressed="true">
+                            {bo.preview.languages.de}
+                        </button>
+                        <button type="button" class={toggle} data-language="En" aria-pressed="false">
+                            {bo.preview.languages.en}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bo-phone mt-3 h-[calc(100dvh-13rem)] max-h-[54rem] min-h-96">
+                    <iframe src={frames.seiteDe} title={bo.preview.frameTitle}></iframe>
+                </div>
+
+                {
+                    warnings.length > 0 && (
+                        <ul class="mt-3 flex flex-col gap-1 text-sm text-cream/55">
+                            {warnings.map((warning) => (
+                                <li>{warning}</li>
+                            ))}
+                        </ul>
+                    )
+                }
+                {
+                    backofficeConfig.mode === 'local' && (
+                        <p class="mt-3 text-sm text-cream/40">
+                            Lokal: „Veröffentlichen“ schreibt die Datei nach src/data/events/.
+                        </p>
+                    )
+                }
+            </div>
+        </aside>
+    </div>
+</AdminLayout>
+
+<script>
+    import { guardFrameLinks, reloadKeepingPlace } from '../scripts/preview-frame';
+
+    const form = document.querySelector<HTMLFormElement>('#event-form');
+    const pane = document.querySelector<HTMLElement>('[data-preview-pane]');
+    const frame = pane?.querySelector<HTMLIFrameElement>('iframe') ?? null;
+
+    /* How long a text is, next to the fields where length matters. */
+    form?.addEventListener('input', (event) => {
+        const control = event.target as HTMLInputElement | HTMLTextAreaElement;
+        const counter = form.querySelector(`[data-counter-for="${control.name}"]`);
+        if (counter) counter.textContent = `${control.value.length} / ${control.dataset.count}`;
+    });
+
+    if (form && pane && frame) {
+        guardFrameLinks(frame);
+
+        let view = 'seite';
+        let language = 'De';
+        const frameUrl = () => pane.dataset[`${view}${language}`] ?? frame.src;
+
+        const press = (group: string, value: string) => {
+            pane.querySelectorAll<HTMLElement>(`[data-${group}]`).forEach((button) => {
+                button.setAttribute(
+                    'aria-pressed',
+                    String(button.dataset[group] === value),
+                );
+            });
+        };
+
+        pane.addEventListener('click', (event) => {
+            const button = (event.target as Element).closest<HTMLElement>(
+                '[data-view], [data-language]',
+            );
+            if (!button) return;
+            if (button.dataset.view) {
+                view = button.dataset.view;
+                press('view', view);
+            }
+            if (button.dataset.language) {
+                language = button.dataset.language;
+                press('language', language);
+            }
+            frame.src = frameUrl();
+        });
+
+        /*
+          The preview follows the form. A moment after the last keystroke the
+          form is sent as it stands and the frame loads again, at the place it
+          was scrolled to. Nothing is saved by this.
+        */
+        let timer: number | undefined;
+        let sending = false;
+        let changedMeanwhile = false;
+
+        const refresh = async () => {
+            if (sending) {
+                changedMeanwhile = true;
+                return;
+            }
+            sending = true;
+            try {
+                const data = new FormData(form);
+                data.set('aktion', 'live');
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: data,
+                    credentials: 'same-origin',
+                });
+                if (response.ok) reloadKeepingPlace(frame, frameUrl());
+            } finally {
+                sending = false;
+                if (changedMeanwhile) {
+                    changedMeanwhile = false;
+                    void refresh();
+                }
+            }
+        };
+
+        const schedule = () => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(refresh, 600);
+        };
+        form.addEventListener('input', schedule);
+        form.addEventListener('change', schedule);
+    }
+</script>
