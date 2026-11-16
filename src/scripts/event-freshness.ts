@@ -109,6 +109,10 @@ export function refreshEventDates(): void {
     upcomingHero.forEach((strip, index) => {
         strip.hidden = index !== 0;
     });
+    const heroFallback = document.querySelector<HTMLElement>(
+        '[data-hero-date-fallback]',
+    );
+    if (heroFallback) heroFallback.hidden = upcomingHero.length > 0;
 
     if (cards.length === 0) return;
 

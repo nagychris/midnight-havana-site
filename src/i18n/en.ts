@@ -104,6 +104,11 @@ export const en: Translation = {
         headline: `${keepTogether('Cuban Salsa')} & ${keepTogether('Rueda de Casino')} ${keepTogether('in Berlin')}`,
         tagline: 'Learn salsa. Meet people. Dance your way into the weekend.',
         badges: ['No partner needed', 'Beginners welcome'],
+        /** The next-date line in the hero. */
+        nextLabel: 'Next date',
+        classesFrom: 'Classes',
+        startFrom: 'From',
+        partyFrom: 'Social',
         ctaPrimary: 'See upcoming dates',
         ctaSecondary: 'Explore classes',
         scrollCue: 'Scroll to the next section',
