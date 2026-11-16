@@ -66,6 +66,15 @@ edit or ask for most:
 - **Text contrast over photos:** check small gold and orange text against
   bright, warm photos. The venue photos share those colours.
 
+## Back office
+
+`src/backoffice/` is a prototype of a back office for the owner (German,
+desktop first). It is off unless `BACKOFFICE` is set; `README.md` explains it.
+Its pages use `src/backoffice/styles/admin.css`, its texts are in
+`src/backoffice/copy.ts`, and everything it publishes must pass `parseEvent`.
+A change to the event fields needs the form (`event-form.ts`) and the file
+writer (`event-yaml.ts`) updated too.
+
 ## Checking a change
 
 ```sh
