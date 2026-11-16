@@ -8,6 +8,33 @@ import {
     formatMissingBookingLinks,
 } from './src/lib/booking-report.ts';
 import { allEvents } from './src/lib/events.ts';
+import netlify from '@astrojs/netlify';
+import { backoffice } from './src/backoffice/integration.ts';
+
+/**
+ * The back office (src/backoffice/) is a prototype and off unless this is set:
+ * `local` for `pnpm backoffice` on a developer's machine, `demo` for a build
+ * that can go online with sandbox data. Without it the site is built exactly
+ * as before: static pages, no adapter, no server code.
+ */
+const BACKOFFICE = process.env.BACKOFFICE;
+if (BACKOFFICE && BACKOFFICE !== 'local' && BACKOFFICE !== 'demo') {
+    throw new Error(`BACKOFFICE must be "local" or "demo", not "${BACKOFFICE}".`);
+}
+
+/** Server-rendered pages need an adapter; Netlify is where the site lives. */
+const backofficeConfig = BACKOFFICE
+    ? {
+          adapter: netlify({
+              // Edge functions are not used, and emulating them downloads Deno.
+              devFeatures: { images: true, environmentVariables: false, edgeFunctions: false },
+          }),
+          // A login lasts a working day.
+          session: { ttl: 60 * 60 * 12 },
+          // Astro's own toolbar would sit on top of the back office.
+          devToolbar: { enabled: false },
+      }
+    : {};
 
 /**
  * Names the upcoming dates whose Eversports booking links are still missing.
@@ -41,6 +68,7 @@ export default defineConfig({
     // Static output is what lets Astro pre-generate the responsive image
     // variants at build time instead of resizing on request.
     output: 'static',
+    ...backofficeConfig,
 
     // German is the default language and lives at the root. English pages are
     // prefixed with /en/. See src/i18n/routes.ts for the URL of each page.
@@ -148,6 +176,7 @@ export default defineConfig({
                 !/\/(impressum|datenschutz|agb|imprint|privacy|terms)\/$/.test(page),
         }),
         reportMissingBookingLinks(),
+        ...(BACKOFFICE ? [backoffice(/** @type {'local' | 'demo'} */ (BACKOFFICE))] : []),
     ],
 
     vite: {

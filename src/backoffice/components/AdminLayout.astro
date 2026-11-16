@@ -1,0 +1,154 @@
+---
+import '../styles/admin.css';
+
+import oswaldLatin from '@fontsource-variable/oswald/files/oswald-latin-wght-normal.woff2?url';
+import karlaLatin from '@fontsource-variable/karla/files/karla-latin-wght-normal.woff2?url';
+import Wordmark from '../../components/brand/Wordmark.astro';
+import WordmarkSprite from '../../components/brand/WordmarkSprite.astro';
+import { isDemo } from '../config';
+import { bo } from '../copy';
+import { adminPaths } from '../routes';
+
+/**
+ * The frame around every back office page: the bar with the brand and the
+ * logout, the demo notice, and a message left by the page before.
+ *
+ * Built for a laptop first. Everything still works on a phone, where the
+ * columns stack.
+ */
+interface Props {
+    title: string;
+    /** A message to show once, e.g. after saving. */
+    flash?: { tone: 'ok' | 'warn'; text: string } | null;
+    /** Lets the page use the full width, for the editor with its preview. */
+    wide?: boolean;
+    /** Leaves the bar and the demo notice out, for the login page. */
+    bare?: boolean;
+}
+
+const { title, flash = null, wide = false, bare = false } = Astro.props;
+const user = Astro.locals.backofficeUser;
+---
+
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="noindex, nofollow" />
+        <title>{`${title} · ${bo.name} · ${bo.brand}`}</title>
+        <meta name="theme-color" content="#0b0908" />
+        <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+        <link rel="preload" href={oswaldLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href={karlaLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    </head>
+
+    <body class="min-h-dvh">
+        <WordmarkSprite />
+
+        {
+            !bare && (
+                <header class="sticky top-0 z-40 border-b border-gold/20 bg-ink/95 backdrop-blur-md">
+                    <div class="mx-auto flex h-14 max-w-[100rem] items-center gap-4 px-5 lg:px-8">
+                        <a
+                            href={adminPaths.home}
+                            class="flex items-center gap-3 text-cream hover:text-cream"
+                        >
+                            <Wordmark title={bo.brand} class="h-7 w-auto" />
+                            <span class="border-l border-gold/30 pl-3 font-display text-xs tracking-label-wide text-gold uppercase">
+                                {bo.name}
+                            </span>
+                        </a>
+
+                        <div class="ml-auto flex items-center gap-5">
+                            <a
+                                href="/"
+                                target="_blank"
+                                rel="noopener"
+                                class="hidden font-display text-xs tracking-label text-cream/70 uppercase hover:text-cream sm:inline"
+                            >
+                                Website ansehen
+                            </a>
+                            {user && (
+                                <form method="post" action={adminPaths.logout} class="flex items-center gap-3">
+                                    <span class="hidden text-sm text-cream/55 md:inline">{user.name}</span>
+                                    <button
+                                        type="submit"
+                                        class="cursor-pointer font-display text-xs tracking-label text-gold uppercase hover:text-gold-light"
+                                    >
+                                        {bo.login.logout}
+                                    </button>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+                </header>
+            )
+        }
+
+        {
+            !bare && isDemo && (
+                <div class="border-b border-gold/15 bg-gold/8">
+                    <div class="mx-auto flex max-w-[100rem] flex-wrap items-center gap-x-4 gap-y-1 px-5 py-2 text-sm text-gold-light lg:px-8">
+                        <p>{bo.demo.banner}</p>
+                        <form method="post" action={adminPaths.resetDemo} class="ml-auto">
+                            <button
+                                type="submit"
+                                class="cursor-pointer text-sm text-gold underline underline-offset-2 hover:text-gold-light"
+                            >
+                                {bo.demo.reset}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )
+        }
+
+        <main
+            class:list={[
+                'mx-auto w-full px-5 pt-8 pb-16 lg:px-8',
+                wide ? 'max-w-[100rem]' : 'max-w-5xl',
+            ]}
+        >
+            {
+                flash && (
+                    <p
+                        role="status"
+                        class:list={[
+                            'mb-6 border px-4 py-3 text-md',
+                            flash.tone === 'ok'
+                                ? 'border-green-dark/60 bg-green/8 text-green'
+                                : 'border-orange/50 bg-orange/8 text-orange-light',
+                        ]}
+                    >
+                        {flash.text}
+                    </p>
+                )
+            }
+            <slot />
+        </main>
+    </body>
+</html>
+
+<script>
+    /*
+      Only matters with `pnpm backoffice`. Saving writes an event file, the dev
+      server notices and tells every open page to reload. A reload while a form
+      is on its way would throw the answer away and leave the editor on the
+      page it came from. So the reload is skipped while a form is being sent;
+      the page that follows is fresh anyway. In a build this is not there.
+    */
+    if (import.meta.hot) {
+        let saving = false;
+        document.addEventListener('submit', () => {
+            saving = true;
+        });
+        window.addEventListener('pageshow', () => {
+            saving = false;
+        });
+        import.meta.hot.on('vite:beforeFullReload', (payload) => {
+            // Vite only reloads for an .html path when it is the open page.
+            if (saving) payload.path = '/backoffice-is-saving.html';
+        });
+    }
+</script>

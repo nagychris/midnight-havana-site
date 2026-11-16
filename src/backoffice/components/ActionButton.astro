@@ -1,0 +1,37 @@
+---
+/**
+ * A button that submits the event form with one of its actions. The form
+ * handler reads the action from the field `aktion`.
+ *
+ * Looks like the site's `Button`, a little smaller, because three of them sit
+ * side by side in the bar above the form.
+ */
+interface Props {
+    action: string;
+    variant?: 'primary' | 'secondary' | 'quiet' | 'text';
+    /** The form to submit, for a button that sits outside it. */
+    form?: string;
+}
+
+const { action, variant = 'secondary', form } = Astro.props;
+
+const variants = {
+    primary: 'bg-orange text-ink hover:bg-orange-hover',
+    secondary: 'border border-gold/50 text-gold-light hover:bg-gold/12 hover:text-cream',
+    quiet: 'border border-gold/25 text-cream/80 hover:border-gold/50 hover:text-cream',
+    text: 'text-cream/55 hover:text-cream',
+} as const;
+---
+
+<button
+    type="submit"
+    name="aktion"
+    value={action}
+    form={form}
+    class:list={[
+        'inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-sharp px-5 py-2.5 font-display text-sm font-medium tracking-label uppercase transition-colors duration-200',
+        variants[variant],
+    ]}
+>
+    <slot />
+</button>

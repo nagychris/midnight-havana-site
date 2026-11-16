@@ -17,6 +17,9 @@
     "brand-assets": "node scripts/generate-brand-assets.mjs",
     "import-photos": "node scripts/import-photos.mjs",
     "check-events": "vite-node scripts/check-events.ts",
+    "backoffice": "BACKOFFICE=local ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "backoffice:demo": "BACKOFFICE=demo ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "backoffice:password": "vite-node scripts/backoffice-password.ts",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {

@@ -1,0 +1,123 @@
+---
+import AdminLayout from '../components/AdminLayout.astro';
+import EventDate from '../../components/event/EventDate.astro';
+import Badge from '../../components/ui/Badge.astro';
+import Button from '../../components/ui/Button.astro';
+import { CLASS_IDS } from '../../data/classes';
+import { isValidDateKey, todayInBerlin } from '../../lib/datetime';
+import { bo } from '../copy';
+import { listed, sessionOf, takeFlash, type ListedEvent } from '../helpers';
+import { adminPaths } from '../routes';
+import { eventStore } from '../store';
+
+export const prerender = false;
+
+const session = sessionOf(Astro);
+const today = todayInBerlin();
+
+const all = (await eventStore(session).list())
+    .map(listed)
+    .sort((a, b) => a.event.date.localeCompare(b.event.date));
+
+// A draft without a date yet belongs with the dates still to come.
+const isUpcoming = (item: ListedEvent) =>
+    !isValidDateKey(item.event.date) || item.event.date >= today;
+const upcoming = all.filter(isUpcoming);
+const past = all.filter((item) => !isUpcoming(item)).reverse();
+
+const flash = await takeFlash(session);
+
+const statusTone = { live: 'green', draft: 'muted', changes: 'gold' } as const;
+---
+
+<AdminLayout title={bo.list.title} flash={flash}>
+    <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+            <h1 class="font-display text-h2 leading-tight-2 font-medium tracking-tiny text-cream uppercase">
+                {bo.list.title}
+            </h1>
+            <p class="mt-1 text-md text-cream/60">{bo.list.intro}</p>
+        </div>
+        <Button href={adminPaths.newEvent}>{bo.list.add}</Button>
+    </div>
+
+    <h2 class="mt-10 font-display text-xs tracking-eyebrow text-gold uppercase">
+        {bo.list.upcoming}
+    </h2>
+
+    {upcoming.length === 0 && <p class="mt-4 text-lead text-cream/65">{bo.list.none}</p>}
+
+    <ul class="mt-3 flex flex-col gap-3">
+        {
+            upcoming.map((item) => (
+                <li class="flex flex-wrap items-center gap-x-6 gap-y-3 border border-gold/25 bg-surface/60 px-5 py-4">
+                    {isValidDateKey(item.event.date) ? (
+                        <EventDate date={item.event.date} size="md" />
+                    ) : (
+                        <span class="w-12 text-center font-display text-3xl text-cream/30">?</span>
+                    )}
+
+                    <div class="min-w-0 flex-1 basis-64">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <Badge tone={statusTone[item.status]}>{bo.list.status[item.status]}</Badge>
+                            {item.event.cancelled && (
+                                <Badge tone="muted">{bo.list.status.cancelled}</Badge>
+                            )}
+                        </div>
+                        <p class="mt-1.5 font-display text-2xl font-medium tracking-tiny text-cream uppercase">
+                            <a href={adminPaths.event(item.id)} class="text-cream hover:text-gold-light">
+                                {item.event.title?.de ?? bo.list.noTitle}
+                            </a>
+                        </p>
+                        <p class="mt-0.5 text-sm text-cream/55">
+                            {item.event.dj ?? '–'}
+                            {item.missingLinks > 0 && (
+                                <span class="text-orange-light">
+                                    {' · '}
+                                    {bo.list.linksMissing(item.missingLinks, CLASS_IDS.length)}
+                                </span>
+                            )}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 font-display text-xs tracking-label uppercase">
+                        <a href={adminPaths.event(item.id)}>{bo.list.edit}</a>
+                        <a href={adminPaths.preview(item.id)}>{bo.list.preview}</a>
+                        <a href={`${adminPaths.newEvent}?vorlage=${item.id}`}>{bo.list.duplicate}</a>
+                    </div>
+                </li>
+            ))
+        }
+    </ul>
+
+    {
+        past.length > 0 && (
+            <details class="mt-10">
+                <summary class="font-display text-xs tracking-eyebrow text-cream/50 uppercase hover:text-cream/80">
+                    {bo.list.past} ({past.length})
+                </summary>
+                <ul class="mt-3 flex flex-col">
+                    {past.map((item) => (
+                        <li class="flex flex-wrap items-baseline gap-x-5 gap-y-1 border-t border-gold/15 py-3 text-md text-cream/65">
+                            <span class="w-24 font-display tracking-label text-cream/45">
+                                {item.event.date}
+                            </span>
+                            <span class="flex-1 basis-48">
+                                {item.event.title?.de ?? bo.list.noTitle}
+                                {item.event.dj && (
+                                    <span class="text-cream/40"> · {item.event.dj}</span>
+                                )}
+                            </span>
+                            <a
+                                href={`${adminPaths.newEvent}?vorlage=${item.id}`}
+                                class="font-display text-xs tracking-label uppercase"
+                            >
+                                {bo.list.duplicate}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </details>
+        )
+    }
+</AdminLayout>
