@@ -1,0 +1,9 @@
+/*
+  The stylesheet of the public pages: everything in global.css.
+
+  The back office (src/backoffice/) has its own entry,
+  src/backoffice/styles/admin.css. Leaving its files out of the class scan
+  here means none of its classes ever reach the public pages.
+*/
+@import './global.css';
+@source not '../backoffice';

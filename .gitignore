@@ -11,3 +11,6 @@ dist/
 .pnpm-store/
 run-astro.sh
 Fotos/
+
+# Local Netlify folder
+.netlify
