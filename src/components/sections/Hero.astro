@@ -5,6 +5,10 @@ import Icon from '../ui/Icon.astro';
 import Wordmark from '../brand/Wordmark.astro';
 import Logo from '../brand/Logo.astro';
 import { photoGroups, photoSetOrAll } from '../../data/photos';
+import { site } from '../../data/site';
+import { upcomingEvents } from '../../lib/events';
+import { formatDateParts, todayInBerlin } from '../../lib/datetime';
+import type { SiteEvent } from '../../lib/event-types';
 import {
     localeFromAstro,
     pathFor,
@@ -27,6 +31,27 @@ import {
 const locale = localeFromAstro(Astro.currentLocale);
 const t = useTranslations(locale);
 const slides = photoSetOrAll(photoGroups.hero);
+
+/* The next few dates, each as its own line. Only the first is shown; the
+   others wait in case the page is still cached after that night has passed,
+   when `refreshEventDates` (src/scripts/event-freshness.ts) moves on to the
+   next one. */
+const today = todayInBerlin();
+const heroDates = upcomingEvents(today)
+    .filter((event) => !event.cancelled)
+    .slice(0, 4);
+
+/** "Kurse ab 19:00", or the first extra's start time on a workshop night. */
+function startLabel(event: SiteEvent): string | null {
+    if (event.regularClasses) {
+        return `${t.hero.classesFrom} ${site.schedule.firstClass}`;
+    }
+    const first = event.extras
+        .map((extra) => extra.startTime)
+        .filter((time) => time < site.schedule.socialDance)
+        .sort()[0];
+    return first ? `${t.hero.startFrom} ${first}` : null;
+}
 ---
 
 <section id={sectionIds.top} class="hero relative flex flex-col overflow-hidden">
@@ -72,8 +97,60 @@ const slides = photoSetOrAll(photoGroups.hero);
             {/* The wordmark is directly above this and the sections below say
                 it again, so on a phone the line is spent for nothing. It
                 returns as soon as there is height to spare. */}
+{/* The next date, so the first thing a visitor learns is when. On the
+                night itself it turns orange and says "heute Abend". The dot and
+                wording switch in the browser via `refreshEventBadges`. */}
+            {
+                heroDates.map((event, index) => {
+                    const parts = formatDateParts(event.date, locale);
+                    const start = startLabel(event);
+                    return (
+                        <p
+                            data-hero-date
+                            data-event-when
+                            data-event-date={event.date}
+                            data-today={String(event.date === today)}
+                            hidden={index !== 0}
+                            class="group mh-rise [animation-delay:50ms] flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-xs tracking-label text-gold uppercase sm:text-sm sm:tracking-eyebrow"
+                        >
+                            <span
+                                class="mh-pulse size-2 shrink-0 rounded-full bg-orange group-data-[today=false]:hidden"
+                                aria-hidden="true"
+                            />
+                            <span
+                                class="size-2 shrink-0 rounded-full bg-gold group-data-[today=true]:hidden"
+                                aria-hidden="true"
+                            />
+                            <span class="hidden text-gold/80 group-data-[today=true]:hidden sm:inline">
+                                {t.hero.nextLabel}:
+                            </span>
+                            <time
+                                datetime={event.date}
+                                class="font-semibold text-cream group-data-[today=true]:hidden"
+                            >
+                                {parts.weekday} {parts.day} {parts.month}
+                            </time>
+                            <span class="font-semibold text-orange group-data-[today=false]:hidden">
+                                {t.nextEvent.todayLabel}
+                            </span>
+                            {start && (
+                                <>
+                                    <span class="text-gold/40" aria-hidden="true">·</span>
+                                    <span>{start}</span>
+                                </>
+                            )}
+                            <span class="text-gold/40" aria-hidden="true">·</span>
+                            <span>{t.hero.partyFrom} {site.schedule.socialDance}</span>
+                        </p>
+                    );
+                })
+            }
+
+            {/* Shown when no date is planned, or every planned one has passed. */}
             <p
-                class="mh-rise [animation-delay:50ms] hidden items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:flex sm:text-sm"
+                data-hero-date-fallback
+                hidden={heroDates.length > 0}
+                class="mh-rise [animation-delay:50ms] flex items-center gap-3 font-display text-xs tracking-eyebrow text-gold uppercase sm:text-sm"
             >
                 <span class="h-px w-6 shrink-0 bg-gold" aria-hidden="true"
                 ></span>
@@ -81,19 +158,22 @@ const slides = photoSetOrAll(photoGroups.hero);
             </p>
 
             <h1
-                class="mh-rise [animation-delay:180ms] max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase sm:mt-4"
+                class="mh-rise [animation-delay:180ms] max-w-[18ch] font-display text-hero leading-crush font-semibold tracking-tightest text-cream uppercase mt-3 sm:mt-4"
             >
                 {t.hero.headline}
             </h1>
 
+            {/* Hidden on phones: the date line above and the badges below say
+                what a visitor needs, and the two lines are better spent
+                keeping the buttons in reach. */}
             <p
-                class="mh-rise [animation-delay:260ms] mt-2.5 text-balance text-lg leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:text-2xl"
+                class="mh-rise [animation-delay:260ms] hidden text-balance text-lg leading-snug-2 font-normal text-orange-light sm:mt-3.5 sm:block sm:text-2xl"
             >
                 {t.hero.tagline}
             </p>
 
             <p
-                class="mh-rise [animation-delay:370ms] mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-3xs tracking-label text-gold uppercase sm:gap-x-2.5 sm:text-xs sm:tracking-label-wide"
+                class="mh-rise [animation-delay:370ms] mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-3xs tracking-label text-gold uppercase sm:gap-x-2.5 sm:text-xs sm:tracking-label-wide"
             >
                 {
                     t.hero.badges.map((badge, index) => (

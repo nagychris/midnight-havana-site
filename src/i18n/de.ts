@@ -134,6 +134,11 @@ export const de = {
         headline: `${keepTogether('Salsa Cubana')} & ${keepTogether('Rueda de Casino')} ${keepTogether('in Berlin')}`,
         tagline: 'Lerne Salsa. Triff Menschen. Tanz durch den Freitagabend.',
         badges: ['Kein Tanzpartner nötig', 'Anfänger willkommen'],
+        /** The next-date line in the hero. */
+        nextLabel: 'Nächster Termin',
+        classesFrom: 'Kurse ab',
+        startFrom: 'Ab',
+        partyFrom: 'Party ab',
         ctaPrimary: 'Nächsten Termin ansehen',
         ctaSecondary: 'Kurse entdecken',
         scrollCue: 'Weiter zum nächsten Abschnitt',
