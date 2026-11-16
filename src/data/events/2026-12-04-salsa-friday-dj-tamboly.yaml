@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=../event.schema.json
+
+date: "2026-12-04"
+slug: salsa-friday-dj-tamboly
+title:
+  de: Salsa Friday
+  en: Salsa Friday
+summary:
+  de: DJ Tamboly bringt Energie, Rhythmus und ein gutes Gespür für die Tanzfläche zu Midnight Havana.
+  en: DJ Tamboly brings energy, rhythm and a good feel for the dance floor to Midnight Havana.
+description:
+  de: |-
+    Seine Sets bewegen sich zwischen Salsa Cubana, Timba und Son und folgen dabei immer dem Flow des Abends und der Stimmung auf der Tanzfläche.
+
+    Freut euch auf einen warmen, lebendigen Mix für Social Dance, spontane Momente und genau die Songs, bei denen man dann doch noch eine Runde länger bleibt.
+  en: |-
+    His sets move between Cuban salsa, timba and son, always following the flow of the night and the mood on the dance floor.
+
+    Look forward to a warm, lively mix for social dancing, spontaneous moments and exactly the songs that make you stay for one more round.
+seoTitle:
+  de: Salsa Friday Berlin mit DJ Tamboly | Midnight Havana
+  en: Salsa Friday Berlin with DJ Tamboly | Midnight Havana
+seoDescription:
+  de: Salsa Friday in Berlin mit Salsa Cubana, Rueda de Casino und DJ Tamboly. Social Dance ab 21:00 im Tangoloft Berlin.
+  en: Salsa Friday in Berlin with Cuban salsa, Rueda de Casino and DJ Tamboly. Social dance from 21:00 at Tangoloft Berlin.
+dj: DJ Tamboly
+teachers:
+  - Helen
+  - Yago
+  - Sassan
+badges:
+  - de: DJ Tamboly
+    en: DJ Tamboly
+image: venue-floor-busy.jpg
+priceNote: null
+cancelled: false
+bookingLinks:
+  salsa-basics: https://www.eversports.de/org/activity/2b0bb918-c6d6-49ec-8ac9-db1d0a387f5e
+  rueda-beginner: https://www.eversports.de/org/activity/73b352b5-db5b-43ac-90ed-daac00dbe739
+  salsa-beginner: https://www.eversports.de/org/activity/b7673d12-e206-449f-b8cb-f0ed3ee8c62b
+  rueda-advanced: https://www.eversports.de/org/activity/ac26d8ea-c105-4c0e-93b9-9108605a8276
+extras: []
